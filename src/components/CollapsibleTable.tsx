@@ -15,6 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { ITableData } from '../interfaces/ITableData';
+import Npc from './Npc';
 
 export default function CollapsibleTable(props: ITableData) {
     return (
@@ -29,9 +30,8 @@ export default function CollapsibleTable(props: ITableData) {
                 </TableHead>
                 <TableBody>
                     {
-                        props.dataSet.data.map((instance: { Id: number }) => {
-                            console.log("Instance: ", instance);
-                            return <Row key={instance.Id} component={props.component} data={props.dataSet.data} instance={instance} />
+                        props.dataSet.data.map((instance: { id: number }) => {
+                            return <Row key={instance.id} component={props.component} instance={instance} />
                         })
                     }
                 </TableBody>
@@ -41,7 +41,7 @@ export default function CollapsibleTable(props: ITableData) {
 
 }
 
-function Row(props: any) {
+function Row(props: { component: string, instance: { id: number } }) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -62,7 +62,6 @@ function Row(props: any) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(props.instance).length}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box>
-                            {<props.component id={props.instance.Id} />}
                         </Box>
                     </Collapse>
                 </TableCell>

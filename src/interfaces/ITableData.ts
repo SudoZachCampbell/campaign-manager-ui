@@ -4,7 +4,7 @@ export interface ITableData {
         headers: string[], 
         data: [
             { 
-                Id: number 
+                id: number 
             }
         ] 
     }
@@ -14,7 +14,7 @@ export interface INpcList {
     headers: string[], 
         data: [
             { 
-                Id: number 
+                id: number 
             }
         ] 
 }

@@ -11,7 +11,7 @@ export default function NpcList(props: any) {
         headers: [""],
         data: [
             {
-                Id: 0
+                id: 0
             }
         ]
     });
