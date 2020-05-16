@@ -7,7 +7,7 @@ export default function Npc(props: any) {
     let [npc, setNpc] = useState<INpc>({ Name: "", Monster: { Name: "" }, Picture: "" });
     let [loading, setLoading] = useState(true);
     const populateNpcsData = async () => {
-        const response = await fetch(`Npc/${props.id}`);
+        const response = await fetch(`http://localhost:53596/Npc/${props.id}`);
         console.log("NPC Response: ", response);
         const data = await response.json();
         console.log("NPC Data: ", data);
