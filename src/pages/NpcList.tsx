@@ -4,9 +4,17 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import CollapsibleTable from '../components/CollapsibleTable'
 import Npc from '../components/Npc'
+import { INpcList } from '../interfaces/ITableData';
 
 export default function NpcList(props: any) {
-    const [npcs, setNpcs] = useState({});
+    const [npcs, setNpcs] = useState<INpcList>({
+        headers: [""],
+        data: [
+            {
+                Id: 0
+            }
+        ]
+    });
     const [loading, setLoading] = useState(true);
 
     const populateNpcsData = async () => {
@@ -40,6 +48,4 @@ export default function NpcList(props: any) {
             {contents}
         </div>
     );
-
-
 }
