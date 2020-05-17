@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Container, Image, Row } from 'react-bootstrap';
 import * as _ from 'lodash';
 
-export default function Npc(props: any) {
+export default function Npc(props: { id: number }) {
     let [npc, setNpc] = useState<INpc>({ Name: "", Monster: { Name: "" }, Picture: "" });
     let [loading, setLoading] = useState(true);
     const populateNpcsData = async () => {
@@ -11,7 +11,7 @@ export default function Npc(props: any) {
         console.log("NPC Response: ", response);
         const data = await response.json();
         console.log("NPC Data: ", data);
-        setNpc(data);
+        setNpc(data[0]);
         setLoading(false);
     }
 
@@ -24,7 +24,7 @@ export default function Npc(props: any) {
             <Row>
                 <Col>
                     <h1 className="display-4">{npc.Name}</h1>
-                    <div>{props.npc.Monster ? npc.Monster.Name : "None"}</div>
+                    <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
                     <Button variant="outline-info">Details</Button>
                 </Col>
                 {npc.Picture &&

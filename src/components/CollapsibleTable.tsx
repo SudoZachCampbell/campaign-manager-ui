@@ -23,6 +23,7 @@ export default function CollapsibleTable(props: ITableData) {
             <Table>
                 <TableHead>
                     <TableRow>
+                        <TableCell key="Empty"></TableCell>
                         {props.dataSet.headers.map((header: string) => {
                             return <TableCell key={header}>{header}</TableCell>
                         })}
@@ -42,7 +43,7 @@ export default function CollapsibleTable(props: ITableData) {
 }
 
 function Row(props: { component: string, instance: { id: number } }) {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
 
     return (
         <>
@@ -53,7 +54,7 @@ function Row(props: { component: string, instance: { id: number } }) {
                     </IconButton>
                 </TableCell>
                 {
-                    _.mapValues(props.instance, (instanceData: any) => {
+                    _.map(props.instance, (instanceData: string | number | boolean) => {
                         return <TableCell>{instanceData}</TableCell>
                     })
                 }
@@ -62,6 +63,7 @@ function Row(props: { component: string, instance: { id: number } }) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(props.instance).length}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box>
+                            <Npc id={props.instance.id} />
                         </Box>
                     </Collapse>
                 </TableCell>
