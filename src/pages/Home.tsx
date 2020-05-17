@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box'; 
+import Box from '@material-ui/core/Box';
 
 export default function Home(props) {
-    const displayName = Home.name;
-
+    useEffect(() => {
+        props.setPageName('Home');
+    })
     return (
         <Box>
             <Typography variant="h1" component="h2" gutterBottom>Hello, world!</Typography>

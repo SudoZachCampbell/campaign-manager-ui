@@ -16,9 +16,7 @@ export default function App(props) {
 
     return (
         <Layout pageName={pageName}>
-            <Route exact path='/' component={Home} />
-            <Route path='/characters' component={CharacterList} />
-            <Route path='/character-details/:id' children={<CharacterDetails />} />
+            <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
             <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
             <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} />} />
         </Layout>

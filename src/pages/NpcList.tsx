@@ -1,10 +1,8 @@
-﻿import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import * as React from 'react';
-import * as _ from 'lodash';
+﻿import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
 import CollapsibleTable from '../components/CollapsibleTable'
-import Npc from '../components/Npc'
 import { INpcList } from '../interfaces/ITableData';
+import { Box, Typography } from '@material-ui/core';
 
 export default function NpcList(props: any) {
     const [npcs, setNpcs] = useState<INpcList>({
@@ -43,10 +41,13 @@ export default function NpcList(props: any) {
     }, [])
 
     return (
-        <div>
-            <h1 id="tabelLabel" >Npcs</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+        <Box p={5}>
+            <Box pb={2}>
+                <Typography id="tabelLabel" variant='h2' gutterBottom>Npcs</Typography>
+            </Box>
+            <Box>
+                {contents}
+            </Box>
+        </Box>
     );
 }
