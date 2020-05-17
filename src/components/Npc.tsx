@@ -1,7 +1,6 @@
 ﻿import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, Grid } from '@material-ui/core'
-import * as _ from 'lodash';
+import { Box, Button, Grid, Typography } from '@material-ui/core'
 
 export default function Npc(props: { id: number }) {
     let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "" });
@@ -21,23 +20,28 @@ export default function Npc(props: { id: number }) {
 
     const renderNpcArea = () => {
         return (
-            <Grid container xs={12}>
-                <Grid item xs={6}>
-                    <h1 className="display-4">{npc.Name}</h1>
-                    <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
-                    <Button variant="contained" color="secondary" href={`/npc-details/${npc.Id}`}>Details</Button>
-                </Grid>
-                {
-                    npc.Picture &&
-                    <Grid item xs={6}>
-                        <img src={`https\://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.Picture}`} />
+            <Box p={3}>
+                <Grid container>
+                    <Grid item xs={4}>
+                        <h1 className="display-4">{npc.Name}</h1>
+                        <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
+                        <Button variant="contained" color="secondary" href={`/npc-details/${npc.Id}`}>Details</Button>
                     </Grid>
-                }
-            </Grid>
+                    {
+                        npc.Picture &&
+                        <Grid item xs={4}>
+                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.Picture}`} />
+                        </Grid>
+                    }
+                </Grid>
+            </Box>
         )
     }
 
-    return renderNpcArea();
+    const renderDisplay = loading ?
+        <Typography>Loading</Typography> : renderNpcArea();
+
+    return renderDisplay;
 }
 
 interface INpc {

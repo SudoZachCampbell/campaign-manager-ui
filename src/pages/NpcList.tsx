@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useState } from 'react';
-import _ from 'lodash';
 import CollapsibleTable from '../components/CollapsibleTable'
 import { INpcList } from '../interfaces/ITableData';
 import { Box, Typography } from '@material-ui/core';
@@ -38,7 +37,7 @@ export default function NpcList(props: any) {
     useEffect(() => {
         populateNpcsData();
         props.setPageName('Npc List');
-    }, [])
+    }, [props])
 
     return (
         <Box p={5}>

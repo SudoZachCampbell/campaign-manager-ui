@@ -1,5 +1,4 @@
-﻿import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+﻿import { useState } from 'react';
 import * as React from 'react';
 import * as _ from 'lodash';
 import Box from '@material-ui/core/Box';
@@ -29,7 +28,7 @@ const useRowStyles = makeStyles({
 
 export default function CollapsibleTable(props: ITableData) {
     return (
-        <Grid container style={{margin: 'auto'}} xs={10}>
+        <Grid item style={{margin: 'auto'}} xs={10}>
             <TableContainer  component={Paper}>
                 <Table stickyHeader>
                     <TableHead>
@@ -71,8 +70,8 @@ function Row(props: { component: string, instance: { id: number } }) {
                     </IconButton>
                 </TableCell>
                 {
-                    _.map(props.instance, (instanceData: string | number | boolean) => {
-                        return <TableCell>{instanceData}</TableCell>
+                    _.map(props.instance, (instanceData: string | number | boolean, key: string) => {
+                        return <TableCell key={key}>{instanceData}</TableCell>
                     })
                 }
             </TableRow>
