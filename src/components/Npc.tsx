@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Image, Row } from 'react-bootstrap';
+import { Button, Grid } from '@material-ui/core'
 import * as _ from 'lodash';
 
 export default function Npc(props: { id: number }) {
@@ -19,27 +19,25 @@ export default function Npc(props: { id: number }) {
         populateNpcsData();
     }, [])
 
-    const renderNpcArea = () =>
-        <Container>
-            <Row>
-                <Col>
+    const renderNpcArea = () => {
+        return (
+            <Grid container xs={12}>
+                <Grid item xs={6}>
                     <h1 className="display-4">{npc.Name}</h1>
                     <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
-                    <Button variant="outline-info">Details</Button>
-                </Col>
-                {npc.Picture &&
-                    <Col style={{ height: "100px" }}>
-                        <Image src={`https\://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.Picture}`} />
-                    </Col>
+                    <Button variant="contained" color="secondary">Details</Button>
+                </Grid>
+                {
+                    npc.Picture &&
+                    <Grid item xs={6}>
+                        <img src={`https\://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.Picture}`} />
+                    </Grid>
                 }
-            </Row>
-        </Container>
+            </Grid>
+        )
+    }
 
-    const contents = loading
-        ? <p><em>Loading...</em></p>
-        : renderNpcArea();
-
-    return contents;
+    return renderNpcArea();
 }
 
 interface INpc {
