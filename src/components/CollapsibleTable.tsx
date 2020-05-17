@@ -58,6 +58,10 @@ function Row(props: { component: string, instance: { id: number } }) {
     const [open, setOpen] = useState<boolean>(false);
     const classes = useRowStyles();
 
+    const types = {
+        Npc: Npc
+    }
+
     return (
         <>
             <TableRow className={classes.root}>
@@ -76,7 +80,7 @@ function Row(props: { component: string, instance: { id: number } }) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(props.instance).length + 1}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box>
-                            <Npc id={props.instance.id} />
+                            {React.createElement(types[props.component], {id: props.instance.id}, null)}
                         </Box>
                     </Collapse>
                 </TableCell>

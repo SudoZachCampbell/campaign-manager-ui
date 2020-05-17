@@ -4,7 +4,7 @@ import { Button, Grid } from '@material-ui/core'
 import * as _ from 'lodash';
 
 export default function Npc(props: { id: number }) {
-    let [npc, setNpc] = useState<INpc>({ Name: "", Monster: { Name: "" }, Picture: "" });
+    let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "" });
     let [loading, setLoading] = useState(true);
     const populateNpcsData = async () => {
         const response = await fetch(`http://localhost:53596/Npc/${props.id}`);
@@ -25,7 +25,7 @@ export default function Npc(props: { id: number }) {
                 <Grid item xs={6}>
                     <h1 className="display-4">{npc.Name}</h1>
                     <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
-                    <Button variant="contained" color="secondary">Details</Button>
+                    <Button variant="contained" color="secondary" href={`/npc-details/${npc.Id}`}>Details</Button>
                 </Grid>
                 {
                     npc.Picture &&
@@ -41,6 +41,7 @@ export default function Npc(props: { id: number }) {
 }
 
 interface INpc {
+    Id: number,
     Name: string,
     Monster: IMonster,
     Picture: string

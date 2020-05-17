@@ -39,6 +39,7 @@ export default function NpcList(props: any) {
 
     useEffect(() => {
         populateNpcsData();
+        props.setPageName('Npc List');
     }, [])
 
     return (

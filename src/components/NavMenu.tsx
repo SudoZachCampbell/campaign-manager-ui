@@ -112,7 +112,7 @@ export default function NavMenu(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Persistent drawer
+                        {props.pageName}
             </Typography>
                 </Toolbar>
             </AppBar>
@@ -158,20 +158,6 @@ export default function NavMenu(props) {
                 </List>
             </Drawer>
         </div>
-        //       <ul className="navbar-nav flex-grow">
-        //       <NavItem>
-        //           <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-        //       </NavItem>
-        //       <NavItem>
-        //           <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-        //       </NavItem>
-        //       <NavItem>
-        //           <NavLink tag={Link} className="text-dark" to="/characters">Characters</NavLink>
-        //       </NavItem>
-        //       <NavItem>
-        //           <NavLink tag={Link} className="text-dark" to="/npcs">Npcs</NavLink>
-        //       </NavItem>
-        //   </ul>
     )
 }
 

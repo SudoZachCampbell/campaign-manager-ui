@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
-import NavMenu from './NavMenu';
+import NavMenu from '../components/NavMenu';
 
 export default function Layout(props) {
-    const displayName = Layout.name;
-
+    
     return (
         <div>
-            <NavMenu />
+            <NavMenu pageName={props.pageName} />
             <Container>
                 {props.children}
             </Container>
