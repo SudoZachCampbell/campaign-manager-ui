@@ -1,16 +1,18 @@
 ﻿import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
+import { INpc } from '../interfaces/Interfaces';
 
 export default function Npc(props: { id: number }) {
     let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "" });
     let [loading, setLoading] = useState(true);
+    
     const populateNpcsData = async () => {
         const response = await fetch(`http://localhost:53596/Npc/${props.id}`);
         console.log("NPC Response: ", response);
         const data = await response.json();
         console.log("NPC Data: ", data);
-        setNpc(data[0]);
+        setNpc(data);
         setLoading(false);
     }
 
@@ -44,13 +46,3 @@ export default function Npc(props: { id: number }) {
     return renderDisplay;
 }
 
-interface INpc {
-    Id: number,
-    Name: string,
-    Monster: IMonster,
-    Picture: string
-}
-
-interface IMonster {
-    Name: string
-}

@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { INpcList } from '../interfaces/ITableData';
+import { INpcList } from '../interfaces/Interfaces';
 import { Box, Typography } from '@material-ui/core';
 
 export default function NpcList(props: any) {

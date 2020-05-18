@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Button, IconButton, TextField, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 
-export default function TogglingTextField(props: any) {
-    const [text, setText] = useState<string>('');
+export default function TogglingTextField(props: { text: string | undefined, label: string, saveField: Function }) {
+    const [currentText, setCurrentText] = useState<string | undefined>('');
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {
-        setText(props.text);
+        setCurrentText(props.text);
     }, [])
 
     const toggleEdit = () => {
@@ -15,19 +15,17 @@ export default function TogglingTextField(props: any) {
     }
 
     const saveField = () => {
-        props.saveField(text);
+        props.saveField(currentText);
         toggleEdit();
     }
 
     const returnField = edit ?
-        <Typography variant='body2'>{text}</Typography> :
         (<>
             <IconButton onClick={toggleEdit}><DeleteIcon /></IconButton>
-            <TextField label={props.label} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value)}>
-                {text}
-            </TextField>
+            <TextField label={props.label} defaultValue={currentText} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCurrentText(event.target.value)} />
             <Button onClick={saveField} variant='contained' color='primary'>Save</Button>
-        </>)
+        </>) :
+        <Typography onClick={toggleEdit} variant='body2' > {currentText}</Typography>
 
     return returnField;
 }

@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles'
-import { ITableData } from '../interfaces/ITableData';
+import { ITableData } from '../interfaces/Interfaces';
 import Npc from './Npc';
 
 const useRowStyles = makeStyles({

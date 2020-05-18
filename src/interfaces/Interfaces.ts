@@ -18,3 +18,14 @@ export interface INpcList {
             }
         ] 
 }
+
+export interface INpc {
+    Id: number,
+    Name: string,
+    Monster: IMonster,
+    Picture: string
+}
+
+export interface IMonster {
+    Name: string
+}
