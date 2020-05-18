@@ -18,7 +18,6 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import './NavMenu.css';
 
 const drawerWidth = 240;
 
