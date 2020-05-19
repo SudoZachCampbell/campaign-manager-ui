@@ -3,8 +3,8 @@ import CollapsibleTable from '../components/CollapsibleTable'
 import { ITableList } from '../interfaces/Interfaces';
 import { Box, Typography } from '@material-ui/core';
 
-export default function NpcList(props: any) {
-    const [npcs, setNpcs] = useState<ITableList>({
+export default function MonsterList(props: any) {
+    const [monsters, setMonsters] = useState<ITableList>({
         headers: [""],
         data: [
             {
@@ -14,35 +14,35 @@ export default function NpcList(props: any) {
     });
     const [loading, setLoading] = useState(true);
 
-    const populateNpcsData = async () => {
-        const response = await fetch('http://localhost:53596/Npc/Table');
-        console.log("NPC List Response: ", response);
+    const populateMonstersData = async () => {
+        const response = await fetch('http://localhost:53596/Monster/Table');
+        console.log("MONSTER List Response: ", response);
         const data = await response.json();
-        console.log("NPC List Data: ", data);
-        setNpcs(data);
+        console.log("MONSTER List Data: ", data);
+        setMonsters(data);
         setLoading(false);
     }
 
-    const renderNpcsTable = () => {
+    const renderMonstersTable = () => {
         return (
-            <CollapsibleTable dataSet={npcs} component={"Npc"} />
+            <CollapsibleTable dataSet={monsters} component={"Monster"} />
         )
     }
 
     const contents = loading
         ? <p><em>Loading...</em></p>
-        : renderNpcsTable();
+        : renderMonstersTable();
 
 
     useEffect(() => {
-        populateNpcsData();
-        props.setPageName('Npc List');
+        populateMonstersData();
+        props.setPageName('Monster List');
     }, [props])
 
     return (
         <Box p={5}>
             <Box pb={2}>
-                <Typography id="tabelLabel" variant='h2' gutterBottom>Npcs</Typography>
+                <Typography id="tabelLabel" variant='h2' gutterBottom>Monsters</Typography>
             </Box>
             <Box>
                 {contents}

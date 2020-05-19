@@ -4,7 +4,7 @@ import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { INpc } from '../interfaces/Interfaces';
 
 export default function Npc(props: { id: number }) {
-    let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "" });
+    let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "",Building: { Name: "" } ,Locale: { Name: "" } });
     let [loading, setLoading] = useState(true);
     
     const populateNpcsData = async () => {

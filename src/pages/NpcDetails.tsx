@@ -14,7 +14,7 @@ export default function NpcDetails(props: { setPageName: Function }) {
     const { id } = useParams();
 
     const populateNpcData = async () => {
-        const response = await fetch(`http://localhost:53596/Npc/${id}`)
+        const response = await fetch(`http://localhost:53596/Npc/${id}`);
         console.log("NPC Details Response: ", response);
         const data = await response.json();
         console.log("NPC Details Data: ", data);
@@ -27,13 +27,13 @@ export default function NpcDetails(props: { setPageName: Function }) {
     }, [])
 
     const saveField = () => {
-
+        
     }
 
     const display = (
         <>
-        <TogglingTextField label='Name' text={npc?.Name} saveField={saveField} />
-        <TogglingTextField label='Monster Name' text={npc?.Monster?.Name} saveField={saveField} />
+            <TogglingTextField label='Name' text={npc?.Name} saveField={saveField} />
+            <TogglingTextField label='Monster Name' text={npc?.Monster?.Name} saveField={saveField} />
         </>
     )
 

@@ -17,6 +17,7 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles'
 import { ITableData } from '../interfaces/Interfaces';
 import Npc from './Npc';
+import Monster from './Monster';
 
 const useRowStyles = makeStyles({
     root: {
