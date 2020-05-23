@@ -4,6 +4,7 @@ import { Route } from 'react-router';
 import Layout from './layouts/Layout';
 import Home from './pages/Home'
 import NpcList from './pages/NpcList';
+import MonsterList from './pages/MonsterList';
 import 'typeface-roboto'
 
 import './custom.css'
@@ -16,6 +17,7 @@ export default function App(props) {
         <Layout pageName={pageName}>
             <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
             <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
+            <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
             <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} />} />
         </Layout>
     );

@@ -37,7 +37,7 @@ export default function MonsterList(props: any) {
     useEffect(() => {
         populateMonstersData();
         props.setPageName('Monster List');
-    }, [props])
+    }, [])
 
     return (
         <Box p={5}>

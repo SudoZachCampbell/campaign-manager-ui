@@ -149,6 +149,10 @@ export default function NavMenu(props) {
                         <ListItemLink href='/npcs'>
                             <ListItemIcon></ListItemIcon>
                             <ListItemText primary='Npcs' />
+                        </ListItemLink>                        
+                        <ListItemLink href='/monsters'>
+                            <ListItemIcon></ListItemIcon>
+                            <ListItemText primary='Monsters' />
                         </ListItemLink>
                         <ListItemLink href='/places'>
                             <ListItemIcon></ListItemIcon>

@@ -26,14 +26,14 @@ export default function Monster(props: { id: number }) {
             <Box p={3}>
                 <Grid container>
                     <Grid item xs={4}>
-                        <h1 className="display-4">{monster.Name}</h1>
-                        <div>{monster.Hp}</div>
-                        <Button variant="contained" color="secondary" href={`/monster-details/${monster.Id}`}>Details</Button>
+                        <h1 className="display-4">{monster.name}</h1>
+                        <div>{monster.hp}</div>
+                        <Button variant="contained" color="secondary" href={`/monster-details/${monster.id}`}>Details</Button>
                     </Grid>
                     {
-                        monster.Picture &&
+                        monster.picture &&
                         <Grid item xs={4}>
-                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${monster.Picture}`} />
+                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${monster.picture}`} />
                         </Grid>
                     }
                 </Grid>

@@ -1,25 +1,26 @@
 export interface IModel {
-    Id: number,
-    Name: string
+    id: number,
+    name: string
 }
 
 //#region Creatures
 export interface ICreature extends IModel {
-    Alignment: number,
-    Picture?: string
+    alignment: number,
+    hp: number,
+    picture?: string
 }
 
 export interface INpc {
-    Id: number,
-    Name: string
-    Picture?: string,
-    Monster?: IMonster, 
-    Locale?: ILocale, 
-    Building?: IBuilding 
+    id: number,
+    name: string
+    picture?: string,
+    monster?: IMonster, 
+    locale?: ILocale, 
+    building?: IBuilding 
 }
 
 export interface IMonster extends ICreature {
-    Pp: number
+    pp: number
 }
 
 //#endregion
@@ -27,7 +28,7 @@ export interface IMonster extends ICreature {
 //#region Locations
 
 export interface ILocale {
-    Name: string
+    name: string
 }
 
 export interface IBuilding {

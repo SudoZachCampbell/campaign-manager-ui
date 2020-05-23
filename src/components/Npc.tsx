@@ -26,14 +26,14 @@ export default function Npc(props: { id: number }) {
             <Box p={3}>
                 <Grid container>
                     <Grid item xs={4}>
-                        <h1 className="display-4">{npc.Name}</h1>
-                        <div>{npc.Monster ? npc.Monster.Name : "None"}</div>
-                        <Button variant="contained" color="secondary" href={`/npc-details/${npc.Id}`}>Details</Button>
+                        <h1 className="display-4">{npc.name}</h1>
+                        <div>{npc.monster ? npc.monster.name : "None"}</div>
+                        <Button variant="contained" color="secondary" href={`/npc-details/${npc.id}`}>Details</Button>
                     </Grid>
                     {
-                        npc.Picture &&
+                        npc.picture &&
                         <Grid item xs={4}>
-                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.Picture}`} />
+                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.picture}`} />
                         </Grid>
                     }
                 </Grid>

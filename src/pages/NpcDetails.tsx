@@ -32,8 +32,8 @@ export default function NpcDetails(props: { setPageName: Function }) {
 
     const display = (
         <>
-            <TogglingTextField label='Name' text={npc?.Name} saveField={saveField} />
-            <TogglingTextField label='Monster Name' text={npc?.Monster?.Name} saveField={saveField} />
+            <TogglingTextField label='Name' text={npc?.name} saveField={saveField} />
+            <TogglingTextField label='Monster Name' text={npc?.monster?.name} saveField={saveField} />
         </>
     )
 

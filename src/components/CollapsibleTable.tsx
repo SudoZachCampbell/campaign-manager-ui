@@ -59,7 +59,8 @@ function Row(props: { component: string, instance: { id: number } }) {
     const classes = useRowStyles();
 
     const types = {
-        Npc: Npc
+        Npc: Npc,
+        Monster: Monster
     }
 
     return (
