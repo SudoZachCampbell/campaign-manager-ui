@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { IMonster } from '../interfaces/Interfaces';
+import { BPMonster } from '../interfaces/Initialisations';
 
 export default function Monster(props: { id: number }) {
-    let [monster, setMonster] = useState<IMonster>({ Id: 0, Name: "", Alignment: 0, Pp: 0 });
+    let [monster, setMonster] = useState<IMonster>(BPMonster);
     let [loading, setLoading] = useState(true);
 
     const populateMonstersData = async () => {

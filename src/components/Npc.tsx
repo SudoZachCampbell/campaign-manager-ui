@@ -2,11 +2,12 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { INpc } from '../interfaces/Interfaces';
+import { BPNpc } from '../interfaces/Initialisations';
 
 export default function Npc(props: { id: number }) {
-    let [npc, setNpc] = useState<INpc>({ Id: 0, Name: "", Monster: { Id: 0, Name: "", Alignment: 0 , Pp: 0} });
+    let [npc, setNpc] = useState<INpc>(BPNpc);
     let [loading, setLoading] = useState(true);
-    
+
     const populateNpcsData = async () => {
         const response = await fetch(`http://localhost:53596/Npc/${props.id}`);
         console.log("NPC Response: ", response);
