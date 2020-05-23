@@ -4,9 +4,9 @@ import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { IMonster } from '../interfaces/Interfaces';
 
 export default function Monster(props: { id: number }) {
-    let [monster, setMonster] = useState<IMonster>({ Id: 0, Name: "", Monster: { Name: "" }, Picture: "",Building: { Name: "" } ,Locale: { Name: "" } });
+    let [monster, setMonster] = useState<IMonster>({ Id: 0, Name: "", Alignment: 0, Pp: 0 });
     let [loading, setLoading] = useState(true);
-    
+
     const populateMonstersData = async () => {
         const response = await fetch(`http://localhost:53596/Monster/${props.id}`);
         console.log("MONSTER Response: ", response);
@@ -26,7 +26,7 @@ export default function Monster(props: { id: number }) {
                 <Grid container>
                     <Grid item xs={4}>
                         <h1 className="display-4">{monster.Name}</h1>
-                        <div>{monster.Monster ? monster.Monster.Name : "None"}</div>
+                        <div>{monster.Hp}</div>
                         <Button variant="contained" color="secondary" href={`/monster-details/${monster.Id}`}>Details</Button>
                     </Grid>
                     {

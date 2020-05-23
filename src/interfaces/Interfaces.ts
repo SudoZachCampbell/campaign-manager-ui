@@ -1,22 +1,25 @@
 export interface IModel {
+    Id: number,
     Name: string
 }
 
 //#region Creatures
 export interface ICreature extends IModel {
-
+    Alignment: number,
+    Picture?: string
 }
 
-export interface INpc extends ICreature{
+export interface INpc {
     Id: number,
-    Picture: string,
-    Monster: IMonster, 
-    Locale: ILocale, 
-    Building: IBuilding 
+    Name: string
+    Picture?: string,
+    Monster?: IMonster, 
+    Locale?: ILocale, 
+    Building?: IBuilding 
 }
 
 export interface IMonster extends ICreature {
-    Name: string
+    Pp: number
 }
 
 //#endregion
