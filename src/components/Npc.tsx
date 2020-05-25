@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
-import { INpc } from '../interfaces/Interfaces';
+import { INpc } from '../interfaces/Models';
 import { BPNpc } from '../interfaces/Initialisations';
 
 export default function Npc(props: { id: number }) {

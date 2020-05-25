@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
-import { INpc } from '../interfaces/Interfaces';
+import { INpc } from '../interfaces/Models';
 import { Typography } from '@material-ui/core';
 
 export default function NpcDetails(props: { setPageName: Function }) {
