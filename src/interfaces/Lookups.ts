@@ -19,3 +19,7 @@ export enum Size {
     Huge,
     Gargantuan
 }
+
+export enum Type {
+    
+}

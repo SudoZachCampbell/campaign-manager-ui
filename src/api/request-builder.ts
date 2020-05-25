@@ -1,7 +1,6 @@
-export const get = async function<T>(url: string): Promise<T> {
+export const get = async function(url: string): Promise<object> {
     let response = await fetch(url);
-    const returnTyped: T = await response.json();
-    return returnTyped;
+    return await response.json();
 }
 
 export default {
