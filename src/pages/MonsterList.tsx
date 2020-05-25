@@ -17,8 +17,9 @@ export default function MonsterList(props: any) {
     const populateMonstersData = async () => {
         const response = await fetch('http://localhost:53596/Monster/Table');
         console.log("MONSTER List Response: ", response);
-        const data = await response.json();
-        console.log("MONSTER List Data: ", data);
+        const monsters = await response.json();
+        console.log("MONSTER List Data: ", monsters);
+        const data = { headers: ["ID", "Name", "Passive Perception", "Alignment"], data: monsters }
         setMonsters(data);
         setLoading(false);
     }
