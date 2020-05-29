@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
 import { INpc } from '../interfaces/Models';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { BPNpc } from '../interfaces/Initialisations'
 
 export default function NpcDetails(props: { setPageName: Function }) {
-    const [npc, setNpc] = useState<INpc | undefined>();
+    const [npc, setNpc] = useState<INpc>(BPNpc);
     const [loading, setLoading] = useState<boolean>(true);
 
     props.setPageName('Npc Details');
@@ -27,14 +28,28 @@ export default function NpcDetails(props: { setPageName: Function }) {
     }, [])
 
     const saveField = () => {
-        
+
     }
 
     const display = (
-        <>
-            <TogglingTextField label='Name' text={npc?.name} saveField={saveField} />
-            <TogglingTextField label='Monster Name' text={npc?.monster?.name} saveField={saveField} />
-        </>
+        <Grid container>
+            <Grid xs={12}>
+                <Typography id="pageHeader" variant='h2' gutterBottom>{npc.name}</Typography>
+            </Grid>
+            <Grid xs={6}>
+                <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
+            </Grid>
+            <Grid xs={6}>
+                <TogglingTextField label='Monster Name' text={npc.monster?.name} saveField={saveField} />
+            </Grid>
+            <Grid xs={6}>
+                <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
+            </Grid>
+            <Grid xs={6}>
+                <TogglingTextField label='Monster Name' text={npc.monster?.name} saveField={saveField} />
+            </Grid>
+        </Grid>
+
     )
 
     const loadingCheck = loading ?

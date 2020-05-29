@@ -6,7 +6,7 @@ export interface IModel {
 //#region Creatures
 export interface ICreature extends IModel {
     alignment: number,
-    hp: number,
+    hit_points: number,
     picture?: string
 }
 
@@ -20,7 +20,7 @@ export interface INpc {
 }
 
 export interface IMonster extends ICreature {
-    pp: number
+    passive_perception: number
 }
 
 //#endregion

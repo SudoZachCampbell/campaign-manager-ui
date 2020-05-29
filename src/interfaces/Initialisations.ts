@@ -1,19 +1,13 @@
-export const BPNpc = {
-    id: 0,
-    name: "",
-    monster: {
-        id: 0,
-        name: "",
-        alignment: 0,
-        pp: 0,
-        hp: 0
-    }
-}
-
 export const BPMonster = {
     id: 0,
     name: "",
     alignment: 0,
-    pp: 0,
-    hp: 0
+    passive_perception: 0,
+    hit_points: 0
+}
+
+export const BPNpc = {
+    id: 0,
+    name: "",
+    monster: BPMonster
 }

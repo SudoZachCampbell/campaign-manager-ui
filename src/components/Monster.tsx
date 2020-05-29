@@ -27,7 +27,7 @@ export default function Monster(props: { id: number }) {
                 <Grid container>
                     <Grid item xs={4}>
                         <h1 className="display-4">{monster.name}</h1>
-                        <div>{monster.hp}</div>
+                        <div>{monster.hit_points}</div>
                         <Button variant="contained" color="secondary" href={`/monster-details/${monster.id}`}>Details</Button>
                     </Grid>
                     {
