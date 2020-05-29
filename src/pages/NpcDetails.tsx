@@ -40,13 +40,9 @@ export default function NpcDetails(props: { setPageName: Function }) {
                 <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
             </Grid>
             <Grid xs={6}>
-                <TogglingTextField label='Monster Name' text={npc.monster?.name} saveField={saveField} />
-            </Grid>
-            <Grid xs={6}>
-                <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
-            </Grid>
-            <Grid xs={6}>
-                <TogglingTextField label='Monster Name' text={npc.monster?.name} saveField={saveField} />
+                {
+                    // TODO: Add Monster Column 
+                }
             </Grid>
         </Grid>
 
