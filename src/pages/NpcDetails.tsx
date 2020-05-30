@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
 import { INpc } from '../interfaces/Models';
-import { Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { BPNpc } from '../interfaces/Initialisations'
 
 export default function NpcDetails(props: { setPageName: Function }) {
@@ -31,21 +31,24 @@ export default function NpcDetails(props: { setPageName: Function }) {
 
     }
 
-    const display = (
-        <Grid container>
-            <Grid xs={12}>
-                <Typography id="pageHeader" variant='h2' gutterBottom>{npc.name}</Typography>
-            </Grid>
-            <Grid xs={6}>
-                <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
-            </Grid>
-            <Grid xs={6}>
-                {
-                    // TODO: Add Monster Column 
-                }
-            </Grid>
-        </Grid>
+    const monsterArea = () => {
 
+    }
+
+    const display = (
+        <Box p={3}>
+            <Grid container>
+                <Grid xs={12}>
+                    <Typography id="pageHeader" variant='h2' gutterBottom>{npc.name}</Typography>
+                </Grid>
+                <Grid xs={6}>
+                    <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
+                </Grid>
+                <Grid xs={6}>
+                    {npc.monster ? }
+                </Grid>
+            </Grid>
+        </Box>
     )
 
     const loadingCheck = loading ?

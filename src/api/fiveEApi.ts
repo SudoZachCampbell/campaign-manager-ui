@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import RequestBuilder from './request-builder';
+import RequestBuilder from './dndDb';
 import { IMonster } from '../interfaces/Models'
 
 export const getMonster: object = async function(name: string): Promise<IMonster> {

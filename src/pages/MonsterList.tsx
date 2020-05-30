@@ -26,7 +26,7 @@ export default function MonsterList(props: any) {
 
     const renderMonstersTable = () => {
         return (
-            <CollapsibleTable dataSet={monsters} component={"Monster"} />
+            <CollapsibleTable dataSet={monsters} component={"MonsterSummary"} />
         )
     }
 

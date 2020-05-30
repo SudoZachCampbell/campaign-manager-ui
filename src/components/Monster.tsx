@@ -1,49 +1,16 @@
-﻿import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Box, Button, Grid, Typography } from '@material-ui/core'
+import React, { useState, useEffect } from 'react';
 import { IMonster } from '../interfaces/Models';
 import { BPMonster } from '../interfaces/Initialisations';
 
-export default function Monster(props: { id: number }) {
-    let [monster, setMonster] = useState<IMonster>(BPMonster);
-    let [loading, setLoading] = useState(true);
+export default function Monster(props: { monster: IMonster, id: number }) {
+    const [monster, setMonster] = useState(BPMonster);
+    const [loading, setLoading] = useState(true);
 
-    const populateMonstersData = async () => {
-        const response = await fetch(`http://localhost:53596/Monster/${props.id}`);
-        console.log("MONSTER Response: ", response);
-        const data = await response.json();
-        console.log("MONSTER Data: ", data);
-        setMonster(data);
-        setLoading(false);
+    const getMonster = async () => {
+        const response = await fetch(`http://localhost:53596/Npc/${id}`)
     }
 
     useEffect(() => {
-        populateMonstersData();
+        props.monster ? setMonster(props.monster) : getMonster()
     }, [])
-
-    const renderMonsterArea = () => {
-        return (
-            <Box p={3}>
-                <Grid container>
-                    <Grid item xs={4}>
-                        <h1 className="display-4">{monster.name}</h1>
-                        <div>{monster.hit_points}</div>
-                        <Button variant="contained" color="secondary" href={`/monster-details/${monster.id}`}>Details</Button>
-                    </Grid>
-                    {
-                        monster.picture &&
-                        <Grid item xs={4}>
-                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${monster.picture}`} />
-                        </Grid>
-                    }
-                </Grid>
-            </Box>
-        )
-    }
-
-    const renderDisplay = loading ?
-        <Typography>Loading</Typography> : renderMonsterArea();
-
-    return renderDisplay;
 }
-

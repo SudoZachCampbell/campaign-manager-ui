@@ -17,7 +17,7 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles'
 import { ITableData } from '../interfaces/Models';
 import Npc from './Npc';
-import Monster from './Monster';
+import MonsterSummary from './MonsterSummary';
 
 const useRowStyles = makeStyles({
     root: {
@@ -60,7 +60,7 @@ function Row(props: { component: string, instance: { id: number } }) {
 
     const types = {
         Npc: Npc,
-        Monster: Monster
+        MonsterSummary: MonsterSummary
     }
 
     return (
