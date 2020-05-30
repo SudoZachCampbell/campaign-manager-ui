@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList } from '../interfaces/Models';
+import { ITableList, INpc } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
+import { getTable, Type } from '../api/dndDb';
 
 export default function NpcList(props: any) {
     const [npcs, setNpcs] = useState<ITableList>({
@@ -15,9 +16,7 @@ export default function NpcList(props: any) {
     const [loading, setLoading] = useState(true);
 
     const populateNpcsData = async () => {
-        const response = await fetch('http://localhost:53596/Npc/Table');
-        console.log("NPC List Response: ", response);
-        const data = await response.json();
+        const data = await getTable<ITableList>(Type.Npc)
         console.log("NPC List Data: ", data);
         setNpcs(data);
         setLoading(false);

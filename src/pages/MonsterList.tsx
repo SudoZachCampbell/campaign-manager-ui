@@ -1,7 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList } from '../interfaces/Models';
+import { ITableList, IMonster } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
+import { getTable, Type } from '../api/dndDb';
 
 export default function MonsterList(props: any) {
     const [monsters, setMonsters] = useState<ITableList>({
@@ -15,11 +16,9 @@ export default function MonsterList(props: any) {
     const [loading, setLoading] = useState(true);
 
     const populateMonstersData = async () => {
-        const response = await fetch('http://localhost:53596/Monster/Table');
-        console.log("MONSTER List Response: ", response);
-        const monsters = await response.json();
+        const monsters = await getTable<IMonster>(Type.Monster);
         console.log("MONSTER List Data: ", monsters);
-        const data = { headers: ["ID", "Name", "Passive Perception", "Alignment"], data: monsters }
+        const data: ITableList = { headers: ["ID", "Name", "Passive Perception", "Alignment"], data: monsters }
         setMonsters(data);
         setLoading(false);
     }

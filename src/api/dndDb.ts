@@ -1,18 +1,15 @@
-import { GetApp } from "@material-ui/icons";
+import RequestBuilder, { RequestType } from './requestBuilder';
 
-const monster = async function (): Promise<object> {
+export const getTable = async function <T>(type: Type): Promise<T> {
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/Table`);
+}
 
+export const getEntity = async function <T>(type: Type, id: number): Promise<T> {
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/${id}`);
 }
 
 
-
-export const get = async function (url: string): Promise<object> {
-    let response = await fetch(url);
-    return await response.json();
+export enum Type {
+    Monster = "Monster",
+    Npc = "Npc"
 }
-
-export default {
-    get: get
-}
-
-
