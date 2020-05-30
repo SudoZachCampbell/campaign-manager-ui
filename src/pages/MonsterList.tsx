@@ -2,7 +2,8 @@
 import CollapsibleTable from '../components/CollapsibleTable'
 import { ITableList, IMonster } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
-import { getTable, Type } from '../api/dndDb';
+import { Type, getEntities } from '../api/dndDb';
+import _ from 'lodash';
 
 export default function MonsterList(props: any) {
     const [monsters, setMonsters] = useState<ITableList>({
@@ -15,10 +16,21 @@ export default function MonsterList(props: any) {
     });
     const [loading, setLoading] = useState(true);
 
+    const columns = [
+        "id", 
+        "name", 
+        "passive_perception", 
+        "alignment"
+    ]
+
     const populateMonstersData = async () => {
-        const monsters = await getTable<IMonster>(Type.Monster);
+        const monsters = await getEntities<IMonster[]>(Type.Monster);
         console.log("MONSTER List Data: ", monsters);
-        const data: ITableList = { headers: ["ID", "Name", "Passive Perception", "Alignment"], data: monsters }
+        const data: ITableList = {
+            headers: columns.map(_.startCase),
+            data: monsters.map(monster => _.pick(monster, columns))
+        }
+        console.log("Monster Data Structure: ", data);
         setMonsters(data);
         setLoading(false);
     }

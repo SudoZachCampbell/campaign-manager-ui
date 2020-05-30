@@ -45,10 +45,6 @@ export interface ITableData {
 
 export interface ITableList {
     headers: string[], 
-        data: [
-            { 
-                id: number 
-            }
-        ] 
+        data: any
 }
 //#endregion
