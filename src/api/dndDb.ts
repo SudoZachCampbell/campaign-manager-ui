@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { ITableList } from '../interfaces/Models';
 
 export const getTable = async function <T>(type: Type, columns: string[]): Promise<ITableList> {
-    const entities = await getEntities<T>(type);
+    const entities = await getEntities<T>(type, ["Monster", "Building"]);
     console.log(`${type} List Data: `, entities);
     const data: ITableList = {
         headers: columns.map(_.startCase),
@@ -16,8 +16,8 @@ export const getEntity = async function <T>(type: Type, id: number): Promise<T> 
     return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/${id}`);
 }
 
-export const getEntities = async function <T>(type: Type): Promise<T[]> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}`)
+export const getEntities = async function <T>(type: Type, include: string[]): Promise<T[]> {
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
 
