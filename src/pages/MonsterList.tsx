@@ -2,7 +2,7 @@
 import CollapsibleTable from '../components/CollapsibleTable'
 import { ITableList, IMonster } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
-import { Type, getEntities } from '../api/dndDb';
+import { Type, getEntities, getTable } from '../api/dndDb';
 import _ from 'lodash';
 
 export default function MonsterList(props: any) {
@@ -24,13 +24,7 @@ export default function MonsterList(props: any) {
     ]
 
     const populateMonstersData = async () => {
-        const monsters = await getEntities<IMonster[]>(Type.Monster);
-        console.log("MONSTER List Data: ", monsters);
-        const data: ITableList = {
-            headers: columns.map(_.startCase),
-            data: monsters.map(monster => _.pick(monster, columns))
-        }
-        console.log("Monster Data Structure: ", data);
+        const data = await getTable<IMonster>(Type.Monster, columns);
         setMonsters(data);
         setLoading(false);
     }

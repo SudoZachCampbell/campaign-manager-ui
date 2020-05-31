@@ -2,7 +2,7 @@
 import CollapsibleTable from '../components/CollapsibleTable'
 import { ITableList, INpc } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
-import { Type } from '../api/dndDb';
+import { Type, getTable } from '../api/dndDb';
 
 export default function NpcList(props: any) {
     const [npcs, setNpcs] = useState<ITableList>({
@@ -15,10 +15,16 @@ export default function NpcList(props: any) {
     });
     const [loading, setLoading] = useState(true);
 
+    const columns = [
+        "id", 
+        "name", 
+        "passive_perception", 
+        "alignment"
+    ]
+
     const populateNpcsData = async () => {
-        // const data = await getTable<ITableList>(Type.Npc)
-        // console.log("NPC List Data: ", data);
-        // setNpcs(data);
+        const data = await getTable<INpc>(Type.Npc, columns);
+        setNpcs(data);
         setLoading(false);
     }
 
