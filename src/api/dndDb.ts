@@ -5,10 +5,23 @@ import { ITableList } from '../interfaces/Models';
 export const getTable = async function <T>(type: Type, columns: string[]): Promise<ITableList> {
     const entities = await getEntities<T>(type, ["Monster", "Building"]);
     console.log(`${type} List Data: `, entities);
+    const properties = columns.map(x => {
+        const splitHeader = x.split('.');
+        if(splitHeader.length > 1) {
+            return splitHeader.map(_.startCase).join(' ');
+        } else {
+            return _.startCase(x);
+        }
+    });
     const data: ITableList = {
-        headers: columns.map(_.startCase),
-        data: entities.map(entity => _.pick(entity, columns))
+        headers: properties,
+        data: entities.map(entity => {
+            return columns.map(property => {
+                return _.get(entity, property)
+            })
+        })
     }
+    console.log(`${type} Table Data: `, data)
     return data;
 }
 

@@ -18,14 +18,14 @@ export default function NpcList(props: any) {
     const columns = [
         "id", 
         "name", 
-        "passive_perception", 
-        "alignment"
+        "monster.name", 
+        "location"
     ]
 
     const populateNpcsData = async () => {
-        // TODO: Get Location and Monster Name
-        const data = await getTable<INpc>(Type.Npc, columns);
-        setNpcs(data);
+        let monsterData: ITableList = await getTable<INpc>(Type.Npc, columns);
+        monsterData.data = monsterData.data
+        setNpcs(monsterData);
         setLoading(false);
     }
 
