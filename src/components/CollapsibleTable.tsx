@@ -16,7 +16,7 @@ import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles'
 import { ITableData } from '../interfaces/Models';
-import Npc from './Npc';
+import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 
 const useRowStyles = makeStyles({
@@ -42,7 +42,7 @@ export default function CollapsibleTable(props: ITableData) {
                     </TableHead>
                     <TableBody>
                         {
-                            props.dataSet.data.map((instance: { id: number }) => {
+                            _.map(props.dataSet.data, (instance: { id: number }) => {
                                 return <Row key={instance.id} component={props.component} instance={instance} />
                             })
                         }
@@ -59,7 +59,7 @@ function Row(props: { component: string, instance: { id: number } }) {
     const classes = useRowStyles();
 
     const types = {
-        Npc: Npc,
+        NpcSummary: NpcSummary,
         MonsterSummary: MonsterSummary
     }
 

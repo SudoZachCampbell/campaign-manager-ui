@@ -1,9 +1,13 @@
 import RequestBuilder, { RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { ITableList } from '../interfaces/Models';
+import { ITableList, IModel, IMonster } from '../interfaces/Models';
 
-export const getTable = async function <T>(type: Type, columns: string[]): Promise<ITableList> {
-    const entities = await getEntities<T>(type, ["Monster", "Building"]);
+export const getTable = async function <T extends IModel>(type: Type, columns: string[]): Promise<[ITableList, { [id: number]: T}]> {
+    const entitiesArray: T[] = await getEntities<T>(type, ["Monster", "Building"]);
+    const entities: { [id: number]: T} = entitiesArray.reduce((accum, entity) => {
+        accum[entity.id] = entity;
+        return accum;
+    }, {});
     console.log(`${type} List Data: `, entities);
     const properties = columns.map(x => {
         const splitHeader = x.split('.');
@@ -13,16 +17,17 @@ export const getTable = async function <T>(type: Type, columns: string[]): Promi
             return _.startCase(x);
         }
     });
-    const data: ITableList = {
+    const tableData: ITableList = {
         headers: properties,
-        data: entities.map(entity => {
-            return columns.map(property => {
-                return _.get(entity, property)
-            })
+        data: _.map(entities, entity => {
+            return columns.reduce((accum, property) => {
+                accum[property] = _.get(entity, property);
+                return accum;
+            }, {})
         })
     }
-    console.log(`${type} Table Data: `, data)
-    return data;
+    console.log(`${type} Table Data: `, tableData)
+    return [tableData, entities];
 }
 
 export const getEntity = async function <T>(type: Type, id: number): Promise<T> {

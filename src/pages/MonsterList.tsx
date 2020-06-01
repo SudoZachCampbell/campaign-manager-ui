@@ -24,8 +24,8 @@ export default function MonsterList(props: any) {
     ]
 
     const populateMonstersData = async () => {
-        const data = await getTable<IMonster>(Type.Monster, columns);
-        setMonsters(data);
+        const [tableData, monstersData]: [ITableList, { [id: number]: IMonster }] = await getTable<IMonster>(Type.Monster, columns);
+        setMonsters(tableData);
         setLoading(false);
     }
 

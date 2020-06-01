@@ -14,9 +14,9 @@ export interface INpc {
     id: number,
     name: string
     picture?: string,
-    monster?: IMonster, 
-    locale?: ILocale, 
-    building?: IBuilding 
+    monster?: IMonster,
+    locale?: ILocale,
+    building?: IBuilding
 }
 
 export interface IMonster extends ICreature {
@@ -44,7 +44,9 @@ export interface ITableData {
 }
 
 export interface ITableList {
-    headers: string[], 
-        data: any[]
+    headers: string[],
+    data: {
+        [id: number]: object
+    }
 }
 //#endregion

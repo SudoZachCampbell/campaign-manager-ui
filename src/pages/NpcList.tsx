@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList, INpc } from '../interfaces/Models';
+import { ITableList, INpc, ITableData } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
 import { Type, getTable } from '../api/dndDb';
 
@@ -23,15 +23,15 @@ export default function NpcList(props: any) {
     ]
 
     const populateNpcsData = async () => {
-        let monsterData: ITableList = await getTable<INpc>(Type.Npc, columns);
-        monsterData.data = monsterData.data
-        setNpcs(monsterData);
+        const [tableData, npcsData]: [ITableList, { [id: number]: INpc}] = await getTable<INpc>(Type.Npc, columns);
+        // tableData.data["location"] = 
+        setNpcs(tableData);
         setLoading(false);
     }
 
     const renderNpcsTable = () => {
         return (
-            <CollapsibleTable dataSet={npcs} component={"Npc"} />
+            <CollapsibleTable dataSet={npcs} component={"NpcSummary"} />
         )
     }
 
