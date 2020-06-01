@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/styles'
-import { ITableData } from '../interfaces/Models';
+import { ITableData, IModel } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 
@@ -27,7 +27,7 @@ const useRowStyles = makeStyles({
     },
 });
 
-export default function CollapsibleTable(props: ITableData) {
+export default function CollapsibleTable(props: ITableData<IModel>) {
     return (
         <Grid item style={{margin: 'auto'}} xs={10}>
             <TableContainer  component={Paper}>

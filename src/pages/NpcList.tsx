@@ -1,17 +1,17 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList, INpc, ITableData } from '../interfaces/Models';
+import { ITableList, INpc, ITableData, ITableRow } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
 import { Type, getTable } from '../api/dndDb';
+import _ from 'lodash';
+import { BPNpc } from '../interfaces/Initialisations';
 
 export default function NpcList(props: any) {
-    const [npcs, setNpcs] = useState<ITableList>({
+    const [npcs, setNpcs] = useState<ITableList<INpc>>({
         headers: [""],
-        data: [
-            {
-                id: 0
-            }
-        ]
+        data: {
+            0: BPNpc
+        }
     });
     const [loading, setLoading] = useState(true);
 
@@ -23,8 +23,13 @@ export default function NpcList(props: any) {
     ]
 
     const populateNpcsData = async () => {
-        const [tableData, npcsData]: [ITableList, { [id: number]: INpc}] = await getTable<INpc>(Type.Npc, columns);
-        // tableData.data["location"] = 
+        let [tableData, npcsData]: [ITableList<INpc>, ITableRow<INpc>] = await getTable<INpc>(Type.Npc, columns);
+        tableData.data = _.map(tableData.data, row => {
+            const npc = npcsData[row.id]
+            row["location"] = npc.building ? `${npc.building.name} in ${npc.building.locale.name}` : npc.locale?.name
+            return row;
+        });
+        console.log('Post Location Table Data: ', tableData);
         setNpcs(tableData);
         setLoading(false);
     }

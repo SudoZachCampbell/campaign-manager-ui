@@ -10,9 +10,7 @@ export interface ICreature extends IModel {
     picture?: string
 }
 
-export interface INpc {
-    id: number,
-    name: string
+export interface INpc extends IModel {
     picture?: string,
     monster?: IMonster,
     locale?: ILocale,
@@ -27,26 +25,31 @@ export interface IMonster extends ICreature {
 
 //#region Locations
 
-export interface ILocale {
-    name: string
+export interface ILocation extends IModel {
+    
 }
 
-export interface IBuilding {
+export interface ILocale extends ILocation {
+}
 
+export interface IBuilding extends ILocation {
+    locale: ILocale
 }
 
 //#endregion
 
 //#region TableData
-export interface ITableData {
+export interface ITableData<T> {
     component: string,
-    dataSet: ITableList
+    dataSet: ITableList<T>
 }
 
-export interface ITableList {
+export interface ITableList<T> {
     headers: string[],
-    data: {
-        [id: number]: object
-    }
+    data: ITableRow<T>
+}
+
+export interface ITableRow<T> {
+    [id: number]: T
 }
 //#endregion
