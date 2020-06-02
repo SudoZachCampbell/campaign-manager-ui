@@ -1,11 +1,11 @@
 import RequestBuilder, { RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { IModel, IMonster, ITableList, ITableRow } from '../interfaces/Models';
+import { IModel, IMonster, ITableList, ITableRows } from '../interfaces/Models';
 import { YoutubeSearchedFor } from '@material-ui/icons';
 
-export const getTable = async function <T extends IModel>(type: Type, columns: string[]): Promise<[ITableList<T>, { [id: number]: T }]> {
-    const entitiesArray: T[] = await getEntities<T>(type, ["Monster", "Building", "Locale"]);
-    const entities: ITableRow<T> = entitiesArray.reduce((accum, entity) => {
+export const getTable = async function <T extends IModel>(type: Type, columns: string[], include: string[]): Promise<[ITableList<T>, { [id: number]: T }]> {
+    const entitiesArray: T[] = await getEntities<T>(type, include);
+    const entities: ITableRows<T> = entitiesArray.reduce((accum, entity) => {
         accum[entity.id] = entity;
         return accum;
     }, {});
@@ -21,7 +21,7 @@ export const getTable = async function <T extends IModel>(type: Type, columns: s
     const tableData: ITableList<T> = {
         headers: properties,
         data: _.reduce(entities, (accum, entity: T) => {
-            accum[entity.id] = columns.reduce((innerAccum: ITableRow<T>, property) => {
+            accum[entity.id] = columns.reduce((innerAccum: ITableRows<T>, property) => {
                 innerAccum[property] = _.get(entity, property);
                 return innerAccum;
             }, {})
@@ -32,8 +32,8 @@ export const getTable = async function <T extends IModel>(type: Type, columns: s
     return [tableData, entities];
 }
 
-export const getEntity = async function <T>(type: Type, id: number): Promise<T> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/${id}`);
+export const getEntity = async function <T>(type: Type, id: number, include: string[]): Promise<T> {
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
 export const getEntities = async function <T>(type: Type, include: string[]): Promise<T[]> {

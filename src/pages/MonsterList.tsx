@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList, IMonster, ITableRow } from '../interfaces/Models';
+import { ITableList, IMonster, ITableRows } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
 import { Type, getEntities, getTable } from '../api/dndDb';
 import _ from 'lodash';
@@ -24,7 +24,7 @@ export default function MonsterList(props: any) {
     ]
 
     const populateMonstersData = async () => {
-        const [tableData, monstersData]: [ITableList<IMonster>, ITableRow<IMonster>] = await getTable<IMonster>(Type.Monster, columns);
+        const [tableData, monstersData]: [ITableList<IMonster>, ITableRows<IMonster>] = await getTable<IMonster>(Type.Monster, columns, [""]);
         setMonsters(tableData);
         setLoading(false);
     }

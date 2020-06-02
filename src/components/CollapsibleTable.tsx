@@ -42,7 +42,7 @@ export default function CollapsibleTable(props: ITableData<IModel>) {
                     </TableHead>
                     <TableBody>
                         {
-                            _.map(props.dataSet.data, (instance: { id: number }) => {
+                            _.map(props.dataSet.data, (instance: IModel) => {
                                 return <Row key={instance.id} component={props.component} instance={instance} />
                             })
                         }
@@ -54,7 +54,7 @@ export default function CollapsibleTable(props: ITableData<IModel>) {
 
 }
 
-function Row(props: { component: string, instance: { id: number } }) {
+function Row(props: { component: string, instance: IModel }) {
     const [open, setOpen] = useState<boolean>(false);
     const classes = useRowStyles();
 
@@ -81,7 +81,7 @@ function Row(props: { component: string, instance: { id: number } }) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(props.instance).length + 1}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box>
-                            {React.createElement(types[props.component], {id: props.instance.id}, null)}
+                            {React.createElement(types[props.component], {instance: props.instance}, null)}
                         </Box>
                     </Collapse>
                 </TableCell>

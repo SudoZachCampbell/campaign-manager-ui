@@ -46,10 +46,10 @@ export interface ITableData<T> {
 
 export interface ITableList<T> {
     headers: string[],
-    data: ITableRow<T>
+    data: ITableRows<T>
 }
 
-export interface ITableRow<T> {
+export interface ITableRows<T> {
     [id: number]: T
 }
 //#endregion
