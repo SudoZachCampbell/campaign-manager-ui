@@ -24,14 +24,17 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
-        height: '15%'
+        height: '15%',
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        backgroundColor: 'transparent'
+        backgroundImage: 'url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/Toblen_Stonehill.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        justifyContent: 'center'
     },
     appBarShift: {
         width: `calc(100% - ${drawerWidth}px)`,
@@ -40,6 +43,9 @@ const useStyles = makeStyles((theme: Theme) => ({
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
+    },
+    title: {
+        lineHeight: 'normal'
     },
     menuButton: {
         marginRight: theme.spacing(2),
@@ -112,9 +118,9 @@ export default function NavMenu(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography className={classes.title} variant="h2" noWrap>
                         {props.pageName}
-            </Typography>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -144,22 +150,22 @@ export default function NavMenu(props) {
                 </List> */}
                 {/* <Divider /> */}
                 <List>
-                        <ListItemLink href='/players'>
-                            <ListItemIcon></ListItemIcon>
-                            <ListItemText primary='Players' />
-                        </ListItemLink>
-                        <ListItemLink href='/npcs'>
-                            <ListItemIcon></ListItemIcon>
-                            <ListItemText primary='Npcs' />
-                        </ListItemLink>                        
-                        <ListItemLink href='/monsters'>
-                            <ListItemIcon></ListItemIcon>
-                            <ListItemText primary='Monsters' />
-                        </ListItemLink>
-                        <ListItemLink href='/places'>
-                            <ListItemIcon></ListItemIcon>
-                            <ListItemText primary='Places' />
-                        </ListItemLink>
+                    <ListItemLink href='/players'>
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText primary='Players' />
+                    </ListItemLink>
+                    <ListItemLink href='/npcs'>
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText primary='Npcs' />
+                    </ListItemLink>
+                    <ListItemLink href='/monsters'>
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText primary='Monsters' />
+                    </ListItemLink>
+                    <ListItemLink href='/places'>
+                        <ListItemIcon></ListItemIcon>
+                        <ListItemText primary='Places' />
+                    </ListItemLink>
                 </List>
             </Drawer>
         </div>

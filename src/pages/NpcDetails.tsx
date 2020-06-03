@@ -12,7 +12,7 @@ export default function NpcDetails(props: { setPageName: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
     const [loading, setLoading] = useState<boolean>(true);
 
-    props.setPageName('Npc Details');
+    props.setPageName(npc.name);
 
     const { id } = useParams();
 
@@ -41,9 +41,6 @@ export default function NpcDetails(props: { setPageName: Function }) {
     const display = (
         <Box p={3}>
             <Grid container>
-                <Grid xs={12}>
-                    <Typography id="pageHeader" variant='h2' gutterBottom>{npc.name}</Typography>
-                </Grid>
                 <Grid xs={6}>
                     <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
                     <TogglingTextField label='Id' text={npc.picture} saveField={saveField} />
