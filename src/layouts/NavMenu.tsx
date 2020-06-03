@@ -24,7 +24,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
-        height: '15%',
+        height: '10%',
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -48,7 +48,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         lineHeight: 'normal'
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(2)
+    },
+    menuIcon: {
+        fontSize: '150%'
     },
     hide: {
         display: 'none',
@@ -116,7 +119,7 @@ export default function NavMenu(props) {
                         edge="start"
                         className={clsx(classes.menuButton, open && classes.hide)}
                     >
-                        <MenuIcon />
+                        <MenuIcon className={classes.menuIcon} />
                     </IconButton>
                     <Typography className={classes.title} variant="h2" noWrap>
                         {props.pageName}

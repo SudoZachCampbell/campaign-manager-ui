@@ -47,9 +47,6 @@ export default function MonsterList(props: any) {
 
     return (
         <Box p={5}>
-            <Box pb={2}>
-                <Typography id="tabelLabel" variant='h2' gutterBottom>Monsters</Typography>
-            </Box>
             <Box>
                 {contents}
             </Box>
