@@ -13,6 +13,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 export default function App(props) {
     const [pageName, setPageName] = useState('');
+    const [pageBanner, setPageBanner] = useState('');
 
     const theme = createMuiTheme({
         typography: {
@@ -22,11 +23,11 @@ export default function App(props) {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <Layout pageName={pageName}>
+            <Layout pageName={pageName} pageBanner={pageBanner}>
                 <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
                 <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
                 <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
-                <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} />} />
+                <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
             </Layout>
         </MuiThemeProvider>
     );

@@ -8,11 +8,12 @@ import { BPNpc } from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
 
-export default function NpcDetails(props: { setPageName: Function }) {
+export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
     const [loading, setLoading] = useState<boolean>(true);
 
     props.setPageName(npc.name);
+    props.setPageBanner(npc.picture);
 
     const { id } = useParams();
 

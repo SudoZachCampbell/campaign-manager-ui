@@ -12,7 +12,9 @@ import {
     ListItemProps,
     ListItemText,
     Toolbar,
-    Typography
+    Typography,
+    Box,
+    Backdrop
 } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -31,10 +33,11 @@ const useStyles = makeStyles((theme: Theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        backgroundImage: 'url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/Toblen_Stonehill.jpg)',
-        backgroundSize: 'cover',
+        backgroundImage: (props: any) => `url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${props.pageBanner})`,
+        backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        justifyContent: 'center'
+        backgroundSize: 'cover',
+        backgroundColor: '#FFFFFF'
     },
     appBarShift: {
         width: `calc(100% - ${drawerWidth}px)`,
@@ -43,6 +46,10 @@ const useStyles = makeStyles((theme: Theme) => ({
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
+    },
+    backDrop: {
+        justifyContent: 'left',
+        background: 'rgba(0,0,0,0.7)'
     },
     title: {
         lineHeight: 'normal'
@@ -90,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function NavMenu(props) {
-    const classes = useStyles();
+    const classes = useStyles(props);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -111,20 +118,22 @@ export default function NavMenu(props) {
                     [classes.appBarShift]: open,
                 })}
             >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
-                    >
-                        <MenuIcon className={classes.menuIcon} />
-                    </IconButton>
-                    <Typography className={classes.title} variant="h2" noWrap>
-                        {props.pageName}
-                    </Typography>
-                </Toolbar>
+                <Backdrop open={true} className={classes.backDrop} transitionDuration={0}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            className={clsx(classes.menuButton, open && classes.hide)}
+                        >
+                            <MenuIcon className={classes.menuIcon} />
+                        </IconButton>
+                        <Typography className={classes.title} variant="h2" noWrap>
+                            {props.pageName}
+                        </Typography>
+                    </Toolbar>
+                </Backdrop>
             </AppBar>
             <Drawer
                 className={classes.drawer}
@@ -171,7 +180,7 @@ export default function NavMenu(props) {
                     </ListItemLink>
                 </List>
             </Drawer>
-        </div>
+        </div >
     )
 }
 

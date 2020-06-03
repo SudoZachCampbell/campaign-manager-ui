@@ -6,7 +6,7 @@ export default function Layout(props) {
     
     return (
         <div style={{height:'1080px'}}>
-            <NavMenu pageName={props.pageName} />
+            <NavMenu pageName={props.pageName} pageBanner={props.pageBanner}/>
             <Container>
                 {props.children}
             </Container>
