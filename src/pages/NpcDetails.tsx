@@ -32,6 +32,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     }
 
     useEffect(() => {
+        // TODO: Why is monster disappearing
         populateNpcData();
     }, [])
 

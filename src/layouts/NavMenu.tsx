@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         }),
         backgroundImage: (props: any) => `url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${props.pageBanner})`,
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
+        backgroundPosition: '50% 25%',
         backgroundSize: 'cover',
         backgroundColor: '#FFFFFF'
     },
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     backDrop: {
         justifyContent: 'left',
-        background: 'rgba(0,0,0,0.7)'
+        background: 'rgba(0,0,0,0.6)'
     },
     title: {
         lineHeight: 'normal'
