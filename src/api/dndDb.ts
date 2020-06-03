@@ -2,6 +2,7 @@ import RequestBuilder, { RequestType } from './requestBuilder';
 import _ from 'lodash';
 import { IModel, IMonster, ITableList, ITableRows } from '../interfaces/Models';
 import { YoutubeSearchedFor } from '@material-ui/icons';
+import { Patch } from '../interfaces/Requests';
 
 export const getTable = async function <T extends IModel>(type: Type, columns: string[], include: string[]): Promise<[ITableList<T>, { [id: number]: T }]> {
     const entitiesArray: T[] = await getEntities<T>(type, include);
@@ -40,8 +41,25 @@ export const getEntities = async function <T>(type: Type, include: string[]): Pr
     return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
+export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, value?: string | object | any[]): Promise<T> {
+    const url = `http://localhost:53596/${type}/${id}`
+    const body: Patch[] = [
+        {
+            op: patchType,
+            path,
+            value
+        }
+    ]
+    return await RequestBuilder[RequestType.PATCH](url, JSON.stringify(body))
+}
+
 
 export enum Type {
     Monster = "Monster",
     Npc = "Npc"
+}
+
+export enum PatchType {
+    Add = 'add',
+    Remove = 'remove'
 }

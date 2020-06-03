@@ -5,7 +5,7 @@ import TogglingTextField from '../components/TogglingTextField';
 import { INpc } from '../interfaces/Models';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { BPNpc } from '../interfaces/Initialisations'
-import { Type, getEntity } from '../api/dndDb';
+import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
 
 export default function NpcDetails(props: { setPageName: Function }) {
@@ -34,16 +34,17 @@ export default function NpcDetails(props: { setPageName: Function }) {
         populateNpcData();
     }, [])
 
-    const saveField = () => {
-
+    const saveField = async (field: string, value: any) => {
+        const data =  await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${field}`, value);
+        setNpc(data);
     }
 
     const display = (
         <Box p={3}>
             <Grid container>
                 <Grid xs={6}>
-                    <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
-                    <TogglingTextField label='Background' text={npc.background} direction='column' saveField={saveField} />
+                    <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
+                    <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
                 </Grid>
                 <Grid xs={6}>
                     {npc.monster && <MonsterSummary instance={npc.monster} />}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Button, Grid, IconButton, TextField, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 
-export default function TogglingTextField(props: { text: string | undefined, label: string, direction?: string, saveField: Function }) {
+export default function TogglingTextField(props: { text: string | undefined, label: string, field: string, saveField: Function, direction?: string }) {
     const [currentText, setCurrentText] = useState<string | undefined>('');
     const [edit, setEdit] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ export default function TogglingTextField(props: { text: string | undefined, lab
     }
 
     const saveField = () => {
-        props.saveField(currentText);
+        props.saveField(props.field, currentText);
         toggleEdit();
     }
 
