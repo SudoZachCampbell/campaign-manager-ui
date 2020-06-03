@@ -11,6 +11,11 @@ export interface ICreature extends IModel {
 }
 
 export interface INpc extends IModel {
+    background?: string,
+    noteable_events?: string[],
+    beliefs?: string[],
+    passions?: string[],
+    flaws?: string[],
     picture?: string,
     monster?: IMonster,
     locale?: ILocale,

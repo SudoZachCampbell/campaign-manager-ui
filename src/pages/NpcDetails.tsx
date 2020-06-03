@@ -43,7 +43,7 @@ export default function NpcDetails(props: { setPageName: Function }) {
             <Grid container>
                 <Grid xs={6}>
                     <TogglingTextField label='Name' text={npc.name} saveField={saveField} />
-                    <TogglingTextField label='Id' text={npc.picture} saveField={saveField} />
+                    <TogglingTextField label='Background' text={npc.background} direction='column' saveField={saveField} />
                 </Grid>
                 <Grid xs={6}>
                     {npc.monster && <MonsterSummary instance={npc.monster} />}
