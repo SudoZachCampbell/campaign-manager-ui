@@ -49,16 +49,18 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     backDrop: {
         justifyContent: 'left',
-        background: 'rgba(0,0,0,0.6)'
+        background: 'rgba(255,255,255,0.6)'
     },
     title: {
-        lineHeight: 'normal'
+        lineHeight: 'normal',
+        color: '#000000'
     },
     menuButton: {
         marginRight: theme.spacing(2)
     },
     menuIcon: {
-        fontSize: '150%'
+        fontSize: '150%',
+        color: '#000000'
     },
     hide: {
         display: 'none',

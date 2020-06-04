@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
 import { INpc } from '../interfaces/Models';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
 import { BPNpc } from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
+import SubMenu from '../components/SubMenu';
 
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
@@ -17,10 +18,10 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
 
     const { id } = useParams();
 
-    
+
     const include = [
-        "Monster", 
-        "Building", 
+        "Monster",
+        "Building",
         "Locale"
     ]
 
@@ -37,8 +38,21 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     }, [])
 
     const saveField = async (field: string, value: any) => {
-        const data =  await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${field}`, value);
+        const data = await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${field}`, value);
         setNpc(data);
+    }
+
+    const tabs = {
+        headers: [
+            'Pictures',
+            'Location',
+            'Monster'
+        ],
+        data: [
+            <Pictures />,
+            <Location />,
+            <MonsterSummary instance={npc.monster} />
+        ]
     }
 
     const display = (
@@ -49,7 +63,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
                     <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
                 </Grid>
                 <Grid xs={6}>
-                    {npc.monster && <MonsterSummary instance={npc.monster} />}
+                    <SubMenu tabs={tabs} />
                 </Grid>
             </Grid>
         </Box>
@@ -60,4 +74,12 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         display
 
     return loadingCheck;
+}
+
+function Pictures(props) {
+    return <Typography>Test Pictures</Typography>
+}
+
+function Location(props) {
+    return <Typography>Test Location</Typography>
 }
