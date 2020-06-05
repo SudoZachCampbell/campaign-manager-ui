@@ -10,12 +10,14 @@ interface MonsterSummaryProps {
 }
 
 export default function MonsterSummary(props: MonsterSummaryProps) {
+
     const renderMonsterArea = () => {
+        console.log(`${props.instance?.name}: `, props.instance)
         return (
             <Box p={3}>
                 <Grid container>
                     <Grid item xs={4}>
-                        <h1 className="display-4">{props.instance?.name}</h1>
+                        <Typography variant='h4'>{props.instance?.name}</Typography>
                         <div>{props.instance?.hit_points}</div>
                         <Button variant="contained" color="secondary" href={`/monster-details/${props.instance?.id}`}>Details</Button>
                     </Grid>

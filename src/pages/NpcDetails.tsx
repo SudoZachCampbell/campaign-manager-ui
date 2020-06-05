@@ -44,14 +44,14 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
 
     const tabs = {
         headers: [
+            'Monster',
             'Pictures',
-            'Location',
-            'Monster'
+            'Location'
         ],
         data: [
+            <MonsterSummary instance={npc.monster} />,
             <Pictures />,
-            <Location />,
-            <MonsterSummary instance={npc.monster} />
+            <Location />
         ]
     }
 
