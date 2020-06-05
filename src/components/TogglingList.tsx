@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Grid, IconButton, TextField, Typography } from '@material-ui/core';
-import { Delete as DeleteIcon } from '@material-ui/icons';
+import { Box, Button, Grid, IconButton, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import {SaveTwoTone as SaveIcon} from '@material-ui/icons';
+import {CancelTwoTone as CancelIcon} from '@material-ui/icons';
+import {FiberManualRecordOutlined as FiberIcon} from '@material-ui/icons';
+import ListAdder from './ListAdder';
 
-export default function TogglingTextField(props: { text: string | undefined, direction?: string, label: string, saveField: Function }) {
-    const [currentText, setCurrentText] = useState<string | undefined>('');
+const useStyles = makeStyles(() => ({
+    itemText: {
+        fontSize: '1em'
+    }
+}))
+
+export default function TogglingList(props: { items: string[] | undefined, label: string, field: string, saveField: Function }) {
+    const [currentItems, setCurrentText] = useState<string[] | undefined>(['']);
     const [edit, setEdit] = useState<boolean>(false);
 
+    const classes = useStyles();
+
     useEffect(() => {
-        setCurrentText(props.text);
+        setCurrentText(props.items);
     }, [])
 
     const toggleEdit = () => {
@@ -15,19 +26,30 @@ export default function TogglingTextField(props: { text: string | undefined, dir
     }
 
     const saveField = () => {
-        props.saveField(currentText);
+        props.saveField(currentItems);
         toggleEdit();
     }
 
     const returnField = edit ?
         (<>
-            <IconButton onClick={toggleEdit}><DeleteIcon /></IconButton>
-            <TextField label={props.label} defaultValue={currentText} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCurrentText(event.target.value)} />
-            <Button onClick={saveField} variant='contained' color='primary'>Save</Button>
+            <ListAdder label={props.label} items={currentItems} />
+            <IconButton onClick={toggleEdit}><CancelIcon /></IconButton>
+            <IconButton onClick={saveField}><SaveIcon /></IconButton>
         </>) :
-        <Box display="flex" flexDirection={props.direction || 'row'}>
-            <Typography variant='body2' style={{marginRight: '1em'}}> {props.label}:</Typography>
-            <Typography onClick={toggleEdit} variant='body2' >{currentText}</Typography>
+        <Box display='flex' flexDirection='column'>
+            <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
+            <List onClick={toggleEdit}>
+                {currentItems?.map(item => {
+                    return (
+                        <ListItem>
+                            <ListItemIcon>
+                                <FiberIcon fontSize='small' />
+                            </ListItemIcon>
+                            <ListItemText primary={item} classes={{ primary: classes.itemText }} />
+                        </ListItem>
+                    )
+                })}
+            </List>
         </Box>
 
     return returnField;

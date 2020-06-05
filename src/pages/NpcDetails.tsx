@@ -8,6 +8,7 @@ import { BPNpc } from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
 import SubMenu from '../components/SubMenu';
+import TogglingList from '../components/TogglingList';
 
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
@@ -62,6 +63,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
                     <Box p={3}>
                         <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
                         <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
+                        <TogglingList label='Noteable Events' field='noteable_events' items={npc.noteable_events} saveField={saveField} />
                     </Box>
                 </Grid>
                 <Grid xs={6}>
