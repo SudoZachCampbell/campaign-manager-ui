@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import {
     AppBar,
@@ -14,7 +14,8 @@ import {
     Toolbar,
     Typography,
     Box,
-    Backdrop
+    Backdrop,
+    Button
 } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -39,14 +40,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         backgroundSize: 'cover',
         backgroundColor: '#FFFFFF'
     },
-    appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
     backDrop: {
         justifyContent: 'left',
         background: 'rgba(255,255,255,0.6)'
@@ -54,6 +47,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     title: {
         lineHeight: 'normal',
         color: '#000000'
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
     },
     menuButton: {
         marginRight: theme.spacing(2)
@@ -65,36 +66,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     hide: {
         display: 'none',
     },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
-    },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: -drawerWidth,
-    },
-    contentShift: {
-        transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
+    list: {
+        width: drawerWidth
     },
 }));
 
@@ -103,12 +76,8 @@ export default function NavMenu(props) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
+    const handleDrawer = (state: boolean) => {
+        setOpen(state);
     };
 
     return (
@@ -116,18 +85,16 @@ export default function NavMenu(props) {
             <CssBaseline />
             <AppBar
                 position="static"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
+                className={classes.appBar}
             >
                 <Backdrop open={true} className={classes.backDrop} transitionDuration={0}>
                     <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
-                            onClick={handleDrawerOpen}
+                            onClick={() => handleDrawer(true)}
                             edge="start"
-                            className={clsx(classes.menuButton, open && classes.hide)}
+                            className={classes.menuButton}
                         >
                             <MenuIcon className={classes.menuIcon} />
                         </IconButton>
@@ -137,55 +104,74 @@ export default function NavMenu(props) {
                     </Toolbar>
                 </Backdrop>
             </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
-                </div>
-                <Divider />
-                {/* 
-                TODO: Added Recently Visited Pages (linked to user)
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List> */}
-                {/* <Divider /> */}
-                <List>
-                    <ListItemLink href='/players'>
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary='Players' />
-                    </ListItemLink>
-                    <ListItemLink href='/npcs'>
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary='Npcs' />
-                    </ListItemLink>
-                    <ListItemLink href='/monsters'>
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary='Monsters' />
-                    </ListItemLink>
-                    <ListItemLink href='/places'>
-                        <ListItemIcon></ListItemIcon>
-                        <ListItemText primary='Places' />
-                    </ListItemLink>
-                </List>
-            </Drawer>
+            <TemporaryDrawer open={open} toggle={handleDrawer} />
         </div >
     )
 }
 
 function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
     return <ListItem button component="a" {...props} />;
+}
+
+function TemporaryDrawer(props: { open: boolean, toggle: Function }) {
+    const classes = useStyles();
+    console.log("Open State: ", props.open)
+
+    const toggleDrawer = (toggleState: boolean) => (
+        event: React.KeyboardEvent | React.MouseEvent,
+    ) => {
+        if (
+            event.type === 'keydown' &&
+            ((event as React.KeyboardEvent).key === 'Tab' ||
+                (event as React.KeyboardEvent).key === 'Shift')
+        ) {
+            return;
+        }
+
+        props.toggle(false);
+    };
+
+    const list = () => (
+        <div
+            className={classes.list}
+            role="presentation"
+            onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+        >
+            <div className={classes.drawerHeader}>
+                <IconButton onClick={toggleDrawer(false)}>
+                    <ChevronLeftIcon />
+                </IconButton>
+            </div>
+            <Divider />
+            <List>
+                <ListItemLink href='/'>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText primary='Home' />
+                </ListItemLink>
+                <ListItemLink href='/players'>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText primary='Players' />
+                </ListItemLink>
+                <ListItemLink href='/npcs'>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText primary='Npcs' />
+                </ListItemLink>
+                <ListItemLink href='/monsters'>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText primary='Monsters' />
+                </ListItemLink>
+                <ListItemLink href='/places'>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText primary='Places' />
+                </ListItemLink>
+            </List>
+        </div>
+    );
+
+    return (
+        <Drawer anchor='left' open={props.open} onClose={toggleDrawer(false)}>
+            {list()}
+        </Drawer>
+    );
 }

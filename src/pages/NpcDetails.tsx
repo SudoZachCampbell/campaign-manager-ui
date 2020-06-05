@@ -59,11 +59,15 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         <Box p={3}>
             <Grid container>
                 <Grid xs={6}>
-                    <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
-                    <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
+                    <Box p={3}>
+                        <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
+                        <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
+                    </Box>
                 </Grid>
                 <Grid xs={6}>
-                    <SubMenu tabs={tabs} />
+                    <Box p={3}>
+                        <SubMenu tabs={tabs} />
+                    </Box>
                 </Grid>
             </Grid>
         </Box>
