@@ -9,5 +9,6 @@ export const BPMonster = {
 export const BPNpc = {
     id: 0,
     name: "",
-    monster: BPMonster
+    monster: BPMonster,
+    noteable_events: []
 }

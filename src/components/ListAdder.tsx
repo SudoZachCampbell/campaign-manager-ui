@@ -19,42 +19,98 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function ListAdder(props: { label: string, items: string[] | undefined }) {
+interface Change {
+    add: {
+        [index: string]: {
+            index: string,
+            value: string
+        }
+    },
+    edit: {
+        [index: string]: {
+            index: string,
+            value: string
+        }
+    },
+    remove: {
+        [index: string]: { index: string }
+    }
+}
+
+export default function ListAdder(props: { label: string, items: string[], saveField: Function }) {
     const [list, setList] = useState(props.items)
-    const [changes, setChanges] = useState<object[]>([])
+    const [changes, setChanges] = useState<Change>({ add: {}, edit: {}, remove: {} })
     const [deleteIndex, setDeleteIndex] = useState(-1);
 
     const classes = useStyles();
+
+    // TODO: Make sure all avenues are handled
+
+    const addField = () => {
+        let newList = [...list, '']
+        console.log("New List: ", newList);
+        setList(() => {
+            const index: string = JSON.stringify(list.length);
+            changes.add[index] = { index, value: '' }
+            setChanges(changes);
+            return newList;
+        });
+    }
+
+    const editField = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        if (list) {
+            const text = event.target.value;
+            let newList = [...list];
+            newList[index] = text;
+            setList(() => {
+                const indexString = JSON.stringify(index);
+                changes.edit[indexString] = { index: indexString, value: text }
+                setChanges(changes);
+                return newList
+            });
+        }
+    }
+
+    const removeField = () => {
+        if (list) {
+            let newList = list.splice(deleteIndex, 1);
+            setList(() => {
+                const indexString = JSON.stringify(deleteIndex);
+                changes.remove[indexString] = {index: indexString}
+                setChanges(changes);
+                return newList
+            });
+        }
+    }
 
     const openDeleteDialog = (index: number) => {
         setDeleteIndex(index)
     }
 
-    const handleClose = (deleteItem: boolean) => {
+    const handleDeleteClose = (deleteItem: boolean) => {
         if (deleteItem) {
-
+            removeField();
         }
         setDeleteIndex(-1)
     }
 
     const saveField = () => {
-        
+        props.saveField(changes);
     }
 
     const listArea = (
         <Box>
-            {list?.map((item, index) => (
-                <Box display='flex'>
+            {list?.map((item, index) => {
+                console.log("Processing List: ", list)
+                return (<Box key={index} display='flex'>
                     <IconButton onClick={() => openDeleteDialog(index)}>
                         <DeleteIcon />
                     </IconButton>
-                    <TextField key={index} fullWidth defaultValue={item} multiline={true} />
-                    <IconButton onClick={saveField}>
-                        <SaveIcon />
-                    </IconButton>
+                    <TextField fullWidth defaultValue={item} multiline={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => editField(event, index)} />
                 </Box>
-            ))}
-            <IconButton>
+                )
+            })}
+            <IconButton onClick={addField}>
                 <AddIcon />
             </IconButton>
             <ConfirmationDialogRaw
@@ -64,7 +120,7 @@ export default function ListAdder(props: { label: string, items: string[] | unde
                 id="delete-confirm"
                 keepMounted
                 open={deleteIndex !== -1}
-                onClose={handleClose}
+                onClose={handleDeleteClose}
                 title={props.label}
                 value={deleteIndex}
             />
