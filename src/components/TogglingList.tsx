@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Grid, IconButton, TextField, Typography, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
-import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
-import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import { FiberManualRecordOutlined as FiberIcon } from '@material-ui/icons';
-import ListAdder from './ListAdder';
+import { ListAdder, Change } from './ListAdder';
+import { Patch } from '../interfaces/Requests'
+import _ from 'lodash'
 
 const useStyles = makeStyles(() => ({
     itemText: {
@@ -25,23 +25,34 @@ export default function TogglingList(props: { items: string[], label: string, fi
         setEdit(!edit);
     }
 
-    const saveField = (changes: object) => {
-        // TODO: Add Saving Structure for JSONPatch
+    const saveField = (changes: Change) => {
+        let patchList: Patch[] = []
+        console.log("Changes: ", changes)
+        patchList = _.reduce(changes, (accum, value, op) => {
+            let opPatch = _.map(value, (property, index) => {
+                let patch: Patch = {
+                    op,
+                    path: `/${_.camelCase(props.field)}/${op === 'add' ? '-' : property.index}`
+                }
+                if (property['value']) {
+                    patch.value = property['value']
+                }
+                console.log(`Patch for ${property.index} with op ${op}: `, patch);
+                return patch;
+            });
+            return accum.concat(opPatch)
+        }, patchList)
         // TODO: Remove warnings around nesting
-        console.log(changes);
-        // props.saveField(currentItems);
+        console.log("Patch List: ", patchList);
+        if (patchList.length) {
+            props.saveField(patchList);
+        }
         toggleEdit();
     }
 
     const returnField = edit ?
         (<>
-            <ListAdder label={props.label} items={currentItems} saveField={saveField} />
-            <IconButton onClick={toggleEdit}>
-                <CancelIcon />
-            </IconButton>
-            <IconButton onClick={saveField}>
-                <SaveIcon />
-            </IconButton>
+            <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
         </>) :
         <Box display='flex' flexDirection='column'>
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>

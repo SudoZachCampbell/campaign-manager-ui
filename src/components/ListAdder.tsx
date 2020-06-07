@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, IconButton, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@material-ui/core';
-import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
+import { SaveTwoTone as SaveIcon, CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import { AddCircleTwoTone as AddIcon } from '@material-ui/icons';
 import { DeleteTwoTone as DeleteIcon } from '@material-ui/icons';
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface Change {
+export interface Change {
     add: {
         [index: string]: {
             index: string,
             value: string
         }
     },
-    edit: {
+    replace: {
         [index: string]: {
             index: string,
             value: string
@@ -37,19 +37,17 @@ interface Change {
     }
 }
 
-export default function ListAdder(props: { label: string, items: string[], saveField: Function }) {
+export function ListAdder(props: { label: string, items: string[], saveField: Function, toggleEdit: Function }) {
     interface List {
         index: number,
         value: string,
         state: State
     }
     const [list, setList] = useState<List[]>([])
-    const [changes, setChanges] = useState<Change>({ add: {}, edit: {}, remove: {} })
+    const [changes, setChanges] = useState<Change>({ add: {}, replace: {}, remove: {} })
     const [deleteIndex, setDeleteIndex] = useState(-1);
 
     const classes = useStyles();
-
-    console.log("Changes Object: ", changes);
 
     enum State {
         NoChange,
@@ -70,7 +68,7 @@ export default function ListAdder(props: { label: string, items: string[], saveF
     }, [])
 
     const addField = () => {
-        let newList = [...list, {index: list.length + 1, value: '', state: State.Added}]
+        let newList = [...list, { index: list.length + 1, value: '', state: State.Added }]
         console.log("New List: ", newList);
         setList(() => {
             const index: string = JSON.stringify(list.length);
@@ -87,7 +85,7 @@ export default function ListAdder(props: { label: string, items: string[], saveF
             newList[index].value = text;
             setList(() => {
                 const indexString = JSON.stringify(index);
-                changes[changes.add[indexString] ? 'add' : 'edit'][indexString] = { index: indexString, value: text }
+                changes[changes.add[indexString] ? 'add' : 'replace'][indexString] = { index: indexString, value: text }
                 setChanges(changes);
                 return newList
             });
@@ -126,6 +124,10 @@ export default function ListAdder(props: { label: string, items: string[], saveF
         props.saveField(changes);
     }
 
+    const toggleEdit = () => {
+        props.toggleEdit();
+    }
+
     const listArea = (
         <Box>
             {list?.map((item, index) => {
@@ -144,6 +146,12 @@ export default function ListAdder(props: { label: string, items: string[], saveF
                     <AddIcon />
                 </IconButton>
             </Box>
+            <IconButton onClick={toggleEdit}>
+                <CancelIcon />
+            </IconButton>
+            <IconButton onClick={saveField}>
+                <SaveIcon />
+            </IconButton>
             <ConfirmationDialogRaw
                 classes={{
                     paper: classes.paper,

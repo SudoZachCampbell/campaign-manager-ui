@@ -41,15 +41,21 @@ export const getEntities = async function <T>(type: Type, include: string[]): Pr
     return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
-export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, value?: string | object | any[]): Promise<T> {
+export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, value?: string, patchList: Patch[] = []): Promise<T> {
     const url = `http://localhost:53596/${type}/${id}`
-    const body: Patch[] = [
-        {
-            op: patchType,
-            path,
-            value
-        }
-    ]
+    let body: Patch[] = []
+    if(patchType === PatchType.List) {
+        body = patchList;
+    } else {
+        body = [
+            {
+                op: patchType,
+                path,
+                value
+            }
+        ]
+    }
+
     return await RequestBuilder[RequestType.PATCH](url, JSON.stringify(body))
 }
 
@@ -61,5 +67,6 @@ export enum Type {
 
 export enum PatchType {
     Add = 'add',
-    Remove = 'remove'
+    Remove = 'remove',
+    List = 'list'
 }
