@@ -38,7 +38,12 @@ interface Change {
 }
 
 export default function ListAdder(props: { label: string, items: string[], saveField: Function }) {
-    const [list, setList] = useState([...props.items])
+    interface List {
+        index: number,
+        value: string,
+        state: State
+    }
+    const [list, setList] = useState<List[]>([])
     const [changes, setChanges] = useState<Change>({ add: {}, edit: {}, remove: {} })
     const [deleteIndex, setDeleteIndex] = useState(-1);
 
@@ -46,10 +51,26 @@ export default function ListAdder(props: { label: string, items: string[], saveF
 
     console.log("Changes Object: ", changes);
 
-    // TODO: Make sure all avenues are handled
+    enum State {
+        NoChange,
+        Added,
+        Edited,
+        Removed
+    }
+
+    useEffect(() => {
+        const newList = props.items.map((value, index) => {
+            return {
+                index,
+                value,
+                state: State.NoChange
+            }
+        })
+        setList(newList);
+    }, [])
 
     const addField = () => {
-        let newList = [...list, '']
+        let newList = [...list, {index: list.length + 1, value: '', state: State.Added}]
         console.log("New List: ", newList);
         setList(() => {
             const index: string = JSON.stringify(list.length);
@@ -63,7 +84,7 @@ export default function ListAdder(props: { label: string, items: string[], saveF
         if (list) {
             const text = event.target.value;
             let newList = [...list];
-            newList[index] = text;
+            newList[index].value = text;
             setList(() => {
                 const indexString = JSON.stringify(index);
                 changes[changes.add[indexString] ? 'add' : 'edit'][indexString] = { index: indexString, value: text }
@@ -81,7 +102,7 @@ export default function ListAdder(props: { label: string, items: string[], saveF
                     delete list[deleteIndex]
                     delete changes.add[indexString]
                 } else {
-                    list.splice(deleteIndex, 1);
+                    list[deleteIndex].state = State.Removed
                     changes.remove[indexString] = { index: indexString }
                 }
                 setChanges(changes);
@@ -108,18 +129,20 @@ export default function ListAdder(props: { label: string, items: string[], saveF
     const listArea = (
         <Box>
             {list?.map((item, index) => {
-                return (<Box key={index} display='flex'>
-                    <IconButton onClick={() => openDeleteDialog(index)}>
-                        <DeleteIcon />
-                    </IconButton>
-                    <TextField fullWidth value={item} multiline={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => editField(event, index)} />
-                </Box>
-                )
+                if (item.state !== State.Removed) {
+                    return (<Box key={index} display='flex'>
+                        <IconButton onClick={() => openDeleteDialog(index)}>
+                            <DeleteIcon />
+                        </IconButton>
+                        <TextField fullWidth value={item.value} multiline={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => editField(event, index)} />
+                    </Box>
+                    )
+                }
             })}
             <Box display='flex' justifyContent='flex-end'>
-            <IconButton onClick={addField}>
-                <AddIcon />
-            </IconButton>
+                <IconButton onClick={addField}>
+                    <AddIcon />
+                </IconButton>
             </Box>
             <ConfirmationDialogRaw
                 classes={{
