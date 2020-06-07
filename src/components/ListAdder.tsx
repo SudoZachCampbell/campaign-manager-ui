@@ -38,11 +38,13 @@ interface Change {
 }
 
 export default function ListAdder(props: { label: string, items: string[], saveField: Function }) {
-    const [list, setList] = useState(props.items)
+    const [list, setList] = useState([...props.items])
     const [changes, setChanges] = useState<Change>({ add: {}, edit: {}, remove: {} })
     const [deleteIndex, setDeleteIndex] = useState(-1);
 
     const classes = useStyles();
+
+    console.log("Changes Object: ", changes);
 
     // TODO: Make sure all avenues are handled
 
@@ -64,7 +66,7 @@ export default function ListAdder(props: { label: string, items: string[], saveF
             newList[index] = text;
             setList(() => {
                 const indexString = JSON.stringify(index);
-                changes.edit[indexString] = { index: indexString, value: text }
+                changes[changes.add[indexString] ? 'add' : 'edit'][indexString] = { index: indexString, value: text }
                 setChanges(changes);
                 return newList
             });
@@ -73,12 +75,17 @@ export default function ListAdder(props: { label: string, items: string[], saveF
 
     const removeField = () => {
         if (list) {
-            let newList = list.splice(deleteIndex, 1);
             setList(() => {
                 const indexString = JSON.stringify(deleteIndex);
-                changes.remove[indexString] = {index: indexString}
+                if (changes.add[indexString]) {
+                    delete list[deleteIndex]
+                    delete changes.add[indexString]
+                } else {
+                    list.splice(deleteIndex, 1);
+                    changes.remove[indexString] = { index: indexString }
+                }
                 setChanges(changes);
-                return newList
+                return list
             });
         }
     }
@@ -101,18 +108,19 @@ export default function ListAdder(props: { label: string, items: string[], saveF
     const listArea = (
         <Box>
             {list?.map((item, index) => {
-                console.log("Processing List: ", list)
                 return (<Box key={index} display='flex'>
                     <IconButton onClick={() => openDeleteDialog(index)}>
                         <DeleteIcon />
                     </IconButton>
-                    <TextField fullWidth defaultValue={item} multiline={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => editField(event, index)} />
+                    <TextField fullWidth value={item} multiline={true} onChange={(event: React.ChangeEvent<HTMLInputElement>) => editField(event, index)} />
                 </Box>
                 )
             })}
+            <Box display='flex' justifyContent='flex-end'>
             <IconButton onClick={addField}>
                 <AddIcon />
             </IconButton>
+            </Box>
             <ConfirmationDialogRaw
                 classes={{
                     paper: classes.paper,

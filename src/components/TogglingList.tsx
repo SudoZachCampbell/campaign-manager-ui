@@ -27,7 +27,7 @@ export default function TogglingList(props: { items: string[], label: string, fi
 
     const saveField = (changes: object) => {
         // TODO: Add Saving Structure for JSONPatch
-        // TODO: Remove Errors around nesting
+        // TODO: Remove warnings around nesting
         console.log(changes);
         // props.saveField(currentItems);
         toggleEdit();
