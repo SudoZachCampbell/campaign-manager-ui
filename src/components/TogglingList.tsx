@@ -57,9 +57,9 @@ export default function TogglingList(props: { items: string[], label: string, fi
         <Box display='flex' flexDirection='column'>
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
             <List onClick={toggleEdit}>
-                {currentItems?.map(item => {
+                {currentItems?.map((item, index) => {
                     return (
-                        <ListItem>
+                        <ListItem key={index}>
                             <ListItemIcon>
                                 <FiberIcon fontSize='small' />
                             </ListItemIcon>

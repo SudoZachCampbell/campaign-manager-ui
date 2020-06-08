@@ -17,7 +17,7 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
             <Box p={3}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Typography variant='h4'>{props.instance?.name}</Typography>
+                        <Typography variant={'h4'}>{props.instance?.name}</Typography>
                     </Grid>
                     <Grid item xs={6}>
 

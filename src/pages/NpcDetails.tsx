@@ -12,6 +12,14 @@ import TogglingList from '../components/TogglingList';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 
+const multiline: string[] = [
+    "background"
+]
+
+const ignoreFields: string[] = [
+    "picture"
+]
+
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
     const [loading, setLoading] = useState<boolean>(true);
@@ -20,7 +28,6 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     props.setPageBanner(npc.picture);
 
     const { id } = useParams();
-
 
     const include = [
         "Monster",
@@ -50,8 +57,6 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         setNpc(data);
     }
 
-    console.log("NPC: ", npc)
-
     const tabs = {
         headers: [
             'Monster',
@@ -68,17 +73,25 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     const display = (
         <Box p={3}>
             <Grid container>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                     <Box p={3}>
-                        <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
-                        <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
-                        <TogglingList label='Noteable Events' field='noteable_events' items={npc.noteable_events} saveField={saveList} />
-                        {
-                            npc.noteable_events.map(event => <Typography>{event}</Typography>)
-                        }
+                        {_.map(npc, (value, field) => {
+                            if (!field.includes('id') && !ignoreFields.includes(field)) {
+                                switch (typeof value) {
+                                    case 'number':
+                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={JSON.stringify(value)} column={multiline.includes(field)} saveField={saveField} />
+                                    case 'string':
+                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={value} column={multiline.includes(field)} saveField={saveField} />
+                                    case 'object':
+                                        if (Array.isArray(value)) {
+                                            return <TogglingList key={field} label={_.startCase(field)} field={field} items={value} saveField={saveList} />
+                                        }
+                                }
+                            }
+                        })}
                     </Box>
                 </Grid>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                     <Box p={3}>
                         <SubMenu tabs={tabs} />
                     </Box>

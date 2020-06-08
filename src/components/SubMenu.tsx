@@ -89,7 +89,7 @@ export default function SubMenu(props: SubMenuProps) {
             >
                 {props.tabs.data.map((tab, index) => {
                     return (
-                        <TabPanel value={value} index={index} dir={theme.direction}>
+                        <TabPanel key={index} value={value} index={index} dir={theme.direction}>
                             {tab}
                         </TabPanel>
                     )
