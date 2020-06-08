@@ -38,7 +38,6 @@ export default function Details<T extends IModel>(props: Props) {
     }
 
     useEffect(() => {
-        // TODO: Why is monster disappearing
         populateEntityData();
     }, [])
 

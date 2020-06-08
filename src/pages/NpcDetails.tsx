@@ -56,19 +56,9 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     }
 
     useEffect(() => {
-        // TODO: Why is monster disappearing
         populateNpcData();
     }, [])
 
-    const saveField = async (field: string, value: any) => {
-        const data: INpc = await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${_.camelCase(field)}`, value);
-        setNpc(data);
-    }
-
-    const saveList = async (field: string, patchList: Patch[]) => {
-        const data = await updateEntity<INpc>(Type.Npc, id, PatchType.List, '', include, '', patchList);
-        setNpc(data);
-    }
 
     const display = (
         <Box p={3}>
