@@ -19,7 +19,7 @@ export default function TogglingList(props: { items: string[], label: string, fi
 
     useEffect(() => {
         setCurrentText(props.items);
-    }, [])
+    }, [props.items])
 
     const toggleEdit = () => {
         setEdit(!edit);
@@ -45,7 +45,7 @@ export default function TogglingList(props: { items: string[], label: string, fi
         // TODO: Remove warnings around nesting
         console.log("Patch List: ", patchList);
         if (patchList.length) {
-            props.saveField(patchList);
+            props.saveField(props.field, patchList);
         }
         toggleEdit();
     }

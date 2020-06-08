@@ -9,7 +9,7 @@ import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
 import SubMenu from '../components/SubMenu';
 import TogglingList from '../components/TogglingList';
-import {Patch} from '../interfaces/Requests';
+import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
@@ -41,14 +41,16 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     }, [])
 
     const saveField = async (field: string, value: any) => {
-        const data = await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${_.camelCase(field)}`, value);
+        const data: INpc = await updateEntity<INpc>(Type.Npc, id, PatchType.Add, `/${_.camelCase(field)}`, value);
         setNpc(data);
     }
 
-    const saveList = async (patchList: Patch[]) => {
+    const saveList = async (field: string, patchList: Patch[]) => {
         const data = await updateEntity<INpc>(Type.Npc, id, PatchType.List, '', '', patchList);
         setNpc(data);
     }
+
+    console.log("NPC: ", npc)
 
     const tabs = {
         headers: [
@@ -71,6 +73,9 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
                         <TogglingTextField label='Name' field='name' text={npc.name} saveField={saveField} />
                         <TogglingTextField label='Background' field='background' text={npc.background} direction='column' saveField={saveField} />
                         <TogglingList label='Noteable Events' field='noteable_events' items={npc.noteable_events} saveField={saveList} />
+                        {
+                            npc.noteable_events.map(event => <Typography>{event}</Typography>)
+                        }
                     </Box>
                 </Grid>
                 <Grid xs={6}>
