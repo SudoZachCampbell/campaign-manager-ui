@@ -20,6 +20,25 @@ const ignoreFields: string[] = [
     "picture"
 ]
 
+const include = [
+    "Monster",
+    "Building",
+    "Locale"
+]
+
+const tabs = {
+    headers: [
+        'Monster',
+        'Pictures',
+        'Location'
+    ],
+    data: [
+        <MonsterSummary instance={entity.monster} />,
+        <Pictures />,
+        <Location />
+    ]
+}
+
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BPNpc);
     const [loading, setLoading] = useState<boolean>(true);
@@ -28,12 +47,6 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     props.setPageBanner(npc.picture);
 
     const { id } = useParams();
-
-    const include = [
-        "Monster",
-        "Building",
-        "Locale"
-    ]
 
     const populateNpcData = async () => {
         const data: INpc = await getEntity<INpc>(Type.Npc, id, include);
@@ -55,19 +68,6 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     const saveList = async (field: string, patchList: Patch[]) => {
         const data = await updateEntity<INpc>(Type.Npc, id, PatchType.List, '', include, '', patchList);
         setNpc(data);
-    }
-
-    const tabs = {
-        headers: [
-            'Monster',
-            'Pictures',
-            'Location'
-        ],
-        data: [
-            <MonsterSummary instance={npc.monster} />,
-            <Pictures />,
-            <Location />
-        ]
     }
 
     const display = (
