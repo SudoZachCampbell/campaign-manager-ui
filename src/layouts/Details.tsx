@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import TogglingTextField from '../components/TogglingTextField';
-import TogglingNumberField from '../components/TogglingNumberField';
 import { INpc, IModel, Field } from '../interfaces/Models';
 import { FieldType } from '../interfaces/Lookups';
 import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
@@ -10,7 +8,10 @@ import BP from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
 import SubMenu from '../components/SubMenu';
+import TogglingTextField from '../components/TogglingTextField';
+import TogglingNumberField from '../components/TogglingNumberField';
 import TogglingList from '../components/TogglingList';
+import TogglingEnumField from '../components/TogglingEnumField';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 
@@ -38,6 +39,11 @@ export default function Details<T extends IModel>(props: Props) {
         setEntity(data);
     }
 
+    const saveEnum = async (field: string, patchList: Patch[]) => {
+        const data: T = await updateEntity<T>(props.type, props.id, PatchType.List, '', props.include, '', patchList);
+        setEntity(data);
+    }
+
     useEffect(() => {
         setEntity(props.entity);
     }, [props.entity])
@@ -49,18 +55,23 @@ export default function Details<T extends IModel>(props: Props) {
                     <Box p={3}>
                         {props.fields.map((field) => {
                             if (!field.name.includes('id') && !props.ignoreFields.includes(field.name)) {
+
                                 const propsObj = {
                                     key: field.name,
                                     label: _.startCase(field.name),
-                                    field: field.name
+                                    field: field.name,
+                                    value: entity[field.name]
                                 }
+
                                 switch (field.type) {
                                     case FieldType.Number:
-                                        return <TogglingNumberField {...propsObj} text={entity[field.name]} saveField={saveField} />
+                                        return <TogglingNumberField {...propsObj} saveField={saveField} />
                                     case FieldType.String:
-                                        return <TogglingTextField {...propsObj} text={entity[field.name]} column={props.multiline?.includes(field.name)} saveField={saveField} />
+                                        return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
+                                    case FieldType.Enum:
+                                        return <TogglingEnumField {...propsObj} type={props.type} saveField={saveEnum} />
                                     case FieldType.Array:
-                                        return <TogglingList {...propsObj} items={value} saveField={saveList} />
+                                        return <TogglingList {...propsObj} saveField={saveList} />
                                 }
                             }
                         })}

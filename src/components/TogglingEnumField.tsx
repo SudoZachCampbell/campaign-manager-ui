@@ -6,8 +6,7 @@ import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import _ from 'lodash'
 
 interface Props {
-    enumName: string,
-    currentValue: string,
+    value: string,
     label: string,
     field: string,
     type: Type,
@@ -20,11 +19,11 @@ export default function TogglingEnumField(props: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {
-        setCurrentValue(props.currentValue ?? '');
-    }, [props.currentValue])
+        setCurrentValue(props.value ?? '');
+    }, [props.value])
 
     const getEnum = async () => {
-        const enumList: string[] = await getEnumValues(props.type, props.enumName);
+        const enumList: string[] = await getEnumValues(props.type, props.field);
         setEnumValues(enumList);
     }
 

@@ -11,15 +11,22 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-export default function TogglingList(props: { items: string[], label: string, field: string, saveField: Function }) {
+interface Props { 
+    value: string[], 
+    label: string, 
+    field: string, 
+    saveField: Function 
+}
+
+export default function TogglingList(props: Props) {
     const [currentItems, setCurrentText] = useState<string[]>(['']);
     const [edit, setEdit] = useState<boolean>(false);
 
     const classes = useStyles();
 
     useEffect(() => {
-        setCurrentText(props.items);
-    }, [props.items])
+        setCurrentText(props.value);
+    }, [props.value])
 
     const toggleEdit = () => {
         setEdit(!edit);

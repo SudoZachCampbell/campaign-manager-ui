@@ -5,7 +5,7 @@ import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import { FiberManualRecordOutlined as FiberIcon } from '@material-ui/icons';
 
 interface Props { 
-    text: string | undefined, 
+    value: string | undefined, 
     label: string, 
     field: string, 
     saveField: Function, 
@@ -17,8 +17,8 @@ export default function TogglingTextField(props: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {
-        setCurrentText(props.text ?? '');
-    }, [props.text])
+        setCurrentText(props.value ?? '');
+    }, [props.value])
 
     const toggleEdit = () => {
         setEdit(!edit);
