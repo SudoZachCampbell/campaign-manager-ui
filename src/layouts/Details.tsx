@@ -13,44 +13,31 @@ import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 
 interface Props {
-    type: Type, 
-    setPageName: Function, 
-    setPageBanner: Function, 
+    id: number,
+    entity: any,
+    type: Type,
     ignoreFields: string[],
+    multiline: string[],
     include: string[],
     tabs: any
 }
 
 export default function Details<T extends IModel>(props: Props) {
     const [entity, setEntity] = useState(BP[props.type]);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    props.setPageName(entity.name);
-    props.setPageBanner(entity.picture);
-
-    const { id } = useParams();
-
-    const populateEntityData = async () => {
-        const data: T = await getEntity<T>(props.type, id, props.include);
-        console.log(`${props.type} Details Data: `, data)
-        setEntity(data);
-        setLoading(false);
-    }
-
-    useEffect(() => {
-        populateEntityData();
-    }, [])
 
     const saveField = async (field: string, value: any) => {
-        const data: T = await updateEntity<T>(props.type, id, PatchType.Add, `/${_.camelCase(field)}`, value);
+        const data: T = await updateEntity<T>(props.type, props.id, PatchType.Add, `/${_.camelCase(field)}`, [''], value);
         setEntity(data);
     }
 
     const saveList = async (field: string, patchList: Patch[]) => {
-        const data: T = await updateEntity<T>(props.type, id, PatchType.List, '', props.include, '', patchList);
+        const data: T = await updateEntity<T>(props.type, props.id, PatchType.List, '', props.include, '', patchList);
         setEntity(data);
     }
 
+    useEffect(() => {
+        setEntity(props.entity);
+    }, [props.entity])
 
     const display = (
         <Box p={3}>
@@ -61,9 +48,9 @@ export default function Details<T extends IModel>(props: Props) {
                             if (!field.includes('id') && !props.ignoreFields.includes(field)) {
                                 switch (typeof value) {
                                     case 'number':
-                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={JSON.stringify(value)} column={multiline.includes(field)} saveField={saveField} />
+                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={JSON.stringify(value)} column={props.multiline.includes(field)} saveField={saveField} />
                                     case 'string':
-                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={value} column={multiline.includes(field)} saveField={saveField} />
+                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={value} column={props.multiline.includes(field)} saveField={saveField} />
                                     case 'object':
                                         if (Array.isArray(value)) {
                                             return <TogglingList key={field} label={_.startCase(field)} field={field} items={value} saveField={saveList} />
@@ -82,9 +69,5 @@ export default function Details<T extends IModel>(props: Props) {
         </Box>
     )
 
-    const loadingCheck = loading ?
-        <Typography>Loading</Typography> :
-        display
-
-    return loadingCheck;
+    return display
 }

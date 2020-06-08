@@ -4,16 +4,16 @@ import { ITableList, INpc, ITableData, ITableRows } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
 import { Type, getTable } from '../api/dndDb';
 import _ from 'lodash';
-import { BPNpc } from '../interfaces/Initialisations';
+import BP from '../interfaces/Initialisations';
 
 export default function NpcList(props: any) {
     const [npcTableData, setNpcsTableData] = useState<ITableList<INpc>>({
         headers: [""],
         data: {
-            0: BPNpc
+            0: BP.Npc
         }
     });
-    const [npcs, setNpcs] = useState({ 0: BPNpc })
+    const [npcs, setNpcs] = useState({ 0: BP.Npc })
     const [loading, setLoading] = useState(true);
 
     const columns = [

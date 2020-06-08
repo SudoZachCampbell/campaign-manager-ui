@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
-import { INpc } from '../interfaces/Models';
+import { IMonster } from '../interfaces/Models';
 import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
@@ -22,29 +22,28 @@ const ignoreFields: string[] = [
 ]
 
 const include = [
-    "Monster",
     "Building",
     "Locale"
 ]
 
-export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
-    const [npc, setNpc] = useState<INpc>(BP.Npc);
+export default function MonsterDetails(props: { setPageName: Function, setPageBanner: Function }) {
+    const [monster, setMonster] = useState<IMonster>(BP.Monster);
     const [loading, setLoading] = useState<boolean>(true);
 
-    props.setPageName(npc.name);
-    props.setPageBanner(npc.picture);
+    props.setPageName(monster.name);
+    props.setPageBanner(monster.picture);
 
     const { id } = useParams();
 
-    const populateNpcData = async () => {
-        const data = await getEntity<INpc>(Type.Npc, id, include);
-        console.log(`NPC Details Data: `, data)
-        setNpc(data);
+    const populateMonsterData = async () => {
+        const data = await getEntity<IMonster>(Type.Monster, id, include);
+        console.log(`Monster Details Data: `, data)
+        setMonster(data);
         setLoading(false);
     }
 
     useEffect(() => {
-        populateNpcData();
+        populateMonsterData();
     }, [])
 
     const tabs = {
@@ -54,7 +53,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
             'Location'
         ],
         data: [
-            <MonsterSummary instance={npc.monster} />,
+            <MonsterSummary instance={monster.monster} />,
             <Pictures />,
             <Location />
         ]
@@ -62,8 +61,8 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
 
     const detailProps = {
         id,
-        entity: npc,
-        type: Type.Npc, 
+        entity: monster,
+        type: Type.Monster, 
         ignoreFields,
         multiline,
         include,

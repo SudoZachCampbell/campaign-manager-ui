@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { INpc } from '../interfaces/Models';
-import { BPNpc } from '../interfaces/Initialisations';
+import BP from '../interfaces/Initialisations';
 import { getEntity, Type } from '../api/dndDb';
 
 export default function NpcSummary(props: { instance: INpc }) {

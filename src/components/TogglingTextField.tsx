@@ -10,7 +10,7 @@ export default function TogglingTextField(props: { text: string | undefined, lab
 
     useEffect(() => {
         setCurrentText(props.text ?? '');
-    }, [])
+    }, [props.text])
 
     const toggleEdit = () => {
         setEdit(!edit);

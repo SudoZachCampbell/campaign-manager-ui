@@ -4,14 +4,14 @@ import { ITableList, IMonster, ITableRows } from '../interfaces/Models';
 import { Box, Typography } from '@material-ui/core';
 import { Type, getEntities, getTable } from '../api/dndDb';
 import _ from 'lodash';
-import { BPMonster } from '../interfaces/Initialisations';
+import BP from '../interfaces/Initialisations';
 
 export default function MonsterList(props: any) {
     const [monsters, setMonsters] = useState<ITableList<IMonster>>({
         headers: [""],
         data:
         {
-            0: BPMonster
+            0: BP.Monster
         }
     });
     const [loading, setLoading] = useState(true);
