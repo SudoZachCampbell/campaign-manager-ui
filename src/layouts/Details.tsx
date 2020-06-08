@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
+import TogglingNumberField from '../components/TogglingNumberField';
 import { INpc, IModel } from '../interfaces/Models';
 import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
@@ -49,7 +50,7 @@ export default function Details<T extends IModel>(props: Props) {
                                 console.log(`${field} is of type ${typeof value}`)
                                 switch (typeof value) {
                                     case 'number':
-                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={JSON.stringify(value)} column={props.multiline.includes(field)} saveField={saveField} />
+                                        return <TogglingNumberField key={field} label={_.startCase(field)} field={field} text={value} saveField={saveField} />
                                     case 'string':
                                         return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={value} column={props.multiline.includes(field)} saveField={saveField} />
                                     case 'object':
