@@ -23,3 +23,10 @@ export enum Size {
 export enum Type {
     
 }
+
+export enum FieldType {
+    Number,
+    String,
+    Enum,
+    Array
+}

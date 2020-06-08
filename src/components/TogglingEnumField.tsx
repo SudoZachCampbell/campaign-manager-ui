@@ -1,13 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Button, IconButton, TextField, Typography } from '@material-ui/core';
-import { Delete as DeleteIcon } from '@material-ui/icons';
+import { Box, IconButton, MenuItem, Select, Typography } from '@material-ui/core';
+import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
+import { Type, getEnumValues } from '../api/dndDb';
+import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
+import _ from 'lodash'
 
-export default function TogglingEnumField(props: { text: string | undefined, label: string, saveField: Function }) {
-    const [currentText, setCurrentText] = useState<string | undefined>('');
+interface Props {
+    enumName: string,
+    currentValue: string,
+    label: string,
+    field: string,
+    type: Type,
+    saveField: Function,
+}
+
+export default function TogglingEnumField(props: Props) {
+    const [currentValue, setCurrentValue] = useState<string | undefined>('');
+    const [enumValues, setEnumValues] = useState<string[]>([]);
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {
-        setCurrentText(props.text);
+        setCurrentValue(props.currentValue ?? '');
+    }, [props.currentValue])
+
+    const getEnum = async () => {
+        const enumList: string[] = await getEnumValues(props.type, props.enumName);
+        setEnumValues(enumList);
+    }
+
+    useEffect(() => {
+        getEnum();
     }, [])
 
     const toggleEdit = () => {
@@ -15,17 +37,27 @@ export default function TogglingEnumField(props: { text: string | undefined, lab
     }
 
     const saveField = () => {
-        props.saveField(currentText);
+        props.saveField(props.field, currentValue);
         toggleEdit();
     }
 
     const returnField = edit ?
         (<>
-            <IconButton onClick={toggleEdit}><DeleteIcon /></IconButton>
-            <TextField label={props.label} defaultValue={currentText} onChange={(event: React.ChangeEvent<HTMLInputElement>) => setCurrentText(event.target.value)} />
-            <Button onClick={saveField} variant='contained' color='primary'>Save</Button>
+            <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
+            <Box display="flex">
+                <IconButton onClick={toggleEdit}><CancelIcon /></IconButton>
+                <Select value={currentValue} onChange={(event: React.ChangeEvent<{ value: unknown }>) => setCurrentValue(event.target.value as string)}>
+                    {enumValues.map(value => (
+                        <MenuItem value={value}>{_.startCase(value)}</MenuItem>
+                    ))}
+                </Select>
+                <IconButton onClick={saveField}><SaveIcon /></IconButton>
+            </Box>
         </>) :
-        <Typography onClick={toggleEdit} variant='body2' > {currentText}</Typography>
+        <Box onClick={toggleEdit} display="flex">
+            <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
+            <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{_.startCase(currentValue)}</Typography>
+        </Box>
 
     return returnField;
 }

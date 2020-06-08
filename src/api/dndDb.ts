@@ -44,7 +44,7 @@ export const getEntities = async function <T>(type: Type, include: string[]): Pr
 export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, include: string[], value?: string, patchList: Patch[] = []): Promise<T> {
     const url = `http://localhost:53596/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`
     let body: Patch[] = []
-    if(patchType === PatchType.List) {
+    if (patchType === PatchType.List) {
         body = patchList;
     } else {
         body = [
@@ -57,6 +57,10 @@ export const updateEntity = async function <T>(type: Type, id: number, patchType
     }
 
     return await RequestBuilder[RequestType.PATCH](url, JSON.stringify(body))
+}
+
+export const getEnumValues = async function (type: Type, name: string): Promise<string[]> {
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/enum/${_.upperFirst(_.camelCase(name))}`);
 }
 
 

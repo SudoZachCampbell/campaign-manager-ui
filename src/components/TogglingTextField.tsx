@@ -4,7 +4,15 @@ import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
 import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import { FiberManualRecordOutlined as FiberIcon } from '@material-ui/icons';
 
-export default function TogglingNumberField(props: { text: string | undefined, label: string, field: string, saveField: Function, column?: boolean }) {
+interface Props { 
+    text: string | undefined, 
+    label: string, 
+    field: string, 
+    saveField: Function, 
+    column?: boolean 
+}
+
+export default function TogglingTextField(props: Props) {
     const [currentText, setCurrentText] = useState<string | undefined>('');
     const [edit, setEdit] = useState<boolean>(false);
 

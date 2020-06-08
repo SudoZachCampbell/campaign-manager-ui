@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TogglingTextField from '../components/TogglingTextField';
 import TogglingNumberField from '../components/TogglingNumberField';
-import { INpc, IModel } from '../interfaces/Models';
+import { INpc, IModel, Field } from '../interfaces/Models';
+import { FieldType } from '../interfaces/Lookups';
 import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
 import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
@@ -18,8 +19,9 @@ interface Props {
     entity: any,
     type: Type,
     ignoreFields: string[],
-    multiline: string[],
+    multiline?: string[],
     include: string[],
+    fields: Field[],
     tabs: any
 }
 
@@ -45,18 +47,20 @@ export default function Details<T extends IModel>(props: Props) {
             <Grid container>
                 <Grid item xs={6}>
                     <Box p={3}>
-                        {_.map(entity, (value, field) => {
-                            if (!field.includes('id') && !props.ignoreFields.includes(field)) {
-                                console.log(`${field} is of type ${typeof value}`)
-                                switch (typeof value) {
-                                    case 'number':
-                                        return <TogglingNumberField key={field} label={_.startCase(field)} field={field} text={value} saveField={saveField} />
-                                    case 'string':
-                                        return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={value} column={props.multiline.includes(field)} saveField={saveField} />
-                                    case 'object':
-                                        if (Array.isArray(value)) {
-                                            return <TogglingList key={field} label={_.startCase(field)} field={field} items={value} saveField={saveList} />
-                                        }
+                        {props.fields.map((field) => {
+                            if (!field.name.includes('id') && !props.ignoreFields.includes(field.name)) {
+                                const propsObj = {
+                                    key: field.name,
+                                    label: _.startCase(field.name),
+                                    field: field.name
+                                }
+                                switch (field.type) {
+                                    case FieldType.Number:
+                                        return <TogglingNumberField {...propsObj} text={entity[field.name]} saveField={saveField} />
+                                    case FieldType.String:
+                                        return <TogglingTextField {...propsObj} text={entity[field.name]} column={props.multiline?.includes(field.name)} saveField={saveField} />
+                                    case FieldType.Array:
+                                        return <TogglingList {...propsObj} items={value} saveField={saveList} />
                                 }
                             }
                         })}

@@ -1,3 +1,5 @@
+import { FieldType } from './Lookups';
+
 export interface IModel {
     id: number,
     name: string
@@ -58,3 +60,8 @@ export interface ITableRows<T> {
     [id: number]: T
 }
 //#endregion
+
+export interface Field {
+    name: string,
+    type: FieldType
+}

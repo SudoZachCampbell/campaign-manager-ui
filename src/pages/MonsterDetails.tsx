@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { IMonster } from '../interfaces/Models';
+import { IMonster, Field } from '../interfaces/Models';
 import { Typography } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
 import { Type, getEntity } from '../api/dndDb';
 import _ from 'lodash';
 import Details from '../layouts/Details';
-
-const multiline: string[] = []
+import { FieldType } from '../interfaces/Lookups';
 
 const ignoreFields: string[] = [
     "picture",
@@ -27,6 +26,74 @@ const include = [
     "Buildings",
     "Locales"
 ]
+
+const fields: Field[] = [
+    {
+        name: "name",
+        type: FieldType.String
+    },
+    {
+        name: "size",
+        type: FieldType.String
+    },
+    {
+        name: "hit_dice",
+        type: FieldType.String
+    },
+    {
+        name: "languages",
+        type: FieldType.String
+    },
+    {
+        name: "challenge_rating",
+        type: FieldType.Number
+    },
+    {
+        name: "passive_perception",
+        type: FieldType.Number
+    },
+    {
+        name: "type",
+        type: FieldType.Enum
+    },
+    {
+        name: "strength",
+        type: FieldType.Number
+    },
+    {
+        name: "dexterity",
+        type: FieldType.Number
+    },
+    {
+        name: "constitution",
+        type: FieldType.Number
+    },
+    {
+        name: "intelligence",
+        type: FieldType.Number
+    },
+    {
+        name: "wisdom",
+        type: FieldType.Number
+    },
+    {
+        name: "charisma",
+        type: FieldType.Number
+    },
+    {
+        name: "armor_class",
+        type: FieldType.String
+    },
+    {
+        name: "hit_points",
+        type: FieldType.String
+    },
+    {
+        name: "alignment",
+        type: FieldType.Enum
+    },
+]
+
 
 export default function MonsterDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [monster, setMonster] = useState<IMonster>(BP.Monster);
@@ -64,9 +131,9 @@ export default function MonsterDetails(props: { setPageName: Function, setPageBa
         entity: monster,
         type: Type.Monster,
         ignoreFields,
-        multiline,
         include,
-        tabs
+        tabs,
+        fields
     }
 
     const display = <Details {...detailProps} />
