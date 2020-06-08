@@ -1,15 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import TogglingTextField from '../components/TogglingTextField';
 import { INpc } from '../interfaces/Models';
-import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
-import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
+import { Type, getEntity } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
-import SubMenu from '../components/SubMenu';
-import TogglingList from '../components/TogglingList';
-import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 import Details from '../layouts/Details';
 

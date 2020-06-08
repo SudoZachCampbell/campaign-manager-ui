@@ -46,6 +46,7 @@ export default function Details<T extends IModel>(props: Props) {
                     <Box p={3}>
                         {_.map(entity, (value, field) => {
                             if (!field.includes('id') && !props.ignoreFields.includes(field)) {
+                                console.log(`${field} is of type ${typeof value}`)
                                 switch (typeof value) {
                                     case 'number':
                                         return <TogglingTextField key={field} label={_.startCase(field)} field={field} text={JSON.stringify(value)} column={props.multiline.includes(field)} saveField={saveField} />

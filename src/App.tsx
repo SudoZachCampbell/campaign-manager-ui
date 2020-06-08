@@ -9,6 +9,7 @@ import 'typeface-roboto'
 
 import './custom.css'
 import NpcDetails from './pages/NpcDetails';
+import MonsterDetails from './pages/MonsterDetails';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 
 export default function App(props) {
@@ -28,6 +29,7 @@ export default function App(props) {
                 <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
                 <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
                 <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
+                <Route path='/monster-details/:id' render={(props) => <MonsterDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
             </Layout>
         </MuiThemeProvider>
     );

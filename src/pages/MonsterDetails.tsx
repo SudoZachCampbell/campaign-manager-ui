@@ -1,29 +1,31 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import TogglingTextField from '../components/TogglingTextField';
 import { IMonster } from '../interfaces/Models';
-import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
-import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
-import MonsterSummary from '../components/MonsterSummary'
-import SubMenu from '../components/SubMenu';
-import TogglingList from '../components/TogglingList';
-import { Patch } from '../interfaces/Requests';
+import { Type, getEntity } from '../api/dndDb';
 import _ from 'lodash';
 import Details from '../layouts/Details';
 
-const multiline: string[] = [
-    "background"
-]
+const multiline: string[] = []
 
 const ignoreFields: string[] = [
-    "picture"
+    "picture",
+    "buildings",
+    "locales",
+    "npcs",
+    "reactions",
+    "speed",
+    "proficiencies",
+    "actions",
+    "legendary_actions",
+    "special_abilities"
 ]
 
 const include = [
-    "Building",
-    "Locale"
+    "Buildings",
+    "Locales"
 ]
 
 export default function MonsterDetails(props: { setPageName: Function, setPageBanner: Function }) {
@@ -48,12 +50,10 @@ export default function MonsterDetails(props: { setPageName: Function, setPageBa
 
     const tabs = {
         headers: [
-            'Monster',
             'Pictures',
             'Location'
         ],
         data: [
-            <MonsterSummary instance={monster.monster} />,
             <Pictures />,
             <Location />
         ]
@@ -62,7 +62,7 @@ export default function MonsterDetails(props: { setPageName: Function, setPageBa
     const detailProps = {
         id,
         entity: monster,
-        type: Type.Monster, 
+        type: Type.Monster,
         ignoreFields,
         multiline,
         include,
