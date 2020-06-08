@@ -52,11 +52,12 @@ export default function TogglingList(props: { items: string[], label: string, fi
 
     const returnField = edit ?
         (<>
+            <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
             <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
         </>) :
-        <Box display='flex' flexDirection='column'>
+        <Box onClick={toggleEdit} display='flex' flexDirection='column'>
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
-            <List onClick={toggleEdit}>
+            <List>
                 {currentItems?.map((item, index) => {
                     return (
                         <ListItem key={index}>

@@ -53,7 +53,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     }
 
     const saveList = async (field: string, patchList: Patch[]) => {
-        const data = await updateEntity<INpc>(Type.Npc, id, PatchType.List, '', '', patchList);
+        const data = await updateEntity<INpc>(Type.Npc, id, PatchType.List, '', include, '', patchList);
         setNpc(data);
     }
 

@@ -38,7 +38,7 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
     }
 
     const renderAddMonster = () => {
-        return <Button></Button>
+        return <Button>Add Monster</Button>
     }
 
     const renderDisplay = props.instance ? renderMonsterArea() : renderAddMonster();
