@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { IMonster } from '../interfaces/Models';
-import { BPMonster } from '../interfaces/Initialisations';
+import BP from '../interfaces/Initialisations';
 import { getEntity, Type } from '../api/dndDb';
 
 interface MonsterSummaryProps {

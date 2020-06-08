@@ -1,4 +1,6 @@
-export const BPMonster = {
+import { INpc, IMonster, IModel } from './Models';
+
+const Monster: IMonster = {
     id: 0,
     name: "",
     alignment: 0,
@@ -6,8 +8,20 @@ export const BPMonster = {
     hit_points: 0
 }
 
-export const BPNpc = {
+const Npc: INpc = {
     id: 0,
     name: "",
-    monster: BPMonster
+    monster: Monster
+}
+
+
+const Model: IModel = {
+    id: 0,
+    name: ""
+}
+
+export default {
+    Model,
+    Monster,
+    Npc
 }
