@@ -1,9 +1,6 @@
 ﻿import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { Box, Button, Grid, Typography } from '@material-ui/core'
+import { Box, Button, Grid } from '@material-ui/core'
 import { INpc } from '../interfaces/Models';
-import BP from '../interfaces/Initialisations';
-import { getEntity, Type } from '../api/dndDb';
 
 export default function NpcSummary(props: { instance: INpc }) {
 
@@ -19,7 +16,7 @@ export default function NpcSummary(props: { instance: INpc }) {
                     {
                         props.instance.picture &&
                         <Grid item xs={4}>
-                            <img height={"40%"} src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${props.instance.picture}`} />
+                            <img height={"40%"} alt='' src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${props.instance.picture}`} />
                         </Grid>
                     }
                 </Grid>

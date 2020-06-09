@@ -1,8 +1,8 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
 import { ITableList, IMonster, ITableRows } from '../interfaces/Models';
-import { Box, Typography } from '@material-ui/core';
-import { Type, getEntities, getTable } from '../api/dndDb';
+import { Box } from '@material-ui/core';
+import { Type, getTable } from '../api/dndDb';
 import _ from 'lodash';
 import BP from '../interfaces/Initialisations';
 

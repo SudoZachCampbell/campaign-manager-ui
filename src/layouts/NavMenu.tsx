@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
+import React from 'react';
 import {
     AppBar,
     CssBaseline,
@@ -13,14 +12,11 @@ import {
     ListItemText,
     Toolbar,
     Typography,
-    Box,
-    Backdrop,
-    Button
+    Backdrop
 } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 
 const drawerWidth = 240;
 
@@ -73,7 +69,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function NavMenu(props) {
     const classes = useStyles(props);
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawer = (state: boolean) => {

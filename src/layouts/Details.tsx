@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { INpc, IModel, Field } from '../interfaces/Models';
+import { IModel, Field } from '../interfaces/Models';
 import { FieldType } from '../interfaces/Lookups';
-import { Box, Grid, Typography, Paper, Tab, Tabs, Button } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
-import { Type, getEntity, updateEntity, PatchType } from '../api/dndDb';
-import MonsterSummary from '../components/MonsterSummary'
+import { Type, updateEntity, PatchType } from '../api/dndDb';
 import SubMenu from '../components/SubMenu';
 import TogglingTextField from '../components/TogglingTextField';
 import TogglingNumberField from '../components/TogglingNumberField';
@@ -48,7 +46,6 @@ export default function Details<T extends IModel>(props: Props) {
             <Grid container>
                 <Grid item xs={6}>
                     <Box p={3}>
-                        {console.log(`Fields: `, props.fields)}
                         {props.fields.map((field) => {
                             if (!field.name.includes('id') && !props.ignoreFields.includes(field.name)) {
 
@@ -61,16 +58,12 @@ export default function Details<T extends IModel>(props: Props) {
 
                                 switch (field.type) {
                                     case FieldType.Number:
-                                        console.log(`NUMBER: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingNumberField {...propsObj} saveField={saveField} />
                                     case FieldType.String:
-                                        console.log(`STRING: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
                                     case FieldType.Enum:
-                                        console.log(`ENUM: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingEnumField {...propsObj} type={props.type} saveField={saveField} />
                                     case FieldType.Array:
-                                        console.log(`ARRAY: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingList {...propsObj} saveField={saveList} />
                                 }
                             }

@@ -45,9 +45,9 @@ export default function TogglingEnumField(props: Props) {
             <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
             <Box display="flex">
                 <IconButton onClick={toggleEdit}><CancelIcon /></IconButton>
-                <Select value={enumValues[currentValue]} onChange={(event: React.ChangeEvent<{ value: unknown }>) => setCurrentValue(event.target.value as string)}>
-                    {enumValues.map(value => (
-                        <MenuItem key={value} value={value}>{_.startCase(value)}</MenuItem>
+                <Select value={currentValue} onChange={(event: React.ChangeEvent<{ value: unknown }>) => setCurrentValue(event.target.value as string)}>
+                    {enumValues.map((value, index) => (
+                        <MenuItem key={index} value={index}>{_.startCase(value)}</MenuItem>
                     ))}
                 </Select>
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>

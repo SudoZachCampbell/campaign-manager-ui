@@ -1,4 +1,12 @@
-import { RepeatOneSharp } from "@material-ui/icons";
+export enum RequestType {
+    DELETE = "DELETE",
+    GET = "GET",
+    HEAD = "HEAD",
+    OPTIONS = "OPTIONS",
+    POST = "POST",
+    PUT = "PUT",
+    PATCH = "PATCH"
+}
 
 const Get = async function <T>(url: string): Promise<T> {
     let response = await fetch(url);
@@ -28,14 +36,4 @@ const Patch = async function <T>(url: string, body: string): Promise<T> {
 export default {
     GET: Get,
     PATCH: Patch
-}
-
-export enum RequestType {
-    DELETE = "DELETE",
-    GET = "GET",
-    HEAD = "HEAD",
-    OPTIONS = "OPTIONS",
-    POST = "POST",
-    PUT = "PUT",
-    PATCH = "PATCH"
 }

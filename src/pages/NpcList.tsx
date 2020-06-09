@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from 'react';
 import CollapsibleTable from '../components/CollapsibleTable'
-import { ITableList, INpc, ITableData, ITableRows } from '../interfaces/Models';
-import { Box, Typography } from '@material-ui/core';
+import { ITableList, INpc, ITableRows } from '../interfaces/Models';
+import { Box} from '@material-ui/core';
 import { Type, getTable } from '../api/dndDb';
 import _ from 'lodash';
 import BP from '../interfaces/Initialisations';
@@ -13,7 +13,6 @@ export default function NpcList(props: any) {
             0: BP.Npc
         }
     });
-    const [npcs, setNpcs] = useState({ 0: BP.Npc })
     const [loading, setLoading] = useState(true);
 
     const columns = [

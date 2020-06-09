@@ -1,8 +1,13 @@
 import RequestBuilder, { RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { IModel, IMonster, ITableList, ITableRows } from '../interfaces/Models';
-import { YoutubeSearchedFor } from '@material-ui/icons';
+import { IModel, ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
+
+export enum PatchType {
+    Add = 'add',
+    Remove = 'remove',
+    List = 'list'
+}
 
 export const getTable = async function <T extends IModel>(type: Type, columns: string[], include: string[]): Promise<[ITableList<T>, { [id: number]: T }]> {
     const entitiesArray: T[] = await getEntities<T>(type, include);
@@ -69,8 +74,3 @@ export enum Type {
     Npc = "Npc"
 }
 
-export enum PatchType {
-    Add = 'add',
-    Remove = 'remove',
-    List = 'list'
-}

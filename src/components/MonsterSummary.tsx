@@ -1,9 +1,6 @@
 ﻿import * as React from 'react';
-import { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { IMonster } from '../interfaces/Models';
-import BP from '../interfaces/Initialisations';
-import { getEntity, Type } from '../api/dndDb';
 
 interface MonsterSummaryProps {
     instance: IMonster | undefined
@@ -28,7 +25,7 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
                         props.instance?.picture &&
                         <Grid item xs={6}>
                             <Box width={1}>
-                                <img width='100%' src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${props.instance.picture}`} />
+                                <img width='100%' alt='' src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${props.instance.picture}`} />
                             </Box>
                         </Grid>
                     }
