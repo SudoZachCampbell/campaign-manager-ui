@@ -94,7 +94,6 @@ const fields: Field[] = [
     }
 ]
 
-
 export default function MonsterDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [monster, setMonster] = useState<IMonster>(BP.Monster);
     const [loading, setLoading] = useState<boolean>(true);
