@@ -114,25 +114,25 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
                                 case FieldType.Number:
                                     return (
                                         <Grid item xs={6}>
-                                            <TogglingNumberField {...propsObj} toggle={false} />
+                                            <TogglingNumberField {...propsObj} noEdit />
                                         </Grid>
                                     )
                                 case FieldType.String:
                                     return (
                                         <Grid item xs={6}>
-                                            <TogglingTextField {...propsObj} toggle={false} />
+                                            <TogglingTextField {...propsObj} noEdit />
                                         </Grid>
                                     )
                                 case FieldType.Enum:
                                     return (
                                         <Grid item xs={6}>
-                                            <TogglingEnumField {...propsObj} type={Type.Monster} toggle={false} />
+                                            <TogglingEnumField {...propsObj} type={Type.Monster} noEdit />
                                         </Grid>
                                     )
                                 case FieldType.Array:
                                     return (
                                         <Grid item xs={6}>
-                                            <TogglingList {...propsObj} toggle={false} />
+                                            <TogglingList {...propsObj} noEdit />
                                         </Grid>
                                     )
                             }

@@ -11,7 +11,7 @@ interface Props {
     field: string,
     saveField?: Function,
     column?: boolean,
-    toggle?: boolean
+    noEdit?: boolean
 }
 
 export default function TogglingNumberField(props: Props) {
@@ -40,7 +40,7 @@ export default function TogglingNumberField(props: Props) {
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>
             </Box>
         </>) :
-        <TogglingLabel label={props.label} toggleEdit={toggleEdit} toggle={props.toggle} >
+        <TogglingLabel label={props.label} toggleEdit={toggleEdit} noEdit={props.noEdit} >
             <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{currentText}</Typography>
         </TogglingLabel>
 

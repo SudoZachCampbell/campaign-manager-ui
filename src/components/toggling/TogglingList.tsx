@@ -18,7 +18,7 @@ interface Props {
     label: string,
     field: string,
     saveField?: Function,
-    toggle?: boolean
+    noEdit?: boolean
 }
 
 export default function TogglingList(props: Props) {
@@ -65,7 +65,7 @@ export default function TogglingList(props: Props) {
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
             <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
         </>) :
-        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} toggle={props.toggle} >
+        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} noEdit={props.noEdit} >
             <List>
                 {currentItems?.map((item, index) => {
                     return (

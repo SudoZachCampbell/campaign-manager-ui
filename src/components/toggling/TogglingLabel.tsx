@@ -6,14 +6,12 @@ interface Props {
     label: string,
     toggleEdit: Function,
     column?: boolean,
-    toggle?: boolean,
+    noEdit?: boolean,
     children: any
 }
 
 export default function (props: Props) {
     const [hideEdit, setHideEdit] = useState<boolean>(true);
-
-    const toggle = props.toggle ?? true
 
     const toggleEdit = () => {
         props.toggleEdit();
@@ -28,24 +26,24 @@ export default function (props: Props) {
     }
 
     return (
-        <Box mb={toggle && 2} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} display="flex">
-            {props.column ? (
+        <Box mb={props.noEdit && 2} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} display="flex">
+            {!props.noEdit ? (
                 <Box display='flex' mr={3} flexDirection={props.column ? 'column' : 'row'}>
                     <Typography variant='subtitle2' style={{ marginRight: '1em', marginBottom: '0.25em' }}> {props.label}:</Typography>
                     <Box display='flex'>
                         {props.children}
-                        <IconButton style={{ visibility: hideEdit || !toggle ? 'hidden' : 'visible' }} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
+                        <IconButton style={{ visibility: hideEdit || props.noEdit ? 'hidden' : 'visible' }} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
                     </Box>
                 </Box >
             ) : (
                     <Grid container xs={12}>
-                        <Grid item xs={4}>
+                        <Grid item xs={5}>
                             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={7}>
                             <Box display='flex'>
                                 {props.children}
-                                <IconButton style={{ marginLeft: '1em', visibility: hideEdit || !toggle ? 'hidden' : 'visible' }} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
+                                <IconButton style={{ marginLeft: '1em', visibility: hideEdit || props.noEdit ? 'hidden' : 'visible' }} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
                             </Box>
                         </Grid>
                     </Grid>
