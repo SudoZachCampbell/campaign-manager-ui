@@ -91,7 +91,7 @@ const fields: Field[] = [
     {
         name: "alignment",
         type: FieldType.Enum
-    },
+    }
 ]
 
 

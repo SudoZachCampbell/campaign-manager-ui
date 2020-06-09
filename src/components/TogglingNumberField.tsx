@@ -5,7 +5,7 @@ import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import { FiberManualRecordOutlined as FiberIcon } from '@material-ui/icons';
 
 interface Props {
-    value: number | undefined,
+    value: number,
     label: string,
     field: string,
     saveField: Function,
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function TogglingNumberField(props: Props) {
-    const [currentText, setCurrentText] = useState<number | undefined>(0);
+    const [currentText, setCurrentText] = useState<number>(0);
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {

@@ -53,8 +53,8 @@ export default function Details<T extends IModel>(props: Props) {
             <Grid container>
                 <Grid item xs={6}>
                     <Box p={3}>
+                        {console.log(`Fields: `, props.fields)}
                         {props.fields.map((field) => {
-                            console.log(`Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                             if (!field.name.includes('id') && !props.ignoreFields.includes(field.name)) {
 
                                 const propsObj = {
@@ -66,12 +66,16 @@ export default function Details<T extends IModel>(props: Props) {
 
                                 switch (field.type) {
                                     case FieldType.Number:
+                                        console.log(`NUMBER: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingNumberField {...propsObj} saveField={saveField} />
                                     case FieldType.String:
-                                        // return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
+                                        console.log(`STRING: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
+                                        return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
                                     case FieldType.Enum:
+                                        console.log(`ENUM: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingEnumField {...propsObj} type={props.type} saveField={saveEnum} />
                                     case FieldType.Array:
+                                        console.log(`ARRAY: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingList {...propsObj} saveField={saveList} />
                                 }
                             }
