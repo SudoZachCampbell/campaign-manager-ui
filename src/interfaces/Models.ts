@@ -33,7 +33,7 @@ export interface IMonster extends ICreature {
 //#region Locations
 
 export interface ILocation extends IModel {
-    
+
 }
 
 export interface ILocale extends ILocation {
@@ -63,5 +63,7 @@ export interface ITableRows<T> {
 
 export interface Field {
     name: string,
-    type: FieldType
+    type: FieldType,
+    addInfo?: string,
+    addField?: string
 }

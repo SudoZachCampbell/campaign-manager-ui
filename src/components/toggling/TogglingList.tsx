@@ -73,7 +73,7 @@ export default function TogglingList(props: Props) {
                             <ListItemIcon>
                                 <FiberIcon fontSize='small' />
                             </ListItemIcon>
-                            <ListItemText primary={item} classes={{ primary: classes.itemText }} />
+                            <ListItemText primary={item} primaryTypographyProps={{variant:'body2'}} classes={{ primary: classes.itemText }} />
                         </ListItem>
                     )
                 })}

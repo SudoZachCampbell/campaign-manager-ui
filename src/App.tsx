@@ -18,8 +18,14 @@ export default function App(props) {
 
     const theme = createMuiTheme({
         typography: {
-            fontFamily: 'Segoe UI'
-        }
+            fontFamily: 'Segoe UI',
+            body2: {
+                fontWeight: 320
+            },
+            subtitle2: {
+                fontWeight: 400
+            }
+        },
     })
 
     return (
