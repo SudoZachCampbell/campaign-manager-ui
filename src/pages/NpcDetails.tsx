@@ -59,7 +59,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
     const [loading, setLoading] = useState<boolean>(true);
 
     props.setPageName(npc.name);
-    props.setPageBanner(npc.picture);
+    npc.picture && props.setPageBanner(`npc/${npc.picture}`);
 
     const { id } = useParams();
 

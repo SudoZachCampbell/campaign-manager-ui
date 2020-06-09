@@ -56,6 +56,8 @@ export default function Details<T extends IModel>(props: Props) {
                                     value: entity[field.name]
                                 }
 
+                                // TODO: Add Object Type
+
                                 switch (field.type) {
                                     case FieldType.Number:
                                         return <TogglingNumberField {...propsObj} saveField={saveField} />

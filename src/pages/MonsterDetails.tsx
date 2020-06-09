@@ -100,7 +100,7 @@ export default function MonsterDetails(props: { setPageName: Function, setPageBa
     const [loading, setLoading] = useState<boolean>(true);
 
     props.setPageName(monster.name);
-    props.setPageBanner(monster.picture);
+    monster.picture && props.setPageBanner(`monster/${monster.picture}`);
 
     const { id } = useParams();
 

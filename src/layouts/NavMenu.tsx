@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        backgroundImage: (props: any) => `url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${props.pageBanner})`,
+        backgroundImage: (props: any) => `url(https://ddimagecollection.s3-eu-west-1.amazonaws.com/${props.pageBanner})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: '50% 25%',
         backgroundSize: 'cover',
