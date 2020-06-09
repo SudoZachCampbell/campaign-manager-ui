@@ -87,11 +87,59 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
         console.log(`${props.instance?.name}: `, props.instance)
         return (
             <Box>
-                <Grid container>
-                    <Grid item xs={props.instance?.picture ? 10 : 12}>
+                <Grid container xs={12}>
+                    <Grid item xs={12}>
                         <Box mb={3} display='flex' justifyContent='center'>
                             <Typography variant={'h4'}>{props.instance?.name}</Typography>
                         </Box>
+                    </Grid>
+                    <Grid container style={{ marginBottom: '2em' }} xs={12}>
+                        {fields.map((field) => {
+                            let value = props.instance && props.instance[field.name];
+                            if (field.addField) {
+                                value += ` (${props.instance && props.instance[field.addField]})`
+                            } else if (field.addInfo) {
+                                value += field.addInfo
+                            }
+                            const propsObj = {
+                                key: field.name,
+                                label: _.startCase(field.name),
+                                field: field.name,
+                                value
+                            }
+
+                            // TODO: Add Object Type
+
+                            switch (field.type) {
+                                case FieldType.Number:
+                                    return (
+                                        <Grid item xs={6}>
+                                            <TogglingNumberField {...propsObj} toggle={false} />
+                                        </Grid>
+                                    )
+                                case FieldType.String:
+                                    return (
+                                        <Grid item xs={6}>
+                                            <TogglingTextField {...propsObj} toggle={false} />
+                                        </Grid>
+                                    )
+                                case FieldType.Enum:
+                                    return (
+                                        <Grid item xs={6}>
+                                            <TogglingEnumField {...propsObj} type={Type.Monster} toggle={false} />
+                                        </Grid>
+                                    )
+                                case FieldType.Array:
+                                    return (
+                                        <Grid item xs={6}>
+                                            <TogglingList {...propsObj} toggle={false} />
+                                        </Grid>
+                                    )
+                            }
+                        })}
+                    </Grid>
+                    <Grid item xs={10}>
+                        <Button variant="contained" color="secondary" href={`/monster-details/${props.instance?.id}`}>Details</Button>
                     </Grid>
                     {
                         props.instance?.picture &&
@@ -101,55 +149,8 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
                             </Box>
                         </Grid>
                     }
-                    <Grid container style={{marginBottom: '2em'}} xs={12}>
-                        {fields.map((field) => {
-                            let value = props.instance && props.instance[field.name];
-                            if(field.addField) {
-                                value += ` (${props.instance && props.instance[field.addField]})`
-                            } else if (field.addInfo) {
-                                value += field.addInfo
-                            }
-                            const propsObj = {
-                                key: field.name,
-                                label: _.startCase(field.name),
-                                field: field.name,
-                                value 
-                            }
-
-                            // TODO: Add Object Type
-
-                            switch (field.type) {
-                                case FieldType.Number:
-                                    return (
-                                        <Grid item xs={12}>
-                                            <TogglingNumberField {...propsObj} toggle={false} />
-                                        </Grid>
-                                    )
-                                case FieldType.String:
-                                    return (
-                                        <Grid item xs={12}>
-                                            <TogglingTextField {...propsObj} toggle={false} />
-                                        </Grid>
-                                    )
-                                case FieldType.Enum:
-                                    return (
-                                        <Grid item xs={12}>
-                                            <TogglingEnumField {...propsObj} type={Type.Monster} toggle={false} />
-                                        </Grid>
-                                    )
-                                case FieldType.Array:
-                                    return (
-                                        <Grid item xs={12}>
-                                            <TogglingList {...propsObj} toggle={false} />
-                                        </Grid>
-                                    )
-                            }
-                        })}
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button variant="contained" color="secondary" href={`/monster-details/${props.instance?.id}`}>Details</Button>
-                    </Grid>
                 </Grid >
+
             </Box >
         )
     }

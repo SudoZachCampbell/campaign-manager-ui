@@ -39,10 +39,10 @@ export default function (props: Props) {
                 </Box >
             ) : (
                     <Grid container xs={12}>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
                         </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={8}>
                             <Box display='flex'>
                                 {props.children}
                                 <IconButton style={{ marginLeft: '1em', visibility: hideEdit || !toggle ? 'hidden' : 'visible' }} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
