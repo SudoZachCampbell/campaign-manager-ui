@@ -37,13 +37,3 @@ export default function App(props) {
         </MuiThemeProvider>
     );
 }
-
-// body2: {
-//     fontWeight: 320
-// },
-// subtitle2: {
-//     fontWeight: 400
-// },
-// h4: {
-//     fontWeight
-// }
