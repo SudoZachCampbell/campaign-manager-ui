@@ -2,11 +2,12 @@
 import { Box, Button, Grid, Typography } from '@material-ui/core'
 import { IMonster, Field } from '../interfaces/Models';
 import _ from 'lodash';
-import { FieldType } from '../interfaces/Lookups';
+import { FieldType, ToggleType } from '../interfaces/Lookups';
 import TogglingTextField from '../components/toggling/TogglingTextField';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingEnumField';
+import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
 import { Type } from '../api/dndDb';
 
 interface MonsterSummaryProps {
@@ -80,6 +81,11 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
         {
             name: "alignment",
             type: FieldType.Enum
+        },
+        {
+            name: "special_abilities",
+            type: FieldType.ArrayOfObjects,
+            toggleType: ToggleType.Text
         }
     ]
 
@@ -133,6 +139,12 @@ export default function MonsterSummary(props: MonsterSummaryProps) {
                                     return (
                                         <Grid item xs={6}>
                                             <TogglingList {...propsObj} noEdit />
+                                        </Grid>
+                                    )
+                                case FieldType.ArrayOfObjects:
+                                    return (
+                                        <Grid item xs={12}>
+                                            <TogglingObjectsField {...propsObj} noEdit toggleType={field.toggleType} />
                                         </Grid>
                                     )
                             }

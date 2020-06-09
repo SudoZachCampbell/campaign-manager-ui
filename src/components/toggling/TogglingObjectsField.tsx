@@ -6,17 +6,20 @@ import { Patch } from '../../interfaces/Requests'
 import _ from 'lodash'
 import EditIcon from '@material-ui/icons/EditTwoTone';
 import TogglingLabel from './TogglingLabel'
+import { ToggleType } from '../../interfaces/Lookups';
+import TogglingTextField from './TogglingTextField';
 
 interface Props {
-    value: string[],
+    value: object[],
     label: string,
     field: string,
     saveField?: Function,
-    noEdit?: boolean
+    noEdit?: boolean,
+    toggleType?: ToggleType
 }
 
-export default function TogglingList(props: Props) {
-    const [currentItems, setCurrentItems] = useState<string[]>(['']);
+export default function TogglingObjectsField(props: Props) {
+    const [currentItems, setCurrentItems] = useState<object[] | undefined>([]);
     const [edit, setEdit] = useState<boolean>(false);
 
     useEffect(() => {
@@ -52,24 +55,37 @@ export default function TogglingList(props: Props) {
         toggleEdit();
     }
 
-    const returnField = edit ?
-        (<>
-            <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
-            <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
-        </>) :
-        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} noEdit={props.noEdit} >
-            <List>
-                {currentItems?.map((item, index) => {
-                    return (
-                        <ListItem key={index}>
-                            <ListItemIcon>
-                                <FiberIcon fontSize='small' />
-                            </ListItemIcon>
-                            <ListItemText primary={item} primaryTypographyProps={{variant:'body2'}} />
-                        </ListItem>
-                    )
-                })}
-            </List>
+    interface TogglingProps {
+        value: string,
+        label: string,
+        field: string,
+        saveField?: Function,
+        column?: boolean,
+        noEdit?: boolean
+    }
+
+    const returnField = () => {
+        switch (props.toggleType) {
+            case ToggleType.Enum:
+                return;
+            case ToggleType.List:
+                return;
+            case ToggleType.Text:
+                console.log("Current Items: ", currentItems)
+                return (
+                    <Box display='flex' flexDirection='column'>
+                        {currentItems?.map(instance => {
+                            return <TogglingTextField label={instance['name']} value={instance['desc']} field={props.field} noEdit={props.noEdit} />
+                        })}
+                    </Box>)
+            case ToggleType.Number:
+                return;
+        }
+    }
+
+    return (
+        <TogglingLabel label={props.label} title column toggleEdit={toggleEdit} noEdit >
+            {returnField()}
         </TogglingLabel>
-    return returnField;
+    )
 }

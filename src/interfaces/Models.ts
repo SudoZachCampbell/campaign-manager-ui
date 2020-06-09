@@ -1,4 +1,4 @@
-import { FieldType } from './Lookups';
+import { FieldType, ToggleType } from './Lookups';
 
 export interface IModel {
     id: number,
@@ -61,9 +61,15 @@ export interface ITableRows<T> {
 }
 //#endregion
 
+//#region WAMS Metadata
+
 export interface Field {
     name: string,
     type: FieldType,
     addInfo?: string,
-    addField?: string
+    addField?: string,
+    toggleType?: ToggleType
 }
+
+
+//#endregion
