@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function TogglingEnumField(props: Props) {
-    const [currentValue, setCurrentValue] = useState<string | undefined>('');
+    const [currentValue, setCurrentValue] = useState<string>('');
     const [enumValues, setEnumValues] = useState<string[]>([]);
     const [edit, setEdit] = useState<boolean>(false);
 
@@ -45,7 +45,7 @@ export default function TogglingEnumField(props: Props) {
             <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
             <Box display="flex">
                 <IconButton onClick={toggleEdit}><CancelIcon /></IconButton>
-                <Select value={currentValue} onChange={(event: React.ChangeEvent<{ value: unknown }>) => setCurrentValue(event.target.value as string)}>
+                <Select value={enumValues[currentValue]} onChange={(event: React.ChangeEvent<{ value: unknown }>) => setCurrentValue(event.target.value as string)}>
                     {enumValues.map(value => (
                         <MenuItem value={value}>{_.startCase(value)}</MenuItem>
                     ))}
@@ -55,7 +55,7 @@ export default function TogglingEnumField(props: Props) {
         </>) :
         <Box onClick={toggleEdit} display="flex">
             <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
-            <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{_.startCase(currentValue)}</Typography>
+            <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{_.startCase(enumValues[currentValue])}</Typography>
         </Box>
 
     return returnField;

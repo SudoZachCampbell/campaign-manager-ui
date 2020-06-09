@@ -54,6 +54,7 @@ export default function Details<T extends IModel>(props: Props) {
                 <Grid item xs={6}>
                     <Box p={3}>
                         {props.fields.map((field) => {
+                            console.log(`Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                             if (!field.name.includes('id') && !props.ignoreFields.includes(field.name)) {
 
                                 const propsObj = {
@@ -67,7 +68,7 @@ export default function Details<T extends IModel>(props: Props) {
                                     case FieldType.Number:
                                         return <TogglingNumberField {...propsObj} saveField={saveField} />
                                     case FieldType.String:
-                                        return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
+                                        // return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
                                     case FieldType.Enum:
                                         return <TogglingEnumField {...propsObj} type={props.type} saveField={saveEnum} />
                                     case FieldType.Array:
