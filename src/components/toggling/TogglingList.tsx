@@ -17,7 +17,8 @@ interface Props {
     value: string[],
     label: string,
     field: string,
-    saveField: Function
+    saveField?: Function,
+    toggle?: boolean
 }
 
 export default function TogglingList(props: Props) {
@@ -54,7 +55,7 @@ export default function TogglingList(props: Props) {
         // TODO: Remove warnings around nesting
         console.log("Patch List: ", patchList);
         if (patchList.length) {
-            props.saveField(props.field, patchList);
+            props.saveField && props.saveField(props.field, patchList);
         }
         toggleEdit();
     }
@@ -64,7 +65,7 @@ export default function TogglingList(props: Props) {
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
             <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
         </>) :
-        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} >
+        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} toggle={props.toggle} >
             <List>
                 {currentItems?.map((item, index) => {
                     return (

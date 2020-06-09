@@ -6,11 +6,14 @@ interface Props {
     label: string,
     toggleEdit: Function,
     column?: boolean,
+    toggle?: boolean,
     children: any
 }
 
 export default function (props: Props) {
     const [hideEdit, setHideEdit] = useState<boolean>(true);
+
+    const toggle = props.toggle ?? true
 
     const toggleEdit = () => {
         props.toggleEdit();
@@ -25,12 +28,12 @@ export default function (props: Props) {
     }
 
     return (
-        <Box mb={2} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} display="flex" justifyContent='space-between'>
-            <Box display='flex' flexDirection={props.column ? 'column' : 'row'}>
+        <Box mb={toggle && 2} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} display="flex">
+            <Box display='flex' mr={3} flexDirection={props.column ? 'column' : 'row'}>
                 <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
                 {props.children}
             </Box>
-            <IconButton style={{visibility: hideEdit ? 'hidden' : 'visible'}} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
+            <IconButton style={{visibility: hideEdit || !toggle ? 'hidden' : 'visible'}} size='small' onClick={toggleEdit}><EditIcon fontSize='small' /></IconButton>
         </Box>
     )
 }

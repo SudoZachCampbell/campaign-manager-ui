@@ -9,8 +9,9 @@ interface Props {
     value: number,
     label: string,
     field: string,
-    saveField: Function,
-    column?: boolean
+    saveField?: Function,
+    column?: boolean,
+    toggle?: boolean
 }
 
 export default function TogglingNumberField(props: Props) {
@@ -26,7 +27,7 @@ export default function TogglingNumberField(props: Props) {
     }
 
     const saveField = () => {
-        props.saveField(props.field, currentText);
+        props.saveField && props.saveField(props.field, currentText);
         toggleEdit();
     }
 
@@ -39,7 +40,7 @@ export default function TogglingNumberField(props: Props) {
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>
             </Box>
         </>) :
-        <TogglingLabel label={props.label} toggleEdit={toggleEdit} >
+        <TogglingLabel label={props.label} toggleEdit={toggleEdit} toggle={props.toggle} >
             <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{currentText}</Typography>
         </TogglingLabel>
 

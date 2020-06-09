@@ -12,7 +12,8 @@ interface Props {
     label: string,
     field: string,
     type: Type,
-    saveField: Function,
+    saveField?: Function,
+    toggle?: boolean
 }
 
 export default function TogglingEnumField(props: Props) {
@@ -38,7 +39,7 @@ export default function TogglingEnumField(props: Props) {
     }
 
     const saveField = () => {
-        props.saveField(props.field, currentValue);
+        props.saveField && props.saveField(props.field, currentValue);
         toggleEdit();
     }
 
@@ -55,7 +56,7 @@ export default function TogglingEnumField(props: Props) {
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>
             </Box>
         </>) :
-        <TogglingLabel label={props.label} toggleEdit={toggleEdit} >
+        <TogglingLabel label={props.label} toggleEdit={toggleEdit} toggle={props.toggle} >
             <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{_.startCase(enumValues[currentValue])}</Typography>
         </TogglingLabel>
 
