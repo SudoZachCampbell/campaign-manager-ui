@@ -39,11 +39,6 @@ export default function Details<T extends IModel>(props: Props) {
         setEntity(data);
     }
 
-    const saveEnum = async (field: string, patchList: Patch[]) => {
-        const data: T = await updateEntity<T>(props.type, props.id, PatchType.List, '', props.include, '', patchList);
-        setEntity(data);
-    }
-
     useEffect(() => {
         setEntity(props.entity);
     }, [props.entity])
@@ -73,7 +68,7 @@ export default function Details<T extends IModel>(props: Props) {
                                         return <TogglingTextField {...propsObj} column={props.multiline?.includes(field.name)} saveField={saveField} />
                                     case FieldType.Enum:
                                         console.log(`ENUM: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
-                                        return <TogglingEnumField {...propsObj} type={props.type} saveField={saveEnum} />
+                                        return <TogglingEnumField {...propsObj} type={props.type} saveField={saveField} />
                                     case FieldType.Array:
                                         console.log(`ARRAY: Field ${field.name} has type ${FieldType[field.type]} has value ${entity[field.name]}`);
                                         return <TogglingList {...propsObj} saveField={saveList} />

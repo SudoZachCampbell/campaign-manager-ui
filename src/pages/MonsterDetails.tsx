@@ -53,7 +53,7 @@ const fields: Field[] = [
         type: FieldType.Number
     },
     {
-        name: "type",
+        name: "monster_type",
         type: FieldType.Enum
     },
     {
