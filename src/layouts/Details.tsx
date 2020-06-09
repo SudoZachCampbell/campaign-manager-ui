@@ -6,10 +6,10 @@ import { Box, Grid } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
 import { Type, updateEntity, PatchType } from '../api/dndDb';
 import SubMenu from '../components/SubMenu';
-import TogglingTextField from '../components/TogglingTextField';
-import TogglingNumberField from '../components/TogglingNumberField';
-import TogglingList from '../components/TogglingList';
-import TogglingEnumField from '../components/TogglingEnumField';
+import TogglingTextField from '../components/toggling/TogglingTextField';
+import TogglingNumberField from '../components/toggling/TogglingNumberField';
+import TogglingList from '../components/toggling/TogglingList';
+import TogglingEnumField from '../components/toggling/TogglingEnumField';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 

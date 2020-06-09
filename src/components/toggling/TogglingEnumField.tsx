@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, IconButton, MenuItem, Select, Typography } from '@material-ui/core';
 import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
-import { Type, getEnumValues } from '../api/dndDb';
+import { Type, getEnumValues } from '../../api/dndDb';
 import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
+import EditIcon from '@material-ui/icons/EditTwoTone';
 import _ from 'lodash'
+import TogglingLabel from './TogglingLabel';
 
 interface Props {
     value: string,
@@ -53,10 +55,9 @@ export default function TogglingEnumField(props: Props) {
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>
             </Box>
         </>) :
-        <Box onClick={toggleEdit} display="flex">
-            <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
+        <TogglingLabel label={props.label} toggleEdit={toggleEdit} >
             <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{_.startCase(enumValues[currentValue])}</Typography>
-        </Box>
+        </TogglingLabel>
 
     return returnField;
 }

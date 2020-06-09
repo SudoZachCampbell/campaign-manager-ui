@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
+import { Box, Typography, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
 import { FiberManualRecordOutlined as FiberIcon } from '@material-ui/icons';
-import { ListAdder, Change } from './ListAdder';
-import { Patch } from '../interfaces/Requests'
+import { ListAdder, Change } from '../ListAdder';
+import { Patch } from '../../interfaces/Requests'
 import _ from 'lodash'
+import EditIcon from '@material-ui/icons/EditTwoTone';
+import TogglingLabel from './TogglingLabel'
 
 const useStyles = makeStyles(() => ({
     itemText: {
@@ -11,11 +13,11 @@ const useStyles = makeStyles(() => ({
     }
 }))
 
-interface Props { 
-    value: string[], 
-    label: string, 
-    field: string, 
-    saveField: Function 
+interface Props {
+    value: string[],
+    label: string,
+    field: string,
+    saveField: Function
 }
 
 export default function TogglingList(props: Props) {
@@ -62,8 +64,7 @@ export default function TogglingList(props: Props) {
             <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
             <ListAdder label={props.label} items={currentItems} saveField={saveField} toggleEdit={toggleEdit} />
         </>) :
-        <Box onClick={toggleEdit} display='flex' flexDirection='column'>
-            <Typography variant='subtitle2' style={{ marginRight: '1em' }}> {props.label}:</Typography>
+        <TogglingLabel label={props.label} column toggleEdit={toggleEdit} >
             <List>
                 {currentItems?.map((item, index) => {
                     return (
@@ -76,7 +77,6 @@ export default function TogglingList(props: Props) {
                     )
                 })}
             </List>
-        </Box>
-
+        </TogglingLabel>
     return returnField;
 }

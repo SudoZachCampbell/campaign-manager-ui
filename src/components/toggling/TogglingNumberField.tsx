@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, IconButton, TextField, Typography } from '@material-ui/core';
 import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
 import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
+import EditIcon from '@material-ui/icons/EditTwoTone';
+import TogglingLabel from './TogglingLabel';
 
 interface Props {
     value: number,
@@ -37,10 +39,9 @@ export default function TogglingNumberField(props: Props) {
                 <IconButton onClick={saveField}><SaveIcon /></IconButton>
             </Box>
         </>) :
-        <Box onClick={toggleEdit} display="flex" flexDirection={props.column ? 'column' : 'row'}>
-            <Typography variant='subtitle2' style={{ marginRight: '1em' }} gutterBottom> {props.label}:</Typography>
+        <TogglingLabel label={props.label} toggleEdit={toggleEdit} >
             <Typography style={{ whiteSpace: 'pre-line' }} variant='body2' gutterBottom>{currentText}</Typography>
-        </Box>
+        </TogglingLabel>
 
     return returnField;
 }
