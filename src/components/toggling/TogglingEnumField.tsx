@@ -26,6 +26,7 @@ export default function TogglingEnumField(props: Props) {
     }, [props.value])
 
     const getEnum = async () => {
+        console.log("Getting Enum: ", props)
         const enumList: string[] = await getEnumValues(props.type, props.field);
         setEnumValues(enumList);
     }

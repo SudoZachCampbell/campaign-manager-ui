@@ -23,7 +23,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
-        height: '10%',
+        height: '13%',
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -156,9 +156,9 @@ function TemporaryDrawer(props: { open: boolean, toggle: Function }) {
                     <ListItemIcon></ListItemIcon>
                     <ListItemText primary='Monsters' />
                 </ListItemLink>
-                <ListItemLink href='/places'>
+                <ListItemLink href='/location-hub'>
                     <ListItemIcon></ListItemIcon>
-                    <ListItemText primary='Places' />
+                    <ListItemText primary='Location Hub' />
                 </ListItemLink>
             </List>
         </div>

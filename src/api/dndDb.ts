@@ -65,12 +65,13 @@ export const updateEntity = async function <T>(type: Type, id: number, patchType
 }
 
 export const getEnumValues = async function (type: Type, name: string): Promise<string[]> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/enum/${_.upperFirst(_.camelCase(name))}`);
+    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/GetEnum/${_.upperFirst(_.camelCase(name))}`);
 }
 
 
 export enum Type {
     Monster = "Monster",
-    Npc = "Npc"
+    Npc = "Npc",
+    Building = "Building"
 }
 
