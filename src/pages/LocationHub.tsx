@@ -2,24 +2,24 @@ import React from 'react';
 import { Map, Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import icon from '../assets/icons/person.svg';
 
 export default function LocationHub(props) {
 
-    let DefaultIcon = L.icon({
+    const personIcon = new L.icon({
         iconUrl: icon,
-        shadowUrl: iconShadow
-    });
-    
-    L.Marker.prototype.options.icon = DefaultIcon;
+        iconRetinaUrl: icon,
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -35],
+        iconSize: [60, 60]
+    }) 
 
     const bounds = [[0, 0], [4734, 7000]]
     const style = { height: '80vh', width: '75vw' }
 
     return (
         <Map crs={L.CRS.Simple} minZoom={-3} bounds={bounds} style={style}>
-            <Marker position={[bounds[1][0] - 1830, 3083]}>
+            <Marker icon={personIcon} position={[bounds[1][0] - 1830, 3083]}>
                 <Popup>
                     A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>
