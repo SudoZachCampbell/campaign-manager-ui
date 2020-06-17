@@ -14,7 +14,7 @@ export default function LocationHub(props) {
     console.log('Current Map: ', currentMap)
 
     useEffect(() => {
-        if (data) setCurrentMap(data.maps[0])
+        if (data.maps) setCurrentMap(data.maps[0])
     }, [data])
 
     return (

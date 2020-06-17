@@ -37,19 +37,23 @@ export interface ILocation extends IModel {
 }
 
 export interface ILocale extends ILocation {
-    maps: IMap[]
+    maps?: IMap[]
 }
 
 export interface IMap extends ILocation {
     image_url: string,
     center?: number[]
     locale?: ILocale,
-    buildings: IBuilding[]
+    buildings: [
+        {
+            building: IBuilding,
+            coords: number[]
+        }
+    ]
 }
 
 export interface IBuilding extends ILocation {
-    locale: ILocale,
-    coords?: number[]
+    locale: ILocale
 }
 
 //#endregion

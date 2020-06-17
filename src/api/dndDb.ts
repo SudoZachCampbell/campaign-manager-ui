@@ -39,15 +39,15 @@ export const getTable = async function <T extends IModel>(type: Type, columns: s
 }
 
 export const getEntity = async function <T>(type: Type, id: number, include: string[]): Promise<T> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`);
+    return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
 export const getEntities = async function <T>(type: Type, include: string[]): Promise<T[]> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}${include ? `?include=${include.join(',')}` : ''}`);
+    return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
 export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, include: string[], value?: string, patchList: Patch[] = []): Promise<T> {
-    const url = `http://localhost:53596/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`
+    const url = `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`
     let body: Patch[] = []
     if (patchType === PatchType.List) {
         body = patchList;
@@ -65,7 +65,7 @@ export const updateEntity = async function <T>(type: Type, id: number, patchType
 }
 
 export const getEnumValues = async function (type: Type, name: string): Promise<string[]> {
-    return await RequestBuilder[RequestType.GET](`http://localhost:53596/${type}/GetEnum/${_.upperFirst(_.camelCase(name))}`);
+    return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}/GetEnum/${_.upperFirst(_.camelCase(name))}`);
 }
 
 

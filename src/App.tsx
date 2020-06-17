@@ -15,7 +15,8 @@ import LocationHub from './pages/LocationHub';
 import { ReactQueryConfigProvider } from 'react-query';
 
 const queryConfig = {
-    suspense: true
+    suspense: true,
+    staleTime: 30000
 }
 
 export default function App(props) {

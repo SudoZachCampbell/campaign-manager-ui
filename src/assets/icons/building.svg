@@ -9,13 +9,13 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
    sodipodi:docname="building.svg"
-   id="svg6"
+   id="svg8"
    version="1.1"
    width="24"
    viewBox="0 0 24 24"
    height="24">
   <metadata
-     id="metadata12">
+     id="metadata14">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,19 +26,19 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs10" />
+     id="defs12" />
   <sodipodi:namedview
-     inkscape:current-layer="svg6"
+     inkscape:current-layer="svg8"
      inkscape:window-maximized="0"
      inkscape:window-y="0"
      inkscape:window-x="0"
      inkscape:cy="12"
      inkscape:cx="12"
-     inkscape:zoom="42"
+     inkscape:zoom="36.708333"
      showgrid="false"
-     id="namedview8"
-     inkscape:window-height="1266"
-     inkscape:window-width="1505"
+     id="namedview10"
+     inkscape:window-height="1171"
+     inkscape:window-width="1210"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -52,7 +52,11 @@
      fill="none"
      d="M0 0h24v24H0V0z" />
   <path
-     style="fill:#ff0094;fill-opacity:1"
      id="path4"
-     d="M12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81l5-4.5M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
+     d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 15h-2v-6H9v6H7v-7.81l5-4.5 5 4.5V18z" />
+  <path
+     style="fill:#00c7b1;fill-opacity:1;opacity:0.53225806"
+     id="path6"
+     opacity=".3"
+     d="M7 10.19V18h2v-6h6v6h2v-7.81l-5-4.5z" />
 </svg>
