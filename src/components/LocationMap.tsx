@@ -12,12 +12,14 @@ import { ILocale } from '../interfaces/Models';
 export default function LocationMap(props) {
     const { data } = useQuery('location', () => getEntity(Type.Locale, 5, ['Maps'])) as { data: ILocale }
 
+    console.log(data)
+
     const personIcon = new L.icon({
         iconUrl: icon,
         iconRetinaUrl: icon,
-        iconAnchor: [20, 40],
+        iconAnchor: [17.5, 25],
         popupAnchor: [0, -35],
-        iconSize: [60, 60]
+        iconSize: [45, 45]
     })
 
     const bounds = [[0, 0], [4734, 7000]]

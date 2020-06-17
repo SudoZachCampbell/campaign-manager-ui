@@ -8,7 +8,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="person.svg"
+   sodipodi:docname="building.svg"
    id="svg6"
    version="1.1"
    width="24"
@@ -33,12 +33,12 @@
      inkscape:window-y="0"
      inkscape:window-x="0"
      inkscape:cy="12"
-     inkscape:cx="7.4166667"
+     inkscape:cx="12"
      inkscape:zoom="42"
      showgrid="false"
      id="namedview8"
-     inkscape:window-height="1274"
-     inkscape:window-width="1242"
+     inkscape:window-height="1266"
+     inkscape:window-width="1505"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -52,7 +52,7 @@
      fill="none"
      d="M0 0h24v24H0V0z" />
   <path
-     style="fill:#00e4ff;fill-opacity:1"
+     style="fill:#ff0094;fill-opacity:1"
      id="path4"
-     d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 9c2.7 0 5.8 1.29 6 2v1H6v-.99c.2-.72 3.3-2.01 6-2.01m0-11C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z" />
+     d="M12 5.69l5 4.5V18h-2v-6H9v6H7v-7.81l5-4.5M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
 </svg>
