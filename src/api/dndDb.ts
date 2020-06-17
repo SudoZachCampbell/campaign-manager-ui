@@ -72,6 +72,7 @@ export const getEnumValues = async function (type: Type, name: string): Promise<
 export enum Type {
     Monster = "Monster",
     Npc = "Npc",
-    Building = "Building"
+    Building = "Building",
+    Locale = "Locale"
 }
 

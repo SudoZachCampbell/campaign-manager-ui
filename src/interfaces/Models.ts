@@ -37,6 +37,13 @@ export interface ILocation extends IModel {
 }
 
 export interface ILocale extends ILocation {
+    maps: IMap[]
+}
+
+export interface IMap extends ILocation {
+    image_url: string,
+    center?: number[]
+    locale?: ILocale
 }
 
 export interface IBuilding extends ILocation {
