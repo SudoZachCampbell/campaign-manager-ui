@@ -12,6 +12,11 @@ import NpcDetails from './pages/NpcDetails';
 import MonsterDetails from './pages/MonsterDetails';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import LocationHub from './pages/LocationHub';
+import { ReactQueryConfigProvider } from 'react-query';
+
+const queryConfig = {
+    suspense: true
+}
 
 export default function App(props) {
     const [pageName, setPageName] = useState('');
@@ -27,15 +32,17 @@ export default function App(props) {
     })
 
     return (
-        <MuiThemeProvider theme={theme}>
-            <Layout pageName={pageName} pageBanner={pageBanner}>
-                <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
-                <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
-                <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
-                <Route path='/location-hub' render={(props) => <LocationHub/>} />
-                <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
-                <Route path='/monster-details/:id' render={(props) => <MonsterDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
-            </Layout>
-        </MuiThemeProvider>
+        <ReactQueryConfigProvider config={queryConfig}>
+            <MuiThemeProvider theme={theme}>
+                <Layout pageName={pageName} pageBanner={pageBanner}>
+                    <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
+                    <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
+                    <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
+                    <Route path='/location-hub' render={(props) => <LocationHub />} />
+                    <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
+                    <Route path='/monster-details/:id' render={(props) => <MonsterDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
+                </Layout>
+            </MuiThemeProvider>
+        </ReactQueryConfigProvider>
     );
 }

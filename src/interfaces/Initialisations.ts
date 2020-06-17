@@ -1,4 +1,4 @@
-import { INpc, IMonster, IModel } from './Models';
+import { INpc, IMonster, IModel, IMap } from './Models';
 
 const Monster: IMonster = {
     id: 0,
@@ -20,8 +20,16 @@ const Model: IModel = {
     name: ""
 }
 
+const Map: IMap = {
+    id: 0,
+    name: '',
+    image_url: '',
+    buildings: []
+}
+
 export default {
     Model,
     Monster,
-    Npc
+    Npc,
+    Map
 }

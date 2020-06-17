@@ -43,11 +43,13 @@ export interface ILocale extends ILocation {
 export interface IMap extends ILocation {
     image_url: string,
     center?: number[]
-    locale?: ILocale
+    locale?: ILocale,
+    buildings: IBuilding[]
 }
 
 export interface IBuilding extends ILocation {
-    locale: ILocale
+    locale: ILocale,
+    coords?: number[]
 }
 
 //#endregion
