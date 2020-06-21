@@ -9,6 +9,7 @@ export enum RequestType {
 }
 
 const Get = async function <T>(url: string): Promise<T> {
+    console.log(`GET request to ${url}`)
     let response = await fetch(url);
     if (!response.ok) {
         const error = await response.clone().text();
