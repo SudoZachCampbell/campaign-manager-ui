@@ -1,36 +1,39 @@
 pipeline {
-    agent any
-    stages {
-        stage('Build Image') {
-            environment {
-                REACT_APP_SERVER_URL = 'http://localhost:53596'
-            }
-            steps {
-                sh 'docker container rename dndclient dndoldclient || true'
-                sh 'docker-compose build'
-            }
-
-            post {
-                failure {
-                    echo 'This build has failed. See logs for details.'
-                    sh 'docker container rename dndoldclient dndclient || true'
-                }
-            }
+  agent any 
+  stages {
+    stage('Clean') {
+      steps {
+        sh 'docker container ls -a'
+        sh 'docker container rename ddcatalogueui ddcatalogueui_old || true'
+        sh 'docker container stop ddcatalogueui_old || true'
+        sh 'docker container ls -a'
+      }
+      post {
+        failure {
+            echo 'This build has failed. See logs for details.'
+            sh 'docker container rename ddcatalogueui_old ddcatalogueui || true'
         }
-        stage('Deploy') {
-            environment {
-                REACT_APP_SERVER_URL = 'http://localhost:53596'
-            }
-            steps {
-                sh 'docker rm --force dndoldclient || true'
-                sh 'docker-compose up -d'
-            }
-
-            post {
-                failure {
-                    echo 'This build has failed. See logs for details.'
-                }
-            }
-        }
+      }   
     }
+    stage('Build') {
+      steps {
+        sh 'docker build -t ddcatalogueui:latest .'
+        sh 'docker image ls -a'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'docker ps -aqf "ancestor=ddcatalogueui" | xargs docker stop | xargs docker rm'
+        sh 'docker run -d -p 5000:80 --name ddcatalogueui ddcatalogueui'
+        sh 'docker container ls -a'
+        sh 'docker container rm ddcatalogueui_old || true'
+      }
+      post {
+        failure {
+            echo 'This build has failed. See logs for details.'
+            sh 'docker container rename ddcatalogueui_old ddcatalogueui'
+        }
+      }   
+    }
+  }
 }
