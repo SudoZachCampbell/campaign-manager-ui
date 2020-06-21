@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'docker ps -aqf "ancestor=ddcatalogueui" | xargs docker stop | xargs docker rm'
+        sh 'docker ps -aqf "ancestor=ddcatalogueui" | xargs docker stop | xargs docker rm || true'
         sh 'docker run -d -p 3000:3000 --name ddcatalogueui ddcatalogueui'
         sh 'docker container ls -a'
         sh 'docker container rm ddcatalogueui_old || true'
@@ -31,7 +31,7 @@ pipeline {
       post {
         failure {
             echo 'This build has failed. See logs for details.'
-            sh 'docker container rename ddcatalogueui_old ddcatalogueui'
+            sh 'docker container rename ddcatalogueui_old ddcatalogueui || true'
         }
       }   
     }
