@@ -43,7 +43,7 @@ export const getEntity = async function <T>(type: Type, id: number, include: str
 }
 
 export const getEntities = async function <T>(type: Type, include: string[]): Promise<T[]> {
-    return await RequestBuilder[RequestType.GET](`http://172.17.0.2:80/${type}${include ? `?include=${include.join(',')}` : ''}`);
+    return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
 export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, include: string[], value?: string, patchList: Patch[] = []): Promise<T> {
