@@ -24,7 +24,7 @@ pipeline {
     stage('Deploy') {
       steps {
         sh 'docker ps -aqf "ancestor=ddcatalogueui" | xargs docker stop | xargs docker rm || true'
-        sh 'docker run -dit -p 80:3000 --name ddcatalogueui ddcatalogueui'
+        sh 'docker run -dit -p 3000:3000 --name ddcatalogueui ddcatalogueui'
         sh 'docker container ls -a'
         sh 'docker container rm ddcatalogueui_old || true'
       }
