@@ -54,7 +54,9 @@ export interface IMap extends ILocation {
 }
 
 export interface IBuilding extends ILocation {
-    locale: ILocale
+    locale: ILocale,
+    npcs: INpc[],
+    monsters: IMonster[]
 }
 
 //#endregion

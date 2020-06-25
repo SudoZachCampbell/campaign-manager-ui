@@ -8,14 +8,14 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="person.svg"
-   id="svg6"
+   sodipodi:docname="person_outline-24px.svg"
+   id="svg10"
    version="1.1"
    width="24"
    viewBox="0 0 24 24"
    height="24">
   <metadata
-     id="metadata12">
+     id="metadata16">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -26,19 +26,19 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs10" />
+     id="defs14" />
   <sodipodi:namedview
-     inkscape:current-layer="svg6"
+     inkscape:current-layer="svg10"
      inkscape:window-maximized="0"
      inkscape:window-y="0"
      inkscape:window-x="0"
      inkscape:cy="12"
-     inkscape:cx="7.4166667"
-     inkscape:zoom="42"
+     inkscape:cx="12"
+     inkscape:zoom="36.708333"
      showgrid="false"
-     id="namedview8"
-     inkscape:window-height="1274"
-     inkscape:window-width="1242"
+     id="namedview12"
+     inkscape:window-height="1134"
+     inkscape:window-width="1515"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -51,8 +51,19 @@
      id="path2"
      fill="none"
      d="M0 0h24v24H0V0z" />
+  <circle
+     style="fill:#ff00ff;fill-opacity:1;opacity:1"
+     id="circle4"
+     r="2.1"
+     opacity=".3"
+     cy="8"
+     cx="12" />
   <path
-     style="fill:#00e4ff;fill-opacity:1"
-     id="path4"
-     d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 9c2.7 0 5.8 1.29 6 2v1H6v-.99c.2-.72 3.3-2.01 6-2.01m0-11C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z" />
+     style="fill:#ff00ff;fill-opacity:1;opacity:1"
+     id="path6"
+     opacity=".3"
+     d="M12 14.9c-2.97 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1z" />
+  <path
+     id="path8"
+     d="M12 13c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4zm6.1 5.1H5.9V17c0-.64 3.13-2.1 6.1-2.1s6.1 1.46 6.1 2.1v1.1zM12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0-6.1c1.16 0 2.1.94 2.1 2.1 0 1.16-.94 2.1-2.1 2.1S9.9 9.16 9.9 8c0-1.16.94-2.1 2.1-2.1z" />
 </svg>

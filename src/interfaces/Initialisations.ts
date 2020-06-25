@@ -28,7 +28,9 @@ const Locale: ILocale = {
 const Building: IBuilding = {
     id: 0,
     name: '',
-    locale: Locale
+    locale: Locale,
+    npcs: [],
+    monsters: []
 }
 
 const Map: IMap = {

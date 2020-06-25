@@ -1,6 +1,6 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Box, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
-import LocationMap from '../components/LocationMap';
+import LocationMap from '../components/mapping/LocationMap';
 import { ReactQueryConfigProvider } from 'react-query'
 import { ILocale, IMap } from '../interfaces/Models';
 import { useQuery } from 'react-query';
@@ -24,7 +24,7 @@ export default function LocationHub(props) {
 
     const classes = useStyles();
 
-    console.log('Current Map: ', maps[currentMapIndex])
+    console.log(`Current Index ${currentMapIndex} gives Map: `, maps[currentMapIndex])
 
     useEffect(() => {
         console.log('Maps: ', data.maps)
@@ -32,8 +32,8 @@ export default function LocationHub(props) {
     }, [data])
 
     const setMap = (event, index) => {
-        console.log("Set Map Index: ", index[0]);
-        setCurrentMapIndex(index[0]);
+        console.log("Set Map Index: ", index);
+        setCurrentMapIndex(index);
     }
 
     const setMapIcons = (event, nextView) => {
@@ -49,17 +49,19 @@ export default function LocationHub(props) {
                         <ToggleButtonGroup
                             value={currentMapIndex}
                             onChange={setMap}
-                            className={classes.root}>
+                            className={classes.root}
+                            exclusive>
                             {data.maps && data.maps.map((map, index) => (
-                                <ToggleButton value={index}>
+                                <ToggleButton key={index} value={index}>
                                     <Typography variant='body1'>{map.variation}</Typography>
                                 </ToggleButton>
                             ))};
-                            </ToggleButtonGroup>
+                        </ToggleButtonGroup>
                         <ToggleButtonGroup
                             orientation='vertical'
                             onChange={setMapIcons}
-                            value={view} exclusive >
+                            value={view}
+                            exclusive >
                             <ToggleButton value='buildings'>
                                 <Typography variant='body1'>Buildings</Typography>
                             </ToggleButton>
@@ -73,7 +75,7 @@ export default function LocationHub(props) {
                     </Box>
                 </Grid>
                 <Grid xs={9}>
-                    <LocationMap map={maps[currentMapIndex]} icons={view} />
+                    <LocationMap map={maps[currentMapIndex]} iconName={view} />
                 </Grid>
             </Grid>
         </Box>
