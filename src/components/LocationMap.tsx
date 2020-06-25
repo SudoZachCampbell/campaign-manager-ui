@@ -7,7 +7,7 @@ import BuildingIcon from '../assets/icons/building.svg';
 import { Box } from '@material-ui/core';
 import { IMap } from '../interfaces/Models';
 
-export default function LocationMap({ map }: { map: IMap }) {
+export default function LocationMap({ map, icons }: { map: IMap, icons: string }) {
     const [bounds, setBounds] = useState<number[][] | null>(null)
     const personIcon = new L.icon({
         iconUrl: PersonIcon,
@@ -47,7 +47,7 @@ export default function LocationMap({ map }: { map: IMap }) {
     return bounds ? (
         <Box display='flex' justifyContent='center'>
             <Map crs={L.CRS.Simple} center={[0, 0]} minZoom={-2} bounds={bounds} style={style}>
-                {map.buildings.map(({ coords, building }) => {
+                {map.buildings?.map(({ coords, building }) => {
                     return coords ? (
                         <Marker key={building.id} icon={buildingIcon} position={[bounds[1][0] - coords[0], coords[1]]}>
                             <Popup>

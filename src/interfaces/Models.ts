@@ -44,7 +44,8 @@ export interface IMap extends ILocation {
     image_url: string,
     center?: number[]
     locale?: ILocale,
-    buildings: [
+    variation?: string,
+    buildings?: [
         {
             building: IBuilding,
             coords: number[]

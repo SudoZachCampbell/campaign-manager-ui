@@ -16,7 +16,7 @@ import { ReactQueryConfigProvider } from 'react-query';
 
 const queryConfig = {
     suspense: true,
-    staleTime: 30000
+    staleTime: 60000
 }
 
 export default function App(props) {
