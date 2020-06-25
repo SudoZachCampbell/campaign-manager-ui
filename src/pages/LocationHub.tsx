@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-export default function LocationHub(props) {
+export default function LocationHub({ setPageName }: { setPageName: Function }) {
     const [maps, setMaps]: [IMap[], Function] = useState([BP.Map]);
     const [view, setView] = useState('buildings');
     const [currentMapIndex, setCurrentMapIndex] = useState(0);
@@ -25,6 +25,8 @@ export default function LocationHub(props) {
     const classes = useStyles();
 
     console.log(`Current Index ${currentMapIndex} gives Map: `, maps[currentMapIndex])
+
+    setPageName('Location Hub');
 
     useEffect(() => {
         console.log('Maps: ', data.maps)

@@ -39,7 +39,7 @@ export default function App(props) {
                     <Route exact path='/' render={(props) => <Home setPageName={setPageName} />} />
                     <Route path='/npcs' render={(props) => <NpcList setPageName={setPageName} />} />
                     <Route path='/monsters' render={(props) => <MonsterList setPageName={setPageName} />} />
-                    <Route path='/location-hub' render={(props) => <LocationHub />} />
+                    <Route path='/location-hub' render={(props) => <LocationHub setPageName={setPageName} />} />
                     <Route path='/npc-details/:id' render={(props) => <NpcDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
                     <Route path='/monster-details/:id' render={(props) => <MonsterDetails setPageName={setPageName} setPageBanner={setPageBanner} />} />
                 </Layout>
