@@ -9,6 +9,7 @@ import MonsterSummary from '../components/MonsterSummary'
 import _ from 'lodash';
 import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
+import LocationMap from '../components/mapping/LocationMap';
 
 const multiline: string[] = [
     "background"
@@ -23,7 +24,7 @@ const ignoreFields: string[] = [
 
 const include = [
     "Monster",
-    "Building",
+    "Building.Maps.Map",
     "Locale"
 ]
 
@@ -83,7 +84,7 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         data: [
             <MonsterSummary instance={npc.monster} />,
             <Pictures />,
-            <Location />
+            npc.building?.maps ? <LocationMap map={npc.building.maps[0].map} iconName='arrow' data={[npc]} /> : <Typography variant='subtitle1'>There's nothing here you silly sausage</Typography>
         ]
     }
 
