@@ -46,7 +46,11 @@ export const getEntities = async function <T>(type: Type, include: string[]): Pr
     return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}${include ? `?include=${include.join(',')}` : ''}`);
 }
 
-export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, include: string[], value?: string, patchList: Patch[] = []): Promise<T> {
+export const getEntitiesByFilter = async function <T>(type: Type, filterType: Type, filterId: number, include: string[]): Promise<T[]> {
+    return await RequestBuilder[RequestType.GET](`${process.env.REACT_APP_SERVER_URL}/${type}/${filterType}/${filterId}${include ? `?include=${include.join(',')}` : ''}`);
+}
+
+export const updateEntity = async function <T>(type: Type, id: number, patchType: PatchType, path: string, include: string[], value?: string | number, patchList: Patch[] = []): Promise<T> {
     const url = `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${include ? `?include=${include.join(',')}` : ''}`
     let body: Patch[] = []
     if (patchType === PatchType.List) {
@@ -73,6 +77,8 @@ export enum Type {
     Monster = "Monster",
     Npc = "Npc",
     Building = "Building",
-    Locale = "Locale"
+    Locale = "Locale",
+    Region = "Region",
+    Continent = "Continent",
 }
 

@@ -36,8 +36,19 @@ export interface ILocation extends IModel {
 
 }
 
+export interface IContinent extends ILocation {
+    regions?: IRegion[]
+}
+
+export interface IRegion extends ILocation {
+    continent: IContinent,
+    locales?: ILocale[]
+}
+
 export interface ILocale extends ILocation {
-    maps?: IMap[]
+    maps?: IMap[],
+    region: IRegion,
+    buildings?: IBuilding[]
 }
 
 export interface IMap extends ILocation {

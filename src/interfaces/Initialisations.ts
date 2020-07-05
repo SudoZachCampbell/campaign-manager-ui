@@ -1,4 +1,4 @@
-import { INpc, IMonster, IModel, IMap, IBuilding, ILocale } from './Models';
+import { INpc, IMonster, IModel, IMap, IBuilding, ILocale, IContinent, IRegion } from './Models';
 
 const Monster: IMonster = {
     id: 0,
@@ -20,9 +20,21 @@ const Model: IModel = {
     name: ""
 }
 
+const Continent: IContinent = {
+    id: 0,
+    name: ""
+}
+
+const Region: IRegion = {
+    id: 0,
+    name: "",
+    continent: Continent
+}
+
 const Locale: ILocale = {
     id: 0,
-    name: ''
+    name: '',
+    region: Region
 }
 
 const Building: IBuilding = {

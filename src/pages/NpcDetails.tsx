@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { INpc, Field } from '../interfaces/Models';
-import { Typography } from '@material-ui/core';
+import { Typography, Box, Button } from '@material-ui/core';
 import BP from '../interfaces/Initialisations'
 import { Type, getEntity } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary'
@@ -10,6 +10,7 @@ import _ from 'lodash';
 import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
+import LocationAdder from '../components/mapping/LocationAdder';
 
 const multiline: string[] = [
     "background"
@@ -58,6 +59,7 @@ const fields: Field[] = [
 export default function NpcDetails(props: { setPageName: Function, setPageBanner: Function }) {
     const [npc, setNpc] = useState<INpc>(BP.Npc);
     const [loading, setLoading] = useState<boolean>(true);
+    const [editLocation, setEditLocation] = useState<boolean>(false);
 
     props.setPageName(npc.name);
     npc.picture && props.setPageBanner(`npc/${npc.picture}`);
@@ -75,6 +77,13 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         populateNpcData();
     }, [])
 
+    const setLocation = npc => {
+        setNpc(() => {
+            setEditLocation(false);
+            return npc
+        });
+    }
+
     const tabs = {
         headers: [
             'Monster',
@@ -84,14 +93,19 @@ export default function NpcDetails(props: { setPageName: Function, setPageBanner
         data: [
             <MonsterSummary instance={npc.monster} />,
             <Pictures />,
-            npc.building?.maps ? <LocationMap map={npc.building.maps[0].map} iconName='arrow' data={[npc]} /> : <Typography variant='subtitle1'>There's nothing here you silly sausage</Typography>
+            npc.building?.maps && !editLocation ? (
+                <Box p={1}>
+                    <Button onClick={() => setEditLocation(true)}>Edit Location</Button>
+                    <LocationMap map={npc.building.maps[0].map} iconName='arrow' data={[npc]} />
+                </Box>)
+                : <LocationAdder id={npc.id} type={Type.Npc} include={include} set={setLocation} building={npc.building} />
         ]
     }
 
     const detailProps = {
         id,
         entity: npc,
-        type: Type.Npc, 
+        type: Type.Npc,
         ignoreFields,
         multiline,
         include,
