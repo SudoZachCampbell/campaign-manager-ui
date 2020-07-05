@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Map, Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
@@ -45,8 +45,12 @@ const arrowIcon = new L.icon({
 export default function LocationMap({ map, iconName, data }: { map: IMap, iconName: string, data?: INpc[] | IMonster[] }) {
     const [bounds, setBounds] = useState<number[][] | null>(null)
     const [icon, setIcon] = useState([buildingIcon]);
+    const [center, setCenter] = useState([0, 0]);
+    const [dataPlacements, setDataPlacements] = useState<any[]>([])
 
-    const style = { height: '80vh', width: '75vw' }
+    const mapRef = useRef();
+
+    const style = { height: '100%', width: '100%' }
 
     function findHHandWW(this: any, ev: Event) {
         setBounds([[0, 0], [this.height, this.width]]);
@@ -77,20 +81,48 @@ export default function LocationMap({ map, iconName, data }: { map: IMap, iconNa
 
     useEffect(() => {
         showImage(`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`);
+        if (bounds) {
+            setCenter([bounds[1][0] / 2, bounds[0][0] / 2])
+        }
     }, [map])
 
+    useEffect(() => {
+        // @ts-ignore
+        mapRef.current && mapRef.current.leafletElement.panTo(center)
+    }, [center])
+
+    useEffect(() => {
+        console.log("Data: ", dataPlacements)
+        if (dataPlacements.length !== 0) {
+            let dataCenter = dataPlacements[0]['props']['position']
+            bounds && dataCenter && setCenter([...dataCenter])
+        }
+    }, [dataPlacements])
+
+
+    useEffect(() => {
+        let dataCenter;
+        data?.forEach((instance, index) => {
+            if (instance.building?.maps) {
+                const location = instance.building?.maps[0]
+                console.log(`Location: [${location.coords[0]},${location.coords[1]}], Npc: `, instance)
+                if (bounds != null) {
+                    dataPlacements.push(<LocationMarker key={index} position={[bounds[1][0] - location.coords[0], location.coords[1]]} entities={[instance]} icon={icon} />)
+                    dataCenter = [bounds[1][0] - location.coords[0], location.coords[1]]
+                }
+            } else {
+                return null
+            }
+        })
+        setDataPlacements([...dataPlacements])
+    }, [data, bounds])
+
+    console.log("Center: ", center)
+
     return bounds ? (
-        <Box display='flex' justifyContent='center'>
-            <Map crs={L.CRS.Simple} center={[0, 0]} minZoom={-2} bounds={bounds} style={style}>
-                {data ? data.forEach((instance, index) => {
-                    if (instance.building?.maps) {
-                        const location = instance.building?.maps[0]
-                        console.log(`Location: [${location.coords[0]},${location.coords[1]}], Npc: `, instance)
-                        return <LocationMarker key={index} position={[bounds[1][0] - location.coords[0], location.coords[1]]} entities={[instance]} icon={icon} />
-                    } else {
-                        return null
-                    }
-                })
+        <Box display='flex' justifyContent='center' height='100%'>
+            <Map crs={L.CRS.Simple} center={center} minZoom={-2} bounds={bounds} style={style} ref={mapRef}>
+                {data ? dataPlacements
                     : map.buildings?.map(({ coords, building }, index) => {
                         switch (iconName) {
                             case 'buildings':

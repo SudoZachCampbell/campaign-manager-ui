@@ -77,7 +77,9 @@ export default function LocationHub({ setPageName }: { setPageName: Function }) 
                     </Box>
                 </Grid>
                 <Grid xs={9}>
-                    <LocationMap map={maps[currentMapIndex]} iconName={view} />
+                    <Box height='80vh'>
+                        <LocationMap map={maps[currentMapIndex]} iconName={view} />
+                    </Box>
                 </Grid>
             </Grid>
         </Box>

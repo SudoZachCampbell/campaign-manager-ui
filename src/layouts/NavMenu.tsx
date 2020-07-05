@@ -34,11 +34,14 @@ const useStyles = makeStyles((theme: Theme) => ({
         backgroundRepeat: 'no-repeat',
         backgroundPosition: '50% 25%',
         backgroundSize: 'cover',
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        height: '100%'
     },
     backDrop: {
+        position: 'relative',
         justifyContent: 'left',
-        background: 'rgba(255,255,255,0.6)'
+        background: 'rgba(255,255,255,0.6)',
+        height: '100%'
     },
     title: {
         lineHeight: 'normal',

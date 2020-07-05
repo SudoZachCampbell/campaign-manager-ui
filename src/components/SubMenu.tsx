@@ -86,6 +86,7 @@ export default function SubMenu(props: SubMenuProps) {
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
                 onChangeIndex={handleChangeIndex}
+                style={{height: '40vh', overflow:'hidden'}}
             >
                 {props.tabs.data.map((tab, index) => {
                     return (
