@@ -6,6 +6,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { AutoSizer } from 'react-virtualized'
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -46,6 +48,10 @@ const useStyles = makeStyles((theme: Theme) => ({
         backgroundColor: theme.palette.background.paper,
         flexGrow: 1
     },
+    content: {
+        height: '50vh',
+        overflowY: 'hidden'
+    }
 }));
 
 interface SubMenuProps {
@@ -82,20 +88,33 @@ export default function SubMenu(props: SubMenuProps) {
                     {props.tabs.headers.map(header => <Tab label={header} {...a11yProps(0)} />)}
                 </Tabs>
             </AppBar>
-            <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={handleChangeIndex}
-                style={{height: '40vh', overflow:'hidden'}}
-            >
-                {props.tabs.data.map((tab, index) => {
-                    return (
-                        <TabPanel key={index} value={value} index={index} dir={theme.direction}>
-                            {tab}
-                        </TabPanel>
-                    )
-                })}
-            </SwipeableViews>
+            <div className={classes.content}>
+                <AutoSizer>
+                    {({ width, height }) => {
+                        console.log(`Width: ${width}, Height: ${height}`)
+                        return (
+                            <Scrollbars style={{ width, height }}>
+                                <SwipeableViews
+                                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                    index={value}
+                                    onChangeIndex={handleChangeIndex}
+                                    style={{position: 'relative'}}
+                                >
+
+                                    {props.tabs.data.map((tab, index) => {
+                                        return (
+                                            <TabPanel key={index} value={value} index={index} dir={theme.direction}>
+                                                {tab}
+                                            </TabPanel>
+                                        )
+                                    })}
+
+                                </SwipeableViews>
+                            </Scrollbars>
+                        )
+                    }}
+                </AutoSizer>
+            </div>
         </div>
     );
 }

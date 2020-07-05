@@ -50,7 +50,7 @@ export default function LocationMap({ map, iconName, data }: { map: IMap, iconNa
 
     const mapRef = useRef();
 
-    const style = { height: '100%', width: '100%' }
+    const style = { height: data?.length ? '50vh' : '80vh', width: '100%' }
 
     function findHHandWW(this: any, ev: Event) {
         setBounds([[0, 0], [this.height, this.width]]);
@@ -120,7 +120,7 @@ export default function LocationMap({ map, iconName, data }: { map: IMap, iconNa
     console.log("Center: ", center)
 
     return bounds ? (
-        <Box display='flex' justifyContent='center' height='100%'>
+        <Box display='flex' justifyContent='center' height='100%' overflow='hidden'>
             <Map crs={L.CRS.Simple} center={center} minZoom={-2} bounds={bounds} style={style} ref={mapRef}>
                 {data ? dataPlacements
                     : map.buildings?.map(({ coords, building }, index) => {
