@@ -1,4 +1,4 @@
-import 'bootstrap'
+import 'bootstrap';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,6 +12,7 @@ ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
     <App />
   </BrowserRouter>,
-  rootElement);
+  rootElement,
+);
 
 // registerServiceWorker();
