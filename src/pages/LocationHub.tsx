@@ -24,7 +24,7 @@ export default function LocationHub({
   const [view, setView] = useState('buildings');
   const [currentMapIndex, setCurrentMapIndex] = useState(0);
   const { data } = useQuery('location', () =>
-    getEntity(Type.Locale, 6, ['Maps.Buildings.Building.Npcs']),
+    getEntity(Type.Locale, '6', ['Maps.Buildings.Building.Npcs']),
   ) as { data: ILocale };
 
   const classes = useStyles();

@@ -10,7 +10,7 @@ import 'typeface-roboto';
 import './custom.css';
 import NpcDetails from './pages/NpcDetails';
 import MonsterDetails from './pages/MonsterDetails';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createTheme, MuiThemeProvider } from '@material-ui/core';
 import LocationHub from './pages/LocationHub';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -24,9 +24,8 @@ export default function App(props) {
   const [pageName, setPageName] = useState('');
   const [pageBanner, setPageBanner] = useState('');
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     typography: {
-      fontFamily: 'Segoe UI',
       fontWeightLight: 100,
       fontWeightRegular: 300,
       fontWeightMedium: 400,
