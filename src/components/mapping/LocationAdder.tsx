@@ -208,7 +208,7 @@ export default function LocationAdder<T extends IModel>({
   return (
     <Box p={3}>
       <Grid container spacing={1}>
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={8}>
             <Typography variant='h4'>Choose a Location: </Typography>
           </Grid>

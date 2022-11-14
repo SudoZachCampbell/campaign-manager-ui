@@ -93,13 +93,13 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
     console.log(`${instance?.name}: `, instance);
     return (
       <Box>
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={12}>
-            <Box mb={3} display='flex' justifyContent='center'>
+            <Box marginBottom='3' display='flex' justifyContent='center'>
               <Typography variant={'h4'}>{instance?.name}</Typography>
             </Box>
           </Grid>
-          <Grid container style={{ marginBottom: '2em' }} xs={12}>
+          <Grid container style={{ marginBottom: '2em' }}>
             {fields.map((field) => {
               let value = instance && instance[field.name];
               if (field.addField) {
@@ -108,7 +108,6 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
                 value += field.addInfo;
               }
               const propsObj = {
-                key: field.name,
                 label: _.startCase(field.name),
                 field: field.name,
                 value,
@@ -119,19 +118,19 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
               switch (field.type) {
                 case FieldType.Number:
                   return (
-                    <Grid item xs={6}>
+                    <Grid key={field.name} item xs={6}>
                       <TogglingNumberField {...propsObj} noEdit />
                     </Grid>
                   );
                 case FieldType.String:
                   return (
-                    <Grid item xs={6}>
+                    <Grid key={field.name} item xs={6}>
                       <TogglingTextField {...propsObj} noEdit />
                     </Grid>
                   );
                 case FieldType.Enum:
                   return (
-                    <Grid item xs={6}>
+                    <Grid key={field.name} item xs={6}>
                       <TogglingEnumField
                         {...propsObj}
                         type={Type.MONSTER}
@@ -141,13 +140,13 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
                   );
                 case FieldType.Array:
                   return (
-                    <Grid item xs={6}>
+                    <Grid key={field.name} item xs={6}>
                       <TogglingList {...propsObj} noEdit />
                     </Grid>
                   );
                 case FieldType.ArrayOfObjects:
                   return (
-                    <Grid item xs={12}>
+                    <Grid key={field.name} item xs={12}>
                       <TogglingObjectsField
                         {...propsObj}
                         noEdit

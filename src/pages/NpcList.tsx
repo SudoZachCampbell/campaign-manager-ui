@@ -10,15 +10,14 @@ import NpcSummary from '../components/NpcSummary';
 const NpcList = (props: any) => {
   const [npcTableData, setNpcsTableData] = useState<ITableList<INpc>>({
     headers: [''],
-    data: {
-      0: BP.Npc,
-    },
+    data: {},
+    fullData: {},
   });
   const [loading, setLoading] = useState(true);
 
   const columns = ['id', 'name', 'monster.name', 'location'];
 
-  const include = ['Monster', 'Building', 'Locale'];
+  const include = ['monster', 'building', 'locale'];
 
   useEffect(() => {
     populateNpcsData();

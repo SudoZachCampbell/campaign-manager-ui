@@ -12,7 +12,7 @@ export enum PatchType {
 export const getTable = async function <T extends IModel>(
   type: Type,
   columns: string[],
-  include: string[],
+  include?: string[],
 ): Promise<[ITableList<T>, { [id: number]: T }]> {
   const entitiesArray: T[] = await getEntities<T>(type, include);
   const entities: ITableRows<T> = entitiesArray.reduce((accum, entity) => {
@@ -44,6 +44,7 @@ export const getTable = async function <T extends IModel>(
       },
       {},
     ),
+    fullData: entities,
   };
   console.log(`${type} Table Data: `, tableData);
   return [tableData, entities];
@@ -52,7 +53,7 @@ export const getTable = async function <T extends IModel>(
 export const getEntity = async function <T>(
   type: Type,
   id: string,
-  include: string[],
+  include?: string[],
 ): Promise<T> {
   return await RequestBuilder[RequestType.GET](
     `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${
@@ -63,7 +64,7 @@ export const getEntity = async function <T>(
 
 export const getEntities = async function <T>(
   type: Type,
-  include: string[],
+  include?: string[],
 ): Promise<T[]> {
   return await RequestBuilder[RequestType.GET](
     `${process.env.REACT_APP_SERVER_URL}/${type}${

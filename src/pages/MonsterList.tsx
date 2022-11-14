@@ -10,9 +10,8 @@ import MonsterSummary from '../components/MonsterSummary';
 export default function MonsterList(props: any) {
   const [monsters, setMonsters] = useState<ITableList<IMonster>>({
     headers: [''],
-    data: {
-      0: BP.Monster,
-    },
+    data: {},
+    fullData: {},
   });
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +21,7 @@ export default function MonsterList(props: any) {
     const [tableData, monstersData]: [
       ITableList<IMonster>,
       ITableRows<IMonster>,
-    ] = await getTable<IMonster>(Type.MONSTER, columns, ['']);
+    ] = await getTable<IMonster>(Type.MONSTER, columns);
     setMonsters(tableData);
     setLoading(false);
   };

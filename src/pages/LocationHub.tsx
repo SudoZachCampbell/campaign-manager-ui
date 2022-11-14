@@ -54,7 +54,7 @@ export default function LocationHub({
   return (
     <Box p={3}>
       <Grid container spacing={5}>
-        <Grid xs={3}>
+        <Grid item xs={3}>
           <Box display='flex' alignItems='center' flexDirection='column'>
             <ToggleButtonGroup
               value={currentMapIndex}
@@ -88,7 +88,7 @@ export default function LocationHub({
             </ToggleButtonGroup>
           </Box>
         </Grid>
-        <Grid xs={9}>
+        <Grid item xs={9}>
           <Box height='80vh'>
             <LocationMap map={maps[currentMapIndex]} iconName={view} />
           </Box>
