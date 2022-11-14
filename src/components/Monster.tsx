@@ -9,7 +9,7 @@ export default function Monster(props: { monster: IMonster; id: string }) {
 
   const getMonster = async () => {
     const monster: IMonster = await getEntity<IMonster>(
-      Type.Monster,
+      Type.MONSTER,
       props.id,
       [''],
     );

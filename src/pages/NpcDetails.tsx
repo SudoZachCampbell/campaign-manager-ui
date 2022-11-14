@@ -59,7 +59,7 @@ export default function NpcDetails(props: {
   const { id } = useParams<{ id: string }>();
 
   const populateNpcData = async () => {
-    const data = await getEntity<INpc>(Type.Npc, id, include);
+    const data = await getEntity<INpc>(Type.NPC, id, include);
     console.log(`NPC Details Data: `, data);
     setNpc(data);
     setLoading(false);
@@ -93,7 +93,7 @@ export default function NpcDetails(props: {
       ) : (
         <LocationAdder
           id={npc.id}
-          type={Type.Npc}
+          type={Type.NPC}
           include={include}
           set={setLocation}
           building={npc.building}
@@ -105,7 +105,7 @@ export default function NpcDetails(props: {
   const detailProps = {
     id,
     entity: npc,
-    type: Type.Npc,
+    type: Type.NPC,
     ignoreFields,
     multiline,
     include,

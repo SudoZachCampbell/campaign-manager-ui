@@ -1,3 +1,4 @@
+import React from 'react';
 import { FieldType, ToggleType } from './Lookups';
 
 export interface IModel {
@@ -75,12 +76,6 @@ export interface IBuilding extends ILocation {
 }
 
 //#endregion
-
-//#region TableData
-export interface ITableData<T> {
-  component: string;
-  dataSet: ITableList<T>;
-}
 
 export interface ITableList<T> {
   headers: string[];

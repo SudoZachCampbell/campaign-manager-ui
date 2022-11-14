@@ -54,7 +54,7 @@ export default function App(props) {
             render={(props) => <LocationHub setPageName={setPageName} />}
           />
           <Route
-            path='/npc-details/:id'
+            path='/npcs/:id'
             render={(props) => (
               <NpcDetails
                 setPageName={setPageName}
@@ -63,7 +63,7 @@ export default function App(props) {
             )}
           />
           <Route
-            path='/monster-details/:id'
+            path='/monsters/:id'
             render={(props) => (
               <MonsterDetails
                 setPageName={setPageName}

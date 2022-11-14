@@ -76,7 +76,7 @@ export default function LocationAdder<T extends IModel>({
   useEffect(() => {
     building
       ? prepopulateData()
-      : populateData<IContinent>(Type.Continent, 'continents');
+      : populateData<IContinent>(Type.CONTINENT, 'continents');
   }, []);
 
   const populateData = async function <T extends ILocation>(
@@ -90,26 +90,26 @@ export default function LocationAdder<T extends IModel>({
   const prepopulateData = async () => {
     if (building) {
       const selectedBuilding = await getEntity<IBuilding>(
-        Type.Building,
+        Type.BUILDING,
         building.id,
         ['Locale.Region.Continent'],
       );
       const buildings = await getEntity<ILocale>(
-        Type.Locale,
+        Type.LOCALE,
         selectedBuilding.locale.id,
         ['Buildings'],
       );
       const locales = await getEntity<IRegion>(
-        Type.Region,
+        Type.REGION,
         selectedBuilding.locale.region.id,
         ['Locales'],
       );
       const regions = await getEntity<IContinent>(
-        Type.Continent,
+        Type.CONTINENT,
         selectedBuilding.locale.region.continent.id,
         ['Regions'],
       );
-      const continents = await getEntities<IContinent>(Type.Continent, []);
+      const continents = await getEntities<IContinent>(Type.CONTINENT, []);
 
       let newLocation = {
         building: selectedBuilding,
@@ -128,7 +128,7 @@ export default function LocationAdder<T extends IModel>({
   };
 
   const setContinent = async (id: string) => {
-    const selectedContinent = await getEntity<IContinent>(Type.Continent, id, [
+    const selectedContinent = await getEntity<IContinent>(Type.CONTINENT, id, [
       'Regions',
     ]);
     if (selectedContinent != null) {
@@ -143,7 +143,7 @@ export default function LocationAdder<T extends IModel>({
   };
 
   const setRegion = async (id: string) => {
-    const selectedRegion = await getEntity<IRegion>(Type.Region, id, [
+    const selectedRegion = await getEntity<IRegion>(Type.REGION, id, [
       'Locales',
     ]);
     if (selectedRegion != null) {
@@ -160,7 +160,7 @@ export default function LocationAdder<T extends IModel>({
   };
 
   const setLocale = async (id: string) => {
-    const selectedLocale = await getEntity<ILocale>(Type.Locale, id, [
+    const selectedLocale = await getEntity<ILocale>(Type.LOCALE, id, [
       'Buildings',
     ]);
     if (selectedLocale != null) {

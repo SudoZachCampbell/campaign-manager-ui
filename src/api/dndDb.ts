@@ -125,10 +125,10 @@ export const getEnumValues = async function (
 };
 
 export enum Type {
-  Monster = 'Monster',
-  Npc = 'Npc',
-  Building = 'Building',
-  Locale = 'Locale',
-  Region = 'Region',
-  Continent = 'Continent',
+  MONSTER = 'monsters',
+  NPC = 'npcs',
+  BUILDING = 'buildings',
+  LOCALE = 'locales',
+  REGION = 'regions',
+  CONTINENT = 'continents',
 }

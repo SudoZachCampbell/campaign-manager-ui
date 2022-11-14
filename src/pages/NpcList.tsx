@@ -1,10 +1,11 @@
 ﻿import React, { useEffect, useState } from 'react';
-import CollapsibleTable from '../components/CollapsibleTable';
+import { CollapsibleTable } from '../components/CollapsibleTable';
 import { ITableList, INpc, ITableRows } from '../interfaces/Models';
 import { Box } from '@material-ui/core';
 import { Type, getTable } from '../api/dndDb';
 import _ from 'lodash';
 import BP from '../interfaces/Initialisations';
+import NpcSummary from '../components/NpcSummary';
 
 const NpcList = (props: any) => {
   const [npcTableData, setNpcsTableData] = useState<ITableList<INpc>>({
@@ -26,7 +27,7 @@ const NpcList = (props: any) => {
 
   const populateNpcsData = async () => {
     let [tableData, npcsData]: [ITableList<INpc>, ITableRows<INpc>] =
-      await getTable<INpc>(Type.Npc, columns, include);
+      await getTable<INpc>(Type.NPC, columns, include);
     tableData.data = _.map(tableData.data, (row) => {
       const npc = npcsData[row.id];
       row['location'] = npc.building
@@ -41,7 +42,7 @@ const NpcList = (props: any) => {
   };
 
   const renderNpcsTable = () => {
-    return <CollapsibleTable dataSet={npcTableData} component={'NpcSummary'} />;
+    return <CollapsibleTable dataSet={npcTableData} Component={NpcSummary} />;
   };
 
   const contents = loading ? (

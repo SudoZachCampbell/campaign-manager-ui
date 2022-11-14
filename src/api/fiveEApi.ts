@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { IMonster } from '../interfaces/Models'
+import { IMonster } from '../interfaces/Models';
 
 // export const getMonster: object = async function(name: string): Promise<IMonster> {
 //     let apiMonster: object = await RequestBuilder.get(`http://www.dnd5eapi.co/api/`)

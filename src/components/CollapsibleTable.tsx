@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core';
-import { ITableData, IModel } from '../interfaces/Models';
+import { IModel, ITableList } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 
@@ -27,7 +27,16 @@ const useRowStyles = makeStyles({
   },
 });
 
-export default function CollapsibleTable(props: ITableData<IModel>) {
+//#region TableData
+export interface CollapsibleTableProps<T> {
+  Component?: React.FC<{ instance: T }>;
+  dataSet: ITableList<T>;
+}
+
+export const CollapsibleTable = <T extends IModel>({
+  dataSet,
+  Component,
+}: CollapsibleTableProps<T>): JSX.Element => {
   return (
     <Grid item style={{ margin: 'auto' }} xs={10}>
       <TableContainer component={Paper}>
@@ -35,17 +44,17 @@ export default function CollapsibleTable(props: ITableData<IModel>) {
           <TableHead>
             <TableRow>
               <TableCell key='Empty'></TableCell>
-              {props.dataSet.headers.map((header: string) => {
+              {dataSet.headers.map((header: string) => {
                 return <TableCell key={header}>{header}</TableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {_.map(props.dataSet.data, (instance: IModel) => {
+            {_.map(dataSet.data, (instance: T) => {
               return (
                 <Row
                   key={instance.id}
-                  component={props.component}
+                  Component={Component}
                   instance={instance}
                 />
               );
@@ -55,9 +64,17 @@ export default function CollapsibleTable(props: ITableData<IModel>) {
       </TableContainer>
     </Grid>
   );
+};
+
+interface RowProps<T> {
+  Component?: React.FC<{ instance: T }>;
+  instance: T;
 }
 
-function Row(props: { component: string; instance: IModel }) {
+const Row = <T extends {}>({
+  Component,
+  instance,
+}: RowProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const classes = useRowStyles();
 
@@ -75,7 +92,7 @@ function Row(props: { component: string; instance: IModel }) {
           </IconButton>
         </TableCell>
         {_.map(
-          props.instance,
+          instance,
           (instanceData: string | number | boolean, key: string) => {
             return <TableCell key={key}>{instanceData}</TableCell>;
           },
@@ -84,19 +101,13 @@ function Row(props: { component: string; instance: IModel }) {
       <TableRow>
         <TableCell
           style={{ paddingBottom: 0, paddingTop: 0 }}
-          colSpan={Object.keys(props.instance).length + 1}
+          colSpan={Object.keys(instance).length + 1}
         >
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box>
-              {React.createElement(
-                types[props.component],
-                { instance: props.instance },
-                null,
-              )}
-            </Box>
+            <Box>{Component && <Component instance={instance} />}</Box>
           </Collapse>
         </TableCell>
       </TableRow>
     </>
   );
-}
+};

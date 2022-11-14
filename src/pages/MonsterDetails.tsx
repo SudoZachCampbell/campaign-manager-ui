@@ -104,7 +104,7 @@ export default function MonsterDetails(props: {
   const { id } = useParams<{ id: string }>();
 
   const populateMonsterData = async () => {
-    const data = await getEntity<IMonster>(Type.Monster, id, include);
+    const data = await getEntity<IMonster>(Type.MONSTER, id, include);
     console.log(`Monster Details Data: `, data);
     setMonster(data);
     setLoading(false);
@@ -122,7 +122,7 @@ export default function MonsterDetails(props: {
   const detailProps = {
     id,
     entity: monster,
-    type: Type.Monster,
+    type: Type.MONSTER,
     ignoreFields,
     include,
     tabs,
