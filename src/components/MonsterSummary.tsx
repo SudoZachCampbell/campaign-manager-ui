@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { IMonster, Field } from '../interfaces/Models';
 import _ from 'lodash';
@@ -8,13 +8,26 @@ import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingEnumField';
 import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
-import { Type } from '../api/dndDb';
+import { getEntity, Type } from '../api/dndDb';
+import { ClipLoader } from 'react-spinners';
 
 interface MonsterSummaryProps {
-  instance?: IMonster;
+  id?: string;
 }
 
-export default function MonsterSummary({ instance }: MonsterSummaryProps) {
+export default function MonsterSummary({ id }: MonsterSummaryProps) {
+  const [monster, setMonster] = useState<IMonster | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useMemo(async () => {
+    if (id) {
+      setLoading(true);
+      const monster = await getEntity<IMonster>(Type.MONSTER, id);
+      setMonster(monster);
+      setLoading(false);
+    }
+  }, [id]);
+
   const fields: Field[] = [
     {
       name: 'name',
@@ -62,7 +75,7 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
     },
     {
       name: 'challenge_rating',
-      addInfo: instance && ` (${instance['xp']}xp)`,
+      addInfo: monster && ` (${monster['xp']}xp)`,
       type: FieldType.Number,
     },
     {
@@ -90,20 +103,20 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
   ];
 
   const renderMonsterArea = () => {
-    console.log(`${instance?.name}: `, instance);
+    console.log(`${monster?.name}: `, monster);
     return (
       <Box>
         <Grid container>
           <Grid item xs={12}>
             <Box marginBottom='3' display='flex' justifyContent='center'>
-              <Typography variant={'h4'}>{instance?.name}</Typography>
+              <Typography variant={'h4'}>{monster?.name}</Typography>
             </Box>
           </Grid>
           <Grid container style={{ marginBottom: '2em' }}>
             {fields.map((field) => {
-              let value = instance && instance[field.name];
+              let value = monster && monster[field.name];
               if (field.addField) {
-                value += ` (${instance && instance[field.addField]})`;
+                value += ` (${monster && monster[field.addField]})`;
               } else if (field.addInfo) {
                 value += field.addInfo;
               }
@@ -161,18 +174,18 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
             <Button
               variant='contained'
               color='secondary'
-              href={`/monsters/${instance?.id}`}
+              href={`/monsters/${monster?.id}`}
             >
               Details
             </Button>
           </Grid>
-          {instance?.picture && (
+          {monster?.picture && (
             <Grid item xs={2}>
               <Box width={1}>
                 <img
                   width='100%'
                   alt=''
-                  src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${instance.picture}`}
+                  src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${monster.picture}`}
                 />
               </Box>
             </Grid>
@@ -186,7 +199,9 @@ export default function MonsterSummary({ instance }: MonsterSummaryProps) {
     return <Button>Add Monster</Button>;
   };
 
-  const renderDisplay = instance ? renderMonsterArea() : renderAddMonster();
+  const renderDisplay = monster ? renderMonsterArea() : renderAddMonster();
 
-  return renderDisplay;
+  console.log(`MonsterSummary.tsx:204 monster`, monster);
+
+  return loading ? <ClipLoader /> : renderDisplay;
 }

@@ -11,17 +11,16 @@ export default function MonsterList(props: any) {
   const [monsters, setMonsters] = useState<ITableList<IMonster>>({
     headers: [''],
     data: {},
-    fullData: {},
   });
   const [loading, setLoading] = useState(true);
 
-  const columns = ['id', 'name', 'passive_perception', 'alignment'];
+  const columns = ['id', 'name', 'passivePerception', 'alignment'];
 
   const populateMonstersData = async () => {
-    const [tableData, monstersData]: [
-      ITableList<IMonster>,
-      ITableRows<IMonster>,
-    ] = await getTable<IMonster>(Type.MONSTER, columns);
+    const tableData: ITableList<IMonster> = await getTable<IMonster>(
+      Type.MONSTER,
+      { include: columns },
+    );
     setMonsters(tableData);
     setLoading(false);
   };

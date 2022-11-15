@@ -19,7 +19,7 @@ interface Props {
   type: Type;
   ignoreFields: string[];
   multiline?: string[];
-  include: string[];
+  expand: string[];
   fields: Field[];
   tabs: any;
 }
@@ -45,7 +45,7 @@ export default function Details<T extends IModel>(props: Props) {
       props.id,
       PatchType.List,
       '',
-      props.include,
+      props.expand,
       '',
       patchList,
     );

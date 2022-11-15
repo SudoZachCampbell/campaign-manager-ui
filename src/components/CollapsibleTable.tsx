@@ -29,7 +29,7 @@ const useRowStyles = makeStyles({
 
 //#region TableData
 export interface CollapsibleTableProps<T> {
-  Component?: React.FC<{ instance: T }>;
+  Component?: React.FC<{ id: string }>;
   dataSet: ITableList<T>;
 }
 
@@ -67,11 +67,11 @@ export const CollapsibleTable = <T extends IModel>({
 };
 
 interface RowProps<T> {
-  Component?: React.FC<{ instance: T }>;
+  Component?: React.FC<{ id: string }>;
   instance: T;
 }
 
-const Row = <T extends {}>({
+const Row = <T extends IModel>({
   Component,
   instance,
 }: RowProps<T>): JSX.Element => {
@@ -91,12 +91,9 @@ const Row = <T extends {}>({
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        {_.map(
-          instance,
-          (instanceData: string | number | boolean, key: string) => {
-            return <TableCell key={key}>{instanceData}</TableCell>;
-          },
-        )}
+        {Object.entries(instance).map(([key, instanceData]) => {
+          return <TableCell key={key}>{instanceData}</TableCell>;
+        })}
       </TableRow>
       <TableRow>
         <TableCell
@@ -104,7 +101,7 @@ const Row = <T extends {}>({
           colSpan={Object.keys(instance).length + 1}
         >
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box>{Component && <Component instance={instance} />}</Box>
+            <Box>{Component && <Component id={instance.id} />}</Box>
           </Collapse>
         </TableCell>
       </TableRow>

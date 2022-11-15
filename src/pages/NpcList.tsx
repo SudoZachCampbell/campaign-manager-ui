@@ -17,7 +17,7 @@ const NpcList = (props: any) => {
 
   const columns = ['id', 'name', 'monster.name', 'location'];
 
-  const include = ['monster', 'building', 'locale'];
+  const expand = ['monster', 'building', 'locale'];
 
   useEffect(() => {
     populateNpcsData();
@@ -26,7 +26,7 @@ const NpcList = (props: any) => {
 
   const populateNpcsData = async () => {
     let [tableData, npcsData]: [ITableList<INpc>, ITableRows<INpc>] =
-      await getTable<INpc>(Type.NPC, columns, include);
+      await getTable<INpc>(Type.NPC, columns, expand);
     tableData.data = _.map(tableData.data, (row) => {
       const npc = npcsData[row.id];
       row['location'] = npc.building

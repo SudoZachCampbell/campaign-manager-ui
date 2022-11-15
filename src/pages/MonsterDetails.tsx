@@ -22,7 +22,7 @@ const ignoreFields: string[] = [
   'special_abilities',
 ];
 
-const include = ['Buildings', 'Locales'];
+const expand = ['Buildings', 'Locales'];
 
 const fields: Field[] = [
   {
@@ -104,7 +104,7 @@ export default function MonsterDetails(props: {
   const { id } = useParams<{ id: string }>();
 
   const populateMonsterData = async () => {
-    const data = await getEntity<IMonster>(Type.MONSTER, id, include);
+    const data = await getEntity<IMonster>(Type.MONSTER, id, { expand });
     console.log(`Monster Details Data: `, data);
     setMonster(data);
     setLoading(false);
@@ -124,7 +124,7 @@ export default function MonsterDetails(props: {
     entity: monster,
     type: Type.MONSTER,
     ignoreFields,
-    include,
+    expand,
     tabs,
     fields,
   };

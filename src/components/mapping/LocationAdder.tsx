@@ -59,13 +59,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function LocationAdder<T extends IModel>({
   id,
   type,
-  include,
+  expand,
   set,
   building,
 }: {
   id: string;
   type: Type;
-  include: string[];
+  expand: string[];
   set: Function;
   building?: IBuilding;
 }) {
@@ -198,7 +198,7 @@ export default function LocationAdder<T extends IModel>({
         id,
         PatchType.Add,
         '/buildingId',
-        include,
+        expand,
         location.building?.id,
       ));
     console.log('New Npc: ', npc);

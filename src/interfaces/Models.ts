@@ -80,7 +80,6 @@ export interface IBuilding extends ILocation {
 export interface ITableList<T> {
   headers: string[];
   data: ITableRows<T>;
-  fullData: ITableRows<T>;
 }
 
 export interface ITableRows<T> {

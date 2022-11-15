@@ -1,4 +1,4 @@
-import RequestBuilder, { RequestType } from './requestBuilder';
+import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
 import { IModel, ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
@@ -11,16 +11,15 @@ export enum PatchType {
 
 export const getTable = async function <T extends IModel>(
   type: Type,
-  columns: string[],
-  include?: string[],
-): Promise<[ITableList<T>, { [id: number]: T }]> {
-  const entitiesArray: T[] = await getEntities<T>(type, include);
+  queryParams: QueryParams,
+): Promise<ITableList<T>> {
+  console.log(`dndDb.ts:17 queryParams`, queryParams);
+  const entitiesArray: T[] = await getEntities<T>(type, queryParams);
   const entities: ITableRows<T> = entitiesArray.reduce((accum, entity) => {
     accum[entity.id] = entity;
     return accum;
   }, {});
-  console.log(`${type} List Data: `, entities);
-  const properties = columns.map((x) => {
+  const properties = queryParams.include?.map((x) => {
     const splitHeader = x.split('.');
     if (splitHeader.length > 1) {
       return splitHeader.map(_.startCase).join(' ');
@@ -29,61 +28,51 @@ export const getTable = async function <T extends IModel>(
     }
   });
   const tableData: ITableList<T> = {
-    headers: properties,
-    data: _.reduce(
-      entities,
-      (accum, entity: T) => {
-        accum[entity.id] = columns.reduce(
-          (innerAccum: ITableRows<T>, property) => {
-            innerAccum[property] = _.get(entity, property);
-            return innerAccum;
-          },
-          {},
-        );
-        return accum;
-      },
-      {},
-    ),
-    fullData: entities,
+    headers: properties ?? [],
+    data: entities,
   };
-  console.log(`${type} Table Data: `, tableData);
-  return [tableData, entities];
+  return tableData;
 };
 
 export const getEntity = async function <T>(
   type: Type,
   id: string,
-  include?: string[],
+  queryParams?: QueryParams,
 ): Promise<T> {
-  return await RequestBuilder[RequestType.GET](
-    `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${
-      include ? `?include=${include.join(',')}` : ''
-    }`,
-  );
+  return await RequestBuilder[RequestType.GET]({
+    url: `${process.env.REACT_APP_SERVER_URL}/${type}/${id}`,
+    queryParams,
+  });
 };
 
 export const getEntities = async function <T>(
   type: Type,
-  include?: string[],
+  queryParams: QueryParams,
 ): Promise<T[]> {
-  return await RequestBuilder[RequestType.GET](
-    `${process.env.REACT_APP_SERVER_URL}/${type}${
-      include ? `?include=${include.join(',')}` : ''
-    }`,
-  );
+  return await RequestBuilder[RequestType.GET]({
+    url: `${process.env.REACT_APP_SERVER_URL}/${type}`,
+    queryParams,
+  });
+};
+
+export const getEntityTable = async function <T>(
+  type: Type,
+  queryParams: QueryParams,
+): Promise<T[]> {
+  return await RequestBuilder[RequestType.GET]({
+    url: `${process.env.REACT_APP_SERVER_URL}/${type}`,
+    queryParams,
+  });
 };
 
 export const getEntitiesByFilter = async function <T>(
   type: Type,
-  filterType: Type,
-  filterId: number,
-  include: string[],
+  queryParams: QueryParams,
 ): Promise<T[]> {
-  return await RequestBuilder[RequestType.GET](
-    `${process.env.REACT_APP_SERVER_URL}/${type}/${filterType}/${filterId}${
-      include ? `?include=${include.join(',')}` : ''
-    }`,
-  );
+  return await RequestBuilder[RequestType.GET]({
+    url: `${process.env.REACT_APP_SERVER_URL}/${type}/`,
+    queryParams,
+  });
 };
 
 export const updateEntity = async function <T>(
@@ -91,12 +80,12 @@ export const updateEntity = async function <T>(
   id: string,
   patchType: PatchType,
   path: string,
-  include: string[],
+  expand: string[],
   value?: string | number,
   patchList: Patch[] = [],
 ): Promise<T> {
   const url = `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${
-    include ? `?include=${include.join(',')}` : ''
+    expand ? `?expand=${expand.join(',')}` : ''
   }`;
   let body: Patch[] = [];
   if (patchType === PatchType.List) {
@@ -111,18 +100,21 @@ export const updateEntity = async function <T>(
     ];
   }
 
-  return await RequestBuilder[RequestType.PATCH](url, JSON.stringify(body));
+  return await RequestBuilder[RequestType.PATCH]({
+    url,
+    body: JSON.stringify(body),
+  });
 };
 
 export const getEnumValues = async function (
   type: Type,
   name: string,
 ): Promise<string[]> {
-  return await RequestBuilder[RequestType.GET](
-    `${process.env.REACT_APP_SERVER_URL}/${type}/GetEnum/${_.upperFirst(
+  return await RequestBuilder[RequestType.GET]({
+    url: `${process.env.REACT_APP_SERVER_URL}/${type}/GetEnum/${_.upperFirst(
       _.camelCase(name),
     )}`,
-  );
+  });
 };
 
 export enum Type {

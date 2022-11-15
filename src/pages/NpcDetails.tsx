@@ -16,7 +16,7 @@ const multiline: string[] = ['background'];
 
 const ignoreFields: string[] = ['picture', 'monster', 'locale', 'building'];
 
-const include = ['Monster', 'Building.Maps.Map', 'Locale'];
+const expand = ['Monster', 'Building.Maps.Map', 'Locale'];
 
 const fields: Field[] = [
   {
@@ -59,7 +59,7 @@ export default function NpcDetails(props: {
   const { id } = useParams<{ id: string }>();
 
   const populateNpcData = async () => {
-    const data = await getEntity<INpc>(Type.NPC, id, include);
+    const data = await getEntity<INpc>(Type.NPC, id, expand);
     console.log(`NPC Details Data: `, data);
     setNpc(data);
     setLoading(false);
@@ -79,7 +79,7 @@ export default function NpcDetails(props: {
   const tabs = {
     headers: ['Monster', 'Pictures', 'Location'],
     data: [
-      <MonsterSummary instance={npc.monster} />,
+      <MonsterSummary id={npc.monster?.id} />,
       <Pictures />,
       npc.building?.maps && !editLocation ? (
         <Box p={1}>
@@ -94,7 +94,7 @@ export default function NpcDetails(props: {
         <LocationAdder
           id={npc.id}
           type={Type.NPC}
-          include={include}
+          expand={expand}
           set={setLocation}
           building={npc.building}
         />
@@ -108,7 +108,7 @@ export default function NpcDetails(props: {
     type: Type.NPC,
     ignoreFields,
     multiline,
-    include,
+    expand,
     tabs,
     fields,
   };
@@ -120,10 +120,10 @@ export default function NpcDetails(props: {
   return loadingCheck;
 }
 
-function Pictures(props) {
+function Pictures() {
   return <Typography>Test Pictures</Typography>;
 }
 
-function Location(props) {
+function Location() {
   return <Typography>Test Location</Typography>;
 }
