@@ -1,7 +1,8 @@
 import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { IModel, ITableList, ITableRows } from '../interfaces/Models';
+import { ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
+import { Base, Monster, MonstersClient } from './Model';
 
 export enum PatchType {
   Add = 'add',
@@ -9,12 +10,15 @@ export enum PatchType {
   List = 'list',
 }
 
-export const getTable = async function <T extends IModel>(
+export const getTable = async function <T extends Base>(
   type: Type,
   queryParams: QueryParams,
 ): Promise<ITableList<T>> {
   console.log(`dndDb.ts:17 queryParams`, queryParams);
+  const client = new MonstersClient();
+  const yeet = await client.getMonsters();
   const entitiesArray: T[] = await getEntities<T>(type, queryParams);
+  console.log(`dndDb.ts:19 entitiesArray`, entitiesArray);
   const entities: ITableRows<T> = entitiesArray.reduce((accum, entity) => {
     accum[entity.id] = entity;
     return accum;

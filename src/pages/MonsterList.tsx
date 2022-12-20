@@ -6,21 +6,17 @@ import { Type, getTable } from '../api/dndDb';
 import _ from 'lodash';
 import BP from '../interfaces/Initialisations';
 import MonsterSummary from '../components/MonsterSummary';
+import { Monster, MonstersClient } from '../api/Model';
 
 export default function MonsterList(props: any) {
-  const [monsters, setMonsters] = useState<ITableList<IMonster>>({
-    headers: [''],
-    data: {},
-  });
+  const [monsters, setMonsters] = useState<Monster[]>([]);
   const [loading, setLoading] = useState(true);
+  const client = new MonstersClient();
 
   const columns = ['id', 'name', 'passivePerception', 'alignment'];
 
   const populateMonstersData = async () => {
-    const tableData: ITableList<IMonster> = await getTable<IMonster>(
-      Type.MONSTER,
-      { include: columns },
-    );
+    const tableData = await client.getMonsters();
     setMonsters(tableData);
     setLoading(false);
   };

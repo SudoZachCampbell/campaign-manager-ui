@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core';
 import { IModel, ITableList } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
+import { Base } from '../api/Model';
 
 const useRowStyles = makeStyles({
   root: {
@@ -30,10 +31,10 @@ const useRowStyles = makeStyles({
 //#region TableData
 export interface CollapsibleTableProps<T> {
   Component?: React.FC<{ id: string }>;
-  dataSet: ITableList<T>;
+  dataSet: T[];
 }
 
-export const CollapsibleTable = <T extends IModel>({
+export const CollapsibleTable = <T extends Base>({
   dataSet,
   Component,
 }: CollapsibleTableProps<T>): JSX.Element => {
@@ -44,18 +45,21 @@ export const CollapsibleTable = <T extends IModel>({
           <TableHead>
             <TableRow>
               <TableCell key='Empty'></TableCell>
-              {dataSet.headers.map((header: string) => {
+              {Object.keys(dataSet[0]).map((header: string) => {
                 return <TableCell key={header}>{header}</TableCell>;
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {_.map(dataSet.data, (instance: T) => {
+            {dataSet.map((instance: T) => {
+              const picked = (({ name }) => ({
+                name,
+              }))(instance);
               return (
                 <Row
                   key={instance.id}
                   Component={Component}
-                  instance={instance}
+                  instance={picked}
                 />
               );
             })}
@@ -71,7 +75,7 @@ interface RowProps<T> {
   instance: T;
 }
 
-const Row = <T extends IModel>({
+const Row = <T extends Base>({
   Component,
   instance,
 }: RowProps<T>): JSX.Element => {
