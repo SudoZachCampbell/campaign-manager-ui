@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { IModel, Field } from '../interfaces/Models';
+import { Field } from '../interfaces/Models';
 import { FieldType } from '../interfaces/Lookups';
 import { Box, Grid } from '@material-ui/core';
 import BP from '../interfaces/Initialisations';
@@ -12,6 +12,7 @@ import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingEnumField';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
+import { Base } from '../api/Model';
 
 interface Props {
   id: string;
@@ -24,83 +25,97 @@ interface Props {
   tabs: any;
 }
 
-export default function Details<T extends IModel>(props: Props) {
-  const [entity, setEntity] = useState(BP[props.type]);
+export default <T extends Base>({
+  id,
+  entity,
+  type,
+  ignoreFields,
+  multiline,
+  expand,
+  fields,
+  tabs,
+}: Props) => {
+  const [updatedEntity, setUpdatedEntity] = useState<T>();
 
   const saveField = async (field: string, value: any) => {
     const data: T = await updateEntity<T>(
-      props.type,
-      props.id,
+      type,
+      id,
       PatchType.Add,
       `/${_.camelCase(field)}`,
       [''],
       value,
     );
-    setEntity(data);
+    setUpdatedEntity(data);
   };
 
   const saveList = async (field: string, patchList: Patch[]) => {
     const data: T = await updateEntity<T>(
-      props.type,
-      props.id,
+      type,
+      id,
       PatchType.List,
       '',
-      props.expand,
+      expand,
       '',
       patchList,
     );
-    setEntity(data);
+    setUpdatedEntity(data);
   };
 
   useEffect(() => {
-    setEntity(props.entity);
-  }, [props.entity]);
+    setUpdatedEntity(entity);
+  }, [entity]);
 
-  const display = (
+  const display = updatedEntity && (
     <Box p={3}>
       <Grid container>
         <Grid item xs={6}>
           <Box p={3}>
-            {props.fields.map((field) => {
+            {fields.map((field) => {
               if (
                 !field.name.includes('id') &&
-                !props.ignoreFields.includes(field.name)
+                !ignoreFields.includes(field.name)
               ) {
                 const propsObj = {
                   key: field.name,
                   label: _.startCase(field.name),
                   field: field.name,
-                  value: entity[field.name],
+                  value: updatedEntity[field.name],
                 };
 
                 // TODO: Add Object Type
-
-                switch (field.type) {
-                  case FieldType.Number:
-                    return (
-                      <TogglingNumberField
-                        {...propsObj}
-                        saveField={saveField}
-                      />
-                    );
-                  case FieldType.String:
-                    return (
-                      <TogglingTextField
-                        {...propsObj}
-                        column={props.multiline?.includes(field.name)}
-                        saveField={saveField}
-                      />
-                    );
-                  case FieldType.Enum:
-                    return (
-                      <TogglingEnumField
-                        {...propsObj}
-                        type={props.type}
-                        saveField={saveField}
-                      />
-                    );
-                  case FieldType.Array:
-                    return <TogglingList {...propsObj} saveField={saveList} />;
+                if (propsObj.value) {
+                  switch (field.type) {
+                    case FieldType.Number:
+                      return (
+                        <TogglingNumberField
+                          {...propsObj}
+                          value={Number(propsObj.value)}
+                          saveField={saveField}
+                        />
+                      );
+                    case FieldType.String:
+                      return (
+                        <TogglingTextField
+                          {...propsObj}
+                          value={propsObj.value.toString()}
+                          column={multiline?.includes(field.name)}
+                          saveField={saveField}
+                        />
+                      );
+                    case FieldType.Enum:
+                      return (
+                        <TogglingEnumField
+                          {...propsObj}
+                          type={type}
+                          saveField={saveField}
+                        />
+                      );
+                    case FieldType.Array:
+                      return (
+                        <TogglingList {...propsObj} saveField={saveList} />
+                      );
+                  }
                 }
               }
             })}
@@ -108,7 +123,7 @@ export default function Details<T extends IModel>(props: Props) {
         </Grid>
         <Grid item xs={6}>
           <Box p={3}>
-            <SubMenu tabs={props.tabs} />
+            <SubMenu tabs={tabs} />
           </Box>
         </Grid>
       </Grid>
@@ -116,4 +131,4 @@ export default function Details<T extends IModel>(props: Props) {
   );
 
   return display;
-}
+};

@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import { makeStyles } from '@material-ui/core';
-import { IModel, ITableList } from '../interfaces/Models';
+import { ITableList } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 import { Base } from '../api/Model';
@@ -30,14 +30,27 @@ const useRowStyles = makeStyles({
 
 //#region TableData
 export interface CollapsibleTableProps<T> {
-  Component?: React.FC<{ id: string }>;
+  Component?: React.FC<{ id?: string }>;
   dataSet: T[];
+  columns: TableColumn[];
+}
+
+export interface TableColumn {
+  name: string;
+  header: string;
+  hidden?: boolean;
 }
 
 export const CollapsibleTable = <T extends Base>({
   dataSet,
   Component,
+  columns,
 }: CollapsibleTableProps<T>): JSX.Element => {
+  const columnNames = columns.reduce<string[]>((acc, { name }) => {
+    acc.push(name);
+    return acc;
+  }, []);
+
   return (
     <Grid item style={{ margin: 'auto' }} xs={10}>
       <TableContainer component={Paper}>
@@ -45,20 +58,18 @@ export const CollapsibleTable = <T extends Base>({
           <TableHead>
             <TableRow>
               <TableCell key='Empty'></TableCell>
-              {Object.keys(dataSet[0]).map((header: string) => {
-                return <TableCell key={header}>{header}</TableCell>;
-              })}
+              {columns.map(({ header }) => (
+                <TableCell key={header}>{header}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {dataSet.map((instance: T) => {
-              const picked = (({ name }) => ({
-                name,
-              }))(instance);
+              const picked = _.pick(instance, columnNames);
               return (
                 <Row
                   key={instance.id}
-                  Component={Component}
+                  Component={Component && <Component id={instance.id} />}
                   instance={picked}
                 />
               );
@@ -71,8 +82,8 @@ export const CollapsibleTable = <T extends Base>({
 };
 
 interface RowProps<T> {
-  Component?: React.FC<{ id: string }>;
-  instance: T;
+  Component?: React.ReactNode;
+  instance: Partial<T>;
 }
 
 const Row = <T extends Base>({
@@ -105,7 +116,7 @@ const Row = <T extends Base>({
           colSpan={Object.keys(instance).length + 1}
         >
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box>{Component && <Component id={instance.id} />}</Box>
+            <Box>{Component}</Box>
           </Collapse>
         </TableCell>
       </TableRow>

@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { IMonster, Field } from '../interfaces/Models';
+import { Field } from '../interfaces/Models';
 import { Typography } from '@material-ui/core';
 import BP from '../interfaces/Initialisations';
 import { Type, getEntity } from '../api/dndDb';
 import _ from 'lodash';
 import Details from '../layouts/Details';
 import { FieldType } from '../interfaces/Lookups';
+import { Monster, MonstersClient } from '../api/Model';
 
 const ignoreFields: string[] = [
   'picture',
@@ -23,6 +24,8 @@ const ignoreFields: string[] = [
 ];
 
 const expand = ['Buildings', 'Locales'];
+
+const client = new MonstersClient();
 
 const fields: Field[] = [
   {
@@ -95,17 +98,17 @@ export default function MonsterDetails(props: {
   setPageName: Function;
   setPageBanner: Function;
 }) {
-  const [monster, setMonster] = useState<IMonster>(BP.Monster);
+  const [monster, setMonster] = useState<Monster>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  props.setPageName(monster.name);
-  monster.picture && props.setPageBanner(`monster/${monster.picture}`);
+  props.setPageName(monster?.name);
+  monster?.picture && props.setPageBanner(`monster/${monster.picture}`);
 
   const { id } = useParams<{ id: string }>();
 
   const populateMonsterData = async () => {
-    const data = await getEntity<IMonster>(Type.MONSTER, id, { expand });
-    console.log(`Monster Details Data: `, data);
+    setLoading(true);
+    const data = await client.getMonsterById(id, expand.join(','));
     setMonster(data);
     setLoading(false);
   };
@@ -136,10 +139,10 @@ export default function MonsterDetails(props: {
   return loadingCheck;
 }
 
-function Pictures(props) {
+function Pictures() {
   return <Typography>Test Pictures</Typography>;
 }
 
-function Location(props) {
+function Location() {
   return <Typography>Test Location</Typography>;
 }

@@ -1,6 +1,6 @@
-﻿import React, { useMemo, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid, Typography } from '@material-ui/core';
-import { IMonster, Field } from '../interfaces/Models';
+import { Field } from '../interfaces/Models';
 import _ from 'lodash';
 import { FieldType, ToggleType } from '../interfaces/Lookups';
 import TogglingTextField from '../components/toggling/TogglingTextField';
@@ -10,22 +10,35 @@ import TogglingEnumField from '../components/toggling/TogglingEnumField';
 import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
 import { getEntity, Type } from '../api/dndDb';
 import { ClipLoader } from 'react-spinners';
+import { Monster, MonstersClient } from '../api/Model';
 
 interface MonsterSummaryProps {
   id?: string;
 }
 
+const client = new MonstersClient();
+
 export default function MonsterSummary({ id }: MonsterSummaryProps) {
-  const [monster, setMonster] = useState<IMonster | undefined>();
+  const [monster, setMonster] = useState<Monster | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
 
-  useMemo(async () => {
+  console.log(`MonsterSummary.tsx:25 id`, id);
+
+  const fetchMonsterDetails = async () => {
     if (id) {
       setLoading(true);
-      const monster = await getEntity<IMonster>(Type.MONSTER, id);
+      const monster = await client.getMonsterById(id);
       setMonster(monster);
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchMonsterDetails();
+  }, [id]);
+
+  useEffect(() => {
+    fetchMonsterDetails();
   }, [id]);
 
   const fields: Field[] = [
@@ -200,8 +213,6 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
   };
 
   const renderDisplay = monster ? renderMonsterArea() : renderAddMonster();
-
-  console.log(`MonsterSummary.tsx:204 monster`, monster);
 
   return loading ? <ClipLoader /> : renderDisplay;
 }
