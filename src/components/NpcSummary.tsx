@@ -1,38 +1,43 @@
 ﻿import * as React from 'react';
 import { Box, Button, Grid } from '@material-ui/core';
-import { INpc } from '../interfaces/Models';
+import { Npc, NpcsClient } from '../api/Model';
+import { useDnDApi } from '../api/dndDb';
 
-export default ({ instance }: { instance: INpc }) => {
-  const renderNpcArea = () => {
-    return (
-      <Box p={3}>
-        <Grid container>
-          <Grid item xs={4}>
-            <h1 className='display-4'>{instance.name}</h1>
-            <div>{instance.monster ? instance.monster.name : 'None'}</div>
-            <Button
-              variant='contained'
-              color='secondary'
-              href={`/npc-details/${instance.id}`}
-            >
-              Details
-            </Button>
-          </Grid>
-          {instance.picture && (
-            <Grid item xs={4}>
-              <img
-                height={'40%'}
-                alt=''
-                src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${instance.picture}`}
-              />
-            </Grid>
-          )}
+const npcClient = new NpcsClient();
+
+interface NpcSummaryProps {
+  id: string;
+}
+
+export default ({ id }: NpcSummaryProps) => {
+  const { loading, invoke, response: npc } = useDnDApi(npcClient.get(id));
+
+  return npc ? (
+    <Box p={3}>
+      <Grid container>
+        <Grid item xs={4}>
+          <h1 className='display-4'>{npc.name}</h1>
+          <div>{npc.monster ? npc.monster.name : 'None'}</div>
+          <Button
+            variant='contained'
+            color='secondary'
+            href={`/npc-details/${npc.id}`}
+          >
+            Details
+          </Button>
         </Grid>
-      </Box>
-    );
-  };
-
-  const renderDisplay = renderNpcArea();
-
-  return renderDisplay;
+        {npc.picture && (
+          <Grid item xs={4}>
+            <img
+              height={'40%'}
+              alt=''
+              src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.picture}`}
+            />
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+  ) : (
+    <p>Fecked</p>
+  );
 };

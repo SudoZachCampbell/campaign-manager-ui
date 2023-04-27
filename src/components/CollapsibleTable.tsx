@@ -30,7 +30,7 @@ const useRowStyles = makeStyles({
 
 //#region TableData
 export interface CollapsibleTableProps<T> {
-  Component?: React.FC<{ id?: string }>;
+  Component?: React.FC<{ id: string }>;
   dataSet: T[];
   columns: TableColumn[];
 }

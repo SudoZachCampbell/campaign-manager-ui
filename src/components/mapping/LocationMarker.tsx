@@ -1,9 +1,8 @@
 import React from 'react';
 import { Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
-import { IModel } from '../../interfaces/Models';
-import { LocalConvenienceStoreOutlined } from '@material-ui/icons';
 import L from 'leaflet';
 import { Typography } from '@material-ui/core';
+import { Base } from '../../api/Model';
 
 export default function LocationMarker({
   position,
@@ -12,7 +11,7 @@ export default function LocationMarker({
 }: {
   key: number;
   position: number[];
-  entities: IModel[];
+  entities: Base[];
   icon: L.icon[];
 }) {
   return (

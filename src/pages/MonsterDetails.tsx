@@ -3,12 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Field } from '../interfaces/Models';
 import { Typography } from '@material-ui/core';
-import BP from '../interfaces/Initialisations';
-import { Type, getEntity } from '../api/dndDb';
+import { ApiType, useDnDApi } from '../api/dndDb';
 import _ from 'lodash';
 import Details from '../layouts/Details';
 import { FieldType } from '../interfaces/Lookups';
-import { Monster, MonstersClient } from '../api/Model';
+import { MonstersClient } from '../api/Model';
 
 const ignoreFields: string[] = [
   'picture',
@@ -37,7 +36,7 @@ const fields: Field[] = [
     type: FieldType.String,
   },
   {
-    name: 'hit_dice',
+    name: 'hitDice',
     type: FieldType.String,
   },
   {
@@ -45,15 +44,15 @@ const fields: Field[] = [
     type: FieldType.String,
   },
   {
-    name: 'challenge_rating',
+    name: 'challengeRating',
     type: FieldType.Number,
   },
   {
-    name: 'passive_perception',
+    name: 'passivePerception',
     type: FieldType.Number,
   },
   {
-    name: 'monster_type',
+    name: 'monsterType',
     type: FieldType.Enum,
   },
   {
@@ -81,11 +80,11 @@ const fields: Field[] = [
     type: FieldType.Number,
   },
   {
-    name: 'armor_class',
+    name: 'armorClass',
     type: FieldType.String,
   },
   {
-    name: 'hit_points',
+    name: 'hitPoints',
     type: FieldType.String,
   },
   {
@@ -94,47 +93,52 @@ const fields: Field[] = [
   },
 ];
 
-export default function MonsterDetails(props: {
+interface MonsterDetailsProps {
   setPageName: Function;
   setPageBanner: Function;
-}) {
-  const [monster, setMonster] = useState<Monster>();
-  const [loading, setLoading] = useState<boolean>(true);
+}
 
-  props.setPageName(monster?.name);
-  monster?.picture && props.setPageBanner(`monster/${monster.picture}`);
-
+export default function MonsterDetails({
+  setPageName,
+  setPageBanner,
+}: MonsterDetailsProps) {
   const { id } = useParams<{ id: string }>();
 
-  const populateMonsterData = async () => {
-    setLoading(true);
-    const data = await client.getMonsterById(id, expand.join(','));
-    setMonster(data);
-    setLoading(false);
-  };
+  const {
+    loading,
+    invoke,
+    response: monster,
+  } = useDnDApi(client.getMonsterById(id, expand.join(',')));
 
   useEffect(() => {
-    populateMonsterData();
+    invoke();
   }, []);
+
+  useEffect(() => {
+    setPageName(monster?.name);
+    monster?.picture && setPageBanner(`monster/${monster.picture}`);
+  }, [monster]);
 
   const tabs = {
     headers: ['Pictures', 'Location'],
     data: [<Pictures />, <Location />],
   };
 
-  const detailProps = {
-    id,
-    entity: monster,
-    type: Type.MONSTER,
-    ignoreFields,
-    expand,
-    tabs,
-    fields,
-  };
-
-  const display = <Details {...detailProps} />;
-
-  const loadingCheck = loading ? <Typography>Loading</Typography> : display;
+  const loadingCheck = loading ? (
+    <Typography>Loading</Typography>
+  ) : monster ? (
+    <Details
+      id={id}
+      entity={monster}
+      type={ApiType.MONSTER}
+      ignoreFields={ignoreFields}
+      expand={expand}
+      tabs={tabs}
+      fields={fields}
+    />
+  ) : (
+    <p>Error loading monster</p>
+  );
 
   return loadingCheck;
 }

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Breadcrumbs,
-  Link,
   Box,
   Select,
   MenuItem,
@@ -14,35 +12,20 @@ import {
   Theme,
   Button,
 } from '@material-ui/core';
-import {
-  IContinent,
-  IRegion,
-  ILocale,
-  IBuilding,
-  IModel,
-  ILocation,
-  INpc,
-} from '../../interfaces/Models';
-import {
-  Type,
-  getEntity,
-  getEntities,
-  getEntitiesByFilter,
-  PatchType,
-  updateEntity,
-} from '../../api/dndDb';
+import { ApiType, PatchType } from '../../api/dndDb';
 import _ from 'lodash';
-
-interface Location {
-  continents: ILocation[];
-  regions?: ILocation[];
-  locales?: ILocation[];
-  buildings?: ILocation[];
-  continent?: ILocation;
-  region?: ILocation;
-  locale?: ILocation;
-  building?: ILocation;
-}
+import {
+  Base,
+  Building,
+  BuildingsClient,
+  Continent,
+  ContinentsClient,
+  ILocale,
+  Locale,
+  LocalesClient,
+  Region,
+  RegionsClient,
+} from '../../api/Model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,96 +39,103 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function LocationAdder<T extends IModel>({
-  id,
-  type,
-  expand,
-  set,
-  building,
-}: {
-  id: string;
-  type: Type;
+const buildingClient = new BuildingsClient();
+const localeClient = new LocalesClient();
+const regionClient = new RegionsClient();
+const continentClient = new ContinentsClient();
+
+interface LocationAdderProps {
+  onSave: (id: string) => void;
   expand: string[];
-  set: Function;
-  building?: IBuilding;
-}) {
+  building?: Building;
+}
+
+interface Location {
+  continents: Continent[];
+  regions?: Region[];
+  locales?: Locale[];
+  buildings?: Building[];
+  continent?: Continent;
+  region?: Region;
+  locale?: Locale;
+  building?: Building;
+}
+
+export default function LocationAdder<T extends Base>({
+  onSave,
+  expand,
+  building,
+}: LocationAdderProps) {
   const [location, setLocation] = useState<Location>({ continents: [] });
 
   const classes = useStyles();
 
   useEffect(() => {
-    building
-      ? prepopulateData()
-      : populateData<IContinent>(Type.CONTINENT, 'continents');
+    building ? prepopulateData() : populateContinents();
   }, []);
 
-  const populateData = async function <T extends ILocation>(
-    type: Type,
-    section: string,
-  ) {
-    const data = await getEntities<T>(type, []);
-    setLocation({ ...location, [section]: data });
+  const populateContinents = async function () {
+    const data = await continentClient.getContinents();
+    setLocation({ ...location, continents: data });
   };
 
   const prepopulateData = async () => {
     if (building) {
-      const selectedBuilding = await getEntity<IBuilding>(
-        Type.BUILDING,
+      const selectedBuilding = await buildingClient.getBuildingById(
         building.id,
-        ['Locale.Region.Continent'],
+        'Locale.Region.Continent',
       );
-      const buildings = await getEntity<ILocale>(
-        Type.LOCALE,
-        selectedBuilding.locale.id,
-        ['Buildings'],
-      );
-      const locales = await getEntity<IRegion>(
-        Type.REGION,
-        selectedBuilding.locale.region.id,
-        ['Locales'],
-      );
-      const regions = await getEntity<IContinent>(
-        Type.CONTINENT,
-        selectedBuilding.locale.region.continent.id,
-        ['Regions'],
-      );
-      const continents = await getEntities<IContinent>(Type.CONTINENT, []);
+
+      const buildings =
+        selectedBuilding.locale &&
+        (await localeClient.getLocale(selectedBuilding.locale.id, 'Buildings'));
+
+      const locales =
+        selectedBuilding.locale?.region &&
+        (await regionClient.getRegionById(
+          selectedBuilding.locale.region.id,
+          'Locales',
+        ));
+      const regions =
+        selectedBuilding.locale?.region?.continent &&
+        (await continentClient.getContinentById(
+          selectedBuilding.locale.region.continent.id,
+          'Regions',
+        ));
+      const continents = await continentClient.getContinents();
 
       let newLocation = {
         building: selectedBuilding,
         locale: selectedBuilding.locale,
-        region: selectedBuilding.locale.region,
-        continent: selectedBuilding.locale.region.continent,
-        buildings: buildings.buildings,
-        locales: locales.locales,
-        regions: regions.regions,
+        region: selectedBuilding.locale?.region,
+        continent: selectedBuilding.locale?.region?.continent,
+        buildings: buildings?.buildings,
+        locales: locales?.locales,
+        regions: regions?.regions,
         continents,
       };
 
-      console.log('New Location: ', newLocation);
       setLocation({ ...newLocation });
     }
   };
 
   const setContinent = async (id: string) => {
-    const selectedContinent = await getEntity<IContinent>(Type.CONTINENT, id, [
+    const selectedContinent = await continentClient.getContinentById(
+      id,
       'Regions',
-    ]);
+    );
     if (selectedContinent != null) {
       const newLocation: Location = {
         continents: location.continents,
         continent: selectedContinent,
         regions: selectedContinent.regions,
       };
-      console.log('New Location: ', newLocation);
       setLocation(newLocation);
     }
   };
 
   const setRegion = async (id: string) => {
-    const selectedRegion = await getEntity<IRegion>(Type.REGION, id, [
-      'Locales',
-    ]);
+    const selectedRegion = await regionClient.getRegionById(id, 'Locales');
     if (selectedRegion != null) {
       const newLocation: Location = {
         continents: location.continents,
@@ -160,9 +150,7 @@ export default function LocationAdder<T extends IModel>({
   };
 
   const setLocale = async (id: string) => {
-    const selectedLocale = await getEntity<ILocale>(Type.LOCALE, id, [
-      'Buildings',
-    ]);
+    const selectedLocale = await localeClient.getLocale(id, 'Buildings');
     if (selectedLocale != null) {
       const newLocation: Location = {
         continents: location.continents,
@@ -191,18 +179,9 @@ export default function LocationAdder<T extends IModel>({
   };
 
   const saveLocation = async () => {
-    const npc =
-      location.building &&
-      (await updateEntity<T>(
-        type,
-        id,
-        PatchType.Add,
-        '/buildingId',
-        expand,
-        location.building?.id,
-      ));
-    console.log('New Npc: ', npc);
-    set(npc);
+    if (location.building?.id) {
+      onSave(location.building.id);
+    }
   };
 
   return (

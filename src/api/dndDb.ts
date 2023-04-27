@@ -2,7 +2,17 @@ import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
 import { ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
-import { Base, Monster, MonstersClient } from './Model';
+import {
+  Base,
+  BuildingsClient,
+  ContinentsClient,
+  LocalesClient,
+  Monster,
+  MonstersClient,
+  NpcsClient,
+  RegionsClient,
+} from './Model';
+import { useState } from 'react';
 
 export enum PatchType {
   Add = 'add',
@@ -10,108 +20,36 @@ export enum PatchType {
   List = 'list',
 }
 
-export const getTable = async function <T extends Base>(
-  type: Type,
-  queryParams: QueryParams,
-): Promise<ITableList<T>> {
-  console.log(`dndDb.ts:17 queryParams`, queryParams);
-  const client = new MonstersClient();
-  const yeet = await client.getMonsters();
-  const entitiesArray: T[] = await getEntities<T>(type, queryParams);
-  console.log(`dndDb.ts:19 entitiesArray`, entitiesArray);
-  const entities: ITableRows<T> = entitiesArray.reduce((accum, entity) => {
-    accum[entity.id] = entity;
-    return accum;
-  }, {});
-  const properties = queryParams.include?.map((x) => {
-    const splitHeader = x.split('.');
-    if (splitHeader.length > 1) {
-      return splitHeader.map(_.startCase).join(' ');
-    } else {
-      return _.startCase(x);
-    }
-  });
-  const tableData: ITableList<T> = {
-    headers: properties ?? [],
-    data: entities,
+export const useDnDApi = <T extends Base>(call: Promise<T>) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [response, setResponse] = useState<T>();
+
+  const invoke = async () => {
+    setLoading(true);
+    const data = await call;
+    setResponse(data);
+    setLoading(false);
   };
-  return tableData;
+
+  return { loading, invoke, response };
 };
 
-export const getEntity = async function <T>(
-  type: Type,
-  id: string,
-  queryParams?: QueryParams,
-): Promise<T> {
-  return await RequestBuilder[RequestType.GET]({
-    url: `${process.env.REACT_APP_SERVER_URL}/${type}/${id}`,
-    queryParams,
-  });
-};
+export const useDndCollectionApi = <T extends Base>(call: Promise<T[]>) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [response, setResponse] = useState<T[]>();
 
-export const getEntities = async function <T>(
-  type: Type,
-  queryParams: QueryParams,
-): Promise<T[]> {
-  return await RequestBuilder[RequestType.GET]({
-    url: `${process.env.REACT_APP_SERVER_URL}/${type}`,
-    queryParams,
-  });
-};
+  const invoke = async () => {
+    setLoading(true);
+    const data = await call;
+    setResponse(data);
+    setLoading(false);
+  };
 
-export const getEntityTable = async function <T>(
-  type: Type,
-  queryParams: QueryParams,
-): Promise<T[]> {
-  return await RequestBuilder[RequestType.GET]({
-    url: `${process.env.REACT_APP_SERVER_URL}/${type}`,
-    queryParams,
-  });
-};
-
-export const getEntitiesByFilter = async function <T>(
-  type: Type,
-  queryParams: QueryParams,
-): Promise<T[]> {
-  return await RequestBuilder[RequestType.GET]({
-    url: `${process.env.REACT_APP_SERVER_URL}/${type}/`,
-    queryParams,
-  });
-};
-
-export const updateEntity = async function <T>(
-  type: Type,
-  id: string,
-  patchType: PatchType,
-  path: string,
-  expand: string[],
-  value?: string | number,
-  patchList: Patch[] = [],
-): Promise<T> {
-  const url = `${process.env.REACT_APP_SERVER_URL}/${type}/${id}${
-    expand ? `?expand=${expand.join(',')}` : ''
-  }`;
-  let body: Patch[] = [];
-  if (patchType === PatchType.List) {
-    body = patchList;
-  } else {
-    body = [
-      {
-        op: patchType,
-        path,
-        value,
-      },
-    ];
-  }
-
-  return await RequestBuilder[RequestType.PATCH]({
-    url,
-    body: JSON.stringify(body),
-  });
+  return { loading, invoke, response };
 };
 
 export const getEnumValues = async function (
-  type: Type,
+  type: ApiType,
   name: string,
 ): Promise<string[]> {
   return await RequestBuilder[RequestType.GET]({
@@ -121,11 +59,20 @@ export const getEnumValues = async function (
   });
 };
 
-export enum Type {
-  MONSTER = 'monsters',
-  NPC = 'npcs',
-  BUILDING = 'buildings',
-  LOCALE = 'locales',
-  REGION = 'regions',
-  CONTINENT = 'continents',
+export enum ApiType {
+  MONSTER,
+  NPC,
+  BUILDING,
+  LOCALE,
+  REGION,
+  CONTINENT,
 }
+
+export const ApiClients = {
+  [ApiType.MONSTER]: new MonstersClient(),
+  [ApiType.NPC]: new NpcsClient(),
+  [ApiType.BUILDING]: new BuildingsClient(),
+  [ApiType.LOCALE]: new LocalesClient(),
+  [ApiType.REGION]: new RegionsClient(),
+  [ApiType.CONTINENT]: new ContinentsClient(),
+};

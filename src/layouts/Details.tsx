@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import { Field } from '../interfaces/Models';
 import { FieldType } from '../interfaces/Lookups';
 import { Box, Grid } from '@material-ui/core';
-import BP from '../interfaces/Initialisations';
-import { Type, updateEntity, PatchType } from '../api/dndDb';
+import { ApiType, PatchType } from '../api/dndDb';
 import SubMenu from '../components/SubMenu';
 import TogglingTextField from '../components/toggling/TogglingTextField';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
@@ -14,15 +13,16 @@ import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 import { Base } from '../api/Model';
 
-interface Props {
+interface Props<T extends Base> {
   id: string;
-  entity: any;
-  type: Type;
+  entity: T;
+  type: ApiType;
   ignoreFields: string[];
   multiline?: string[];
   expand: string[];
   fields: Field[];
   tabs: any;
+  onSave: () => void;
 }
 
 export default <T extends Base>({
@@ -34,7 +34,8 @@ export default <T extends Base>({
   expand,
   fields,
   tabs,
-}: Props) => {
+  onSave,
+}: Props<T>) => {
   const [updatedEntity, setUpdatedEntity] = useState<T>();
 
   const saveField = async (field: string, value: any) => {
@@ -66,7 +67,7 @@ export default <T extends Base>({
     setUpdatedEntity(entity);
   }, [entity]);
 
-  const display = updatedEntity && (
+  const display = updatedEntity ? (
     <Box p={3}>
       <Grid container>
         <Grid item xs={6}>
@@ -91,7 +92,7 @@ export default <T extends Base>({
                         <TogglingNumberField
                           {...propsObj}
                           value={Number(propsObj.value)}
-                          saveField={saveField}
+                          onSaveField={saveField}
                         />
                       );
                     case FieldType.String:
@@ -100,7 +101,7 @@ export default <T extends Base>({
                           {...propsObj}
                           value={propsObj.value.toString()}
                           column={multiline?.includes(field.name)}
-                          saveField={saveField}
+                          onSaveField={saveField}
                         />
                       );
                     case FieldType.Enum:
@@ -108,12 +109,12 @@ export default <T extends Base>({
                         <TogglingEnumField
                           {...propsObj}
                           type={type}
-                          saveField={saveField}
+                          onSaveField={saveField}
                         />
                       );
                     case FieldType.Array:
                       return (
-                        <TogglingList {...propsObj} saveField={saveList} />
+                        <TogglingList {...propsObj} onSaveField={saveList} />
                       );
                   }
                 }
@@ -128,6 +129,8 @@ export default <T extends Base>({
         </Grid>
       </Grid>
     </Box>
+  ) : (
+    <p>Something happened</p>
   );
 
   return display;

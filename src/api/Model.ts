@@ -2830,15 +2830,15 @@ export class Creature extends Base implements ICreature {
   intelligence!: number;
   wisdom!: number;
   charisma!: number;
-  proficiencies?: any[] | undefined;
+  proficiencies?: Proficiencies[] | undefined;
   armorClass!: number;
   hitPoints!: number;
   hitDice?: string | undefined;
   size?: string | undefined;
-  speed?: any[] | undefined;
+  speed?: Speed[] | undefined;
   languages?: string | undefined;
   alignment!: Alignment;
-  reactions?: any[] | undefined;
+  reactions?: CreatureAction[] | undefined;
   picture?: string | undefined;
 
   constructor(data?: ICreature) {
@@ -2856,7 +2856,8 @@ export class Creature extends Base implements ICreature {
       this.charisma = _data['charisma'];
       if (Array.isArray(_data['proficiencies'])) {
         this.proficiencies = [] as any;
-        for (let item of _data['proficiencies']) this.proficiencies!.push(item);
+        for (let item of _data['proficiencies'])
+          this.proficiencies!.push(Proficiencies.fromJS(item));
       }
       this.armorClass = _data['armorClass'];
       this.hitPoints = _data['hitPoints'];
@@ -2864,13 +2865,14 @@ export class Creature extends Base implements ICreature {
       this.size = _data['size'];
       if (Array.isArray(_data['speed'])) {
         this.speed = [] as any;
-        for (let item of _data['speed']) this.speed!.push(item);
+        for (let item of _data['speed']) this.speed!.push(Speed.fromJS(item));
       }
       this.languages = _data['languages'];
       this.alignment = _data['alignment'];
       if (Array.isArray(_data['reactions'])) {
         this.reactions = [] as any;
-        for (let item of _data['reactions']) this.reactions!.push(item);
+        for (let item of _data['reactions'])
+          this.reactions!.push(CreatureAction.fromJS(item));
       }
       this.picture = _data['picture'];
     }
@@ -2893,7 +2895,8 @@ export class Creature extends Base implements ICreature {
     data['charisma'] = this.charisma;
     if (Array.isArray(this.proficiencies)) {
       data['proficiencies'] = [];
-      for (let item of this.proficiencies) data['proficiencies'].push(item);
+      for (let item of this.proficiencies)
+        data['proficiencies'].push(item.toJSON());
     }
     data['armorClass'] = this.armorClass;
     data['hitPoints'] = this.hitPoints;
@@ -2901,13 +2904,13 @@ export class Creature extends Base implements ICreature {
     data['size'] = this.size;
     if (Array.isArray(this.speed)) {
       data['speed'] = [];
-      for (let item of this.speed) data['speed'].push(item);
+      for (let item of this.speed) data['speed'].push(item.toJSON());
     }
     data['languages'] = this.languages;
     data['alignment'] = this.alignment;
     if (Array.isArray(this.reactions)) {
       data['reactions'] = [];
-      for (let item of this.reactions) data['reactions'].push(item);
+      for (let item of this.reactions) data['reactions'].push(item.toJSON());
     }
     data['picture'] = this.picture;
     super.toJSON(data);
@@ -2922,15 +2925,15 @@ export interface ICreature extends IBase {
   intelligence: number;
   wisdom: number;
   charisma: number;
-  proficiencies?: any[] | undefined;
+  proficiencies?: Proficiencies[] | undefined;
   armorClass: number;
   hitPoints: number;
   hitDice?: string | undefined;
   size?: string | undefined;
-  speed?: any[] | undefined;
+  speed?: Speed[] | undefined;
   languages?: string | undefined;
   alignment: Alignment;
-  reactions?: any[] | undefined;
+  reactions?: CreatureAction[] | undefined;
   picture?: string | undefined;
 }
 
@@ -3011,6 +3014,90 @@ export interface IPlayer extends ICreature {
   building?: Building | undefined;
 }
 
+export class Proficiencies implements IProficiencies {
+  name?: string | undefined;
+  value!: number;
+
+  constructor(data?: IProficiencies) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.name = _data['name'];
+      this.value = _data['value'];
+    }
+  }
+
+  static fromJS(data: any): Proficiencies {
+    data = typeof data === 'object' ? data : {};
+    let result = new Proficiencies();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['value'] = this.value;
+    return data;
+  }
+}
+
+export interface IProficiencies {
+  name?: string | undefined;
+  value: number;
+}
+
+export class Speed implements ISpeed {
+  name?: string | undefined;
+  value!: number;
+  measurement?: string | undefined;
+
+  constructor(data?: ISpeed) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.name = _data['name'];
+      this.value = _data['value'];
+      this.measurement = _data['measurement'];
+    }
+  }
+
+  static fromJS(data: any): Speed {
+    data = typeof data === 'object' ? data : {};
+    let result = new Speed();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['value'] = this.value;
+    data['measurement'] = this.measurement;
+    return data;
+  }
+}
+
+export interface ISpeed {
+  name?: string | undefined;
+  value: number;
+  measurement?: string | undefined;
+}
+
 export enum Alignment {
   LawfulGood = 0,
   LawfulNeutral = 1,
@@ -3023,6 +3110,222 @@ export enum Alignment {
   ChaoticEvil = 8,
   Any = 9,
   None = 10,
+}
+
+export class CreatureAction implements ICreatureAction {
+  name?: string | undefined;
+  type?: string | undefined;
+  desc?: string | undefined;
+  count?: number | undefined;
+  attackBonus?: number | undefined;
+  damage?: Damage[] | undefined;
+  usage?: Usage | undefined;
+  actions?: CreatureAction[] | undefined;
+  dc?: DC | undefined;
+
+  constructor(data?: ICreatureAction) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.name = _data['name'];
+      this.type = _data['type'];
+      this.desc = _data['desc'];
+      this.count = _data['count'];
+      this.attackBonus = _data['attackBonus'];
+      if (Array.isArray(_data['damage'])) {
+        this.damage = [] as any;
+        for (let item of _data['damage'])
+          this.damage!.push(Damage.fromJS(item));
+      }
+      this.usage = _data['usage']
+        ? Usage.fromJS(_data['usage'])
+        : <any>undefined;
+      if (Array.isArray(_data['actions'])) {
+        this.actions = [] as any;
+        for (let item of _data['actions'])
+          this.actions!.push(CreatureAction.fromJS(item));
+      }
+      this.dc = _data['dc'] ? DC.fromJS(_data['dc']) : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): CreatureAction {
+    data = typeof data === 'object' ? data : {};
+    let result = new CreatureAction();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['type'] = this.type;
+    data['desc'] = this.desc;
+    data['count'] = this.count;
+    data['attackBonus'] = this.attackBonus;
+    if (Array.isArray(this.damage)) {
+      data['damage'] = [];
+      for (let item of this.damage) data['damage'].push(item.toJSON());
+    }
+    data['usage'] = this.usage ? this.usage.toJSON() : <any>undefined;
+    if (Array.isArray(this.actions)) {
+      data['actions'] = [];
+      for (let item of this.actions) data['actions'].push(item.toJSON());
+    }
+    data['dc'] = this.dc ? this.dc.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface ICreatureAction {
+  name?: string | undefined;
+  type?: string | undefined;
+  desc?: string | undefined;
+  count?: number | undefined;
+  attackBonus?: number | undefined;
+  damage?: Damage[] | undefined;
+  usage?: Usage | undefined;
+  actions?: CreatureAction[] | undefined;
+  dc?: DC | undefined;
+}
+
+export class Damage implements IDamage {
+  damageType?: string | undefined;
+  damageDice?: string | undefined;
+  damageBonus?: number | undefined;
+
+  constructor(data?: IDamage) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.damageType = _data['damageType'];
+      this.damageDice = _data['damageDice'];
+      this.damageBonus = _data['damageBonus'];
+    }
+  }
+
+  static fromJS(data: any): Damage {
+    data = typeof data === 'object' ? data : {};
+    let result = new Damage();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['damageType'] = this.damageType;
+    data['damageDice'] = this.damageDice;
+    data['damageBonus'] = this.damageBonus;
+    return data;
+  }
+}
+
+export interface IDamage {
+  damageType?: string | undefined;
+  damageDice?: string | undefined;
+  damageBonus?: number | undefined;
+}
+
+export class Usage implements IUsage {
+  type?: string | undefined;
+  times?: number | undefined;
+  minValue?: number | undefined;
+
+  constructor(data?: IUsage) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.type = _data['type'];
+      this.times = _data['times'];
+      this.minValue = _data['minValue'];
+    }
+  }
+
+  static fromJS(data: any): Usage {
+    data = typeof data === 'object' ? data : {};
+    let result = new Usage();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['type'] = this.type;
+    data['times'] = this.times;
+    data['minValue'] = this.minValue;
+    return data;
+  }
+}
+
+export interface IUsage {
+  type?: string | undefined;
+  times?: number | undefined;
+  minValue?: number | undefined;
+}
+
+export class DC implements IDC {
+  dcType?: string | undefined;
+  dcValue!: number;
+  successType?: string | undefined;
+
+  constructor(data?: IDC) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.dcType = _data['dcType'];
+      this.dcValue = _data['dcValue'];
+      this.successType = _data['successType'];
+    }
+  }
+
+  static fromJS(data: any): DC {
+    data = typeof data === 'object' ? data : {};
+    let result = new DC();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['dcType'] = this.dcType;
+    data['dcValue'] = this.dcValue;
+    data['successType'] = this.successType;
+    return data;
+  }
+}
+
+export interface IDC {
+  dcType?: string | undefined;
+  dcValue: number;
+  successType?: string | undefined;
 }
 
 export class Npc extends Base implements INpc {
@@ -3138,10 +3441,10 @@ export class Monster extends Creature implements IMonster {
   xp!: number;
   passivePerception!: number;
   monsterType!: MonsterType;
-  actions?: any[] | undefined;
-  legendaryActions?: any[] | undefined;
-  specialAbilities?: any[] | undefined;
-  senses?: any | undefined;
+  actions?: CreatureAction[] | undefined;
+  legendaryActions?: CreatureAction[] | undefined;
+  specialAbilities?: CreatureAction[] | undefined;
+  senses?: { [key: string]: string } | undefined;
   npcs?: Npc[] | undefined;
   locales?: MonsterLocale[] | undefined;
   buildings?: MonsterBuilding[] | undefined;
@@ -3159,19 +3462,26 @@ export class Monster extends Creature implements IMonster {
       this.monsterType = _data['monsterType'];
       if (Array.isArray(_data['actions'])) {
         this.actions = [] as any;
-        for (let item of _data['actions']) this.actions!.push(item);
+        for (let item of _data['actions'])
+          this.actions!.push(CreatureAction.fromJS(item));
       }
       if (Array.isArray(_data['legendaryActions'])) {
         this.legendaryActions = [] as any;
         for (let item of _data['legendaryActions'])
-          this.legendaryActions!.push(item);
+          this.legendaryActions!.push(CreatureAction.fromJS(item));
       }
       if (Array.isArray(_data['specialAbilities'])) {
         this.specialAbilities = [] as any;
         for (let item of _data['specialAbilities'])
-          this.specialAbilities!.push(item);
+          this.specialAbilities!.push(CreatureAction.fromJS(item));
       }
-      this.senses = _data['senses'];
+      if (_data['senses']) {
+        this.senses = {} as any;
+        for (let key in _data['senses']) {
+          if (_data['senses'].hasOwnProperty(key))
+            (<any>this.senses)![key] = _data['senses'][key];
+        }
+      }
       if (Array.isArray(_data['npcs'])) {
         this.npcs = [] as any;
         for (let item of _data['npcs']) this.npcs!.push(Npc.fromJS(item));
@@ -3204,19 +3514,25 @@ export class Monster extends Creature implements IMonster {
     data['monsterType'] = this.monsterType;
     if (Array.isArray(this.actions)) {
       data['actions'] = [];
-      for (let item of this.actions) data['actions'].push(item);
+      for (let item of this.actions) data['actions'].push(item.toJSON());
     }
     if (Array.isArray(this.legendaryActions)) {
       data['legendaryActions'] = [];
       for (let item of this.legendaryActions)
-        data['legendaryActions'].push(item);
+        data['legendaryActions'].push(item.toJSON());
     }
     if (Array.isArray(this.specialAbilities)) {
       data['specialAbilities'] = [];
       for (let item of this.specialAbilities)
-        data['specialAbilities'].push(item);
+        data['specialAbilities'].push(item.toJSON());
     }
-    data['senses'] = this.senses;
+    if (this.senses) {
+      data['senses'] = {};
+      for (let key in this.senses) {
+        if (this.senses.hasOwnProperty(key))
+          (<any>data['senses'])[key] = (<any>this.senses)[key];
+      }
+    }
     if (Array.isArray(this.npcs)) {
       data['npcs'] = [];
       for (let item of this.npcs) data['npcs'].push(item.toJSON());
@@ -3239,10 +3555,10 @@ export interface IMonster extends ICreature {
   xp: number;
   passivePerception: number;
   monsterType: MonsterType;
-  actions?: any[] | undefined;
-  legendaryActions?: any[] | undefined;
-  specialAbilities?: any[] | undefined;
-  senses?: any | undefined;
+  actions?: CreatureAction[] | undefined;
+  legendaryActions?: CreatureAction[] | undefined;
+  specialAbilities?: CreatureAction[] | undefined;
+  senses?: { [key: string]: string } | undefined;
   npcs?: Npc[] | undefined;
   locales?: MonsterLocale[] | undefined;
   buildings?: MonsterBuilding[] | undefined;

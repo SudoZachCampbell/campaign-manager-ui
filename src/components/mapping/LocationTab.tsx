@@ -1,5 +1,5 @@
-import { Typography } from "@material-ui/core";
+import { Typography } from '@material-ui/core';
 
-export default function Location(props) {
-    return <Typography>Test Location</Typography>
+export default function Location() {
+  return <Typography>Test Location</Typography>;
 }

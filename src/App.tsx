@@ -20,7 +20,7 @@ const queryConfig = new QueryClient({
   },
 });
 
-export default function App(props) {
+export default function App() {
   const [pageName, setPageName] = useState('');
   const [pageBanner, setPageBanner] = useState('');
 

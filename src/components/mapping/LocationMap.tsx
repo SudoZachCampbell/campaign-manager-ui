@@ -7,8 +7,8 @@ import BuildingIcon from '../../assets/icons/building.svg';
 import PeopleIcon from '../../assets/icons/people.svg';
 import ArrowIcon from '../../assets/icons/arrow.svg';
 import { Box } from '@material-ui/core';
-import { IMap, IBuilding, IMonster, INpc } from '../../interfaces/Models';
 import LocationMarker from './LocationMarker';
+import { Monster, Npc } from '../../api/Model';
 
 const personIcon = new L.icon({
   iconUrl: PersonIcon,
@@ -47,9 +47,9 @@ export default function LocationMap({
   iconName,
   data,
 }: {
-  map: IMap;
+  map: Map;
   iconName: string;
-  data?: INpc[] | IMonster[];
+  data?: Npc[] | Monster[];
 }) {
   const [bounds, setBounds] = useState<number[][] | null>(null);
   const [icon, setIcon] = useState([buildingIcon]);

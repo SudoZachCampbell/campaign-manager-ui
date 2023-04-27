@@ -71,8 +71,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function NavMenu(props) {
-  const classes = useStyles(props);
+interface NavMenuProps {
+  pageName: string;
+  pageBanner: any;
+  theme?: Theme;
+}
+
+export default function NavMenu({ pageName, pageBanner, theme }: NavMenuProps) {
+  const classes = useStyles(theme);
   const [open, setOpen] = React.useState(false);
 
   const handleDrawer = (state: boolean) => {
@@ -99,7 +105,7 @@ export default function NavMenu(props) {
               <MenuIcon className={classes.menuIcon} />
             </IconButton>
             <Typography className={classes.title} variant='h2' noWrap>
-              {props.pageName}
+              {pageName}
             </Typography>
           </Toolbar>
         </Backdrop>

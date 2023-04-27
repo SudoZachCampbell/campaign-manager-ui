@@ -1,12 +1,9 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
 import LocationMap from '../components/mapping/LocationMap';
-import { ILocale, IMap } from '../interfaces/Models';
-import { useQuery } from 'react-query';
-import { getEntity, Type } from '../api/dndDb';
-import BP from '../interfaces/Initialisations';
-import { values } from 'lodash';
+import { useDnDApi } from '../api/dndDb';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
+import { LocalesClient, Map } from '../api/Model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -15,43 +12,54 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
+const localeClient = new LocalesClient();
+
 export default function LocationHub({
   setPageName,
 }: {
   setPageName: Function;
 }) {
-  const [maps, setMaps]: [IMap[], Function] = useState([BP.Map]);
-  const [view, setView] = useState('buildings');
+  const [maps, setMaps] = useState<Map[]>();
+  const [view, setView] = useState<string>('buildings');
   const [currentMapIndex, setCurrentMapIndex] = useState(0);
-  const { data } = useQuery('location', () =>
-    getEntity(Type.LOCALE, '6', ['Maps.Buildings.Building.Npcs']),
-  ) as { data: ILocale };
+
+  const {
+    loading,
+    invoke,
+    response: locale,
+  } = useDnDApi(localeClient.getLocale('6', 'Maps.Buildings.Building.Npcs'));
 
   const classes = useStyles();
 
   console.log(
     `Current Index ${currentMapIndex} gives Map: `,
-    maps[currentMapIndex],
+    maps?.[currentMapIndex],
   );
 
-  setPageName('Location Hub');
+  useEffect(() => {
+    setPageName('Location Hub');
+    invoke();
+  });
 
   useEffect(() => {
-    console.log('Maps: ', data.maps);
-    data.maps && setMaps(data.maps);
-  }, [data]);
+    locale?.maps && setMaps(locale.maps);
+  }, [locale]);
 
-  const setMap = (event, index) => {
+  const setMap = (_: unknown, index: number) => {
     console.log('Set Map Index: ', index);
     setCurrentMapIndex(index);
   };
 
-  const setMapIcons = (event, nextView) => {
+  const setMapIcons = (_: unknown, nextView: string) => {
     console.log('New View: ', nextView);
     setView(nextView);
   };
 
-  return (
+  return loading ? (
+    <p>
+      <em>Loading...</em>
+    </p>
+  ) : (
     <Box p={3}>
       <Grid container spacing={5}>
         <Grid item xs={3}>
@@ -62,8 +70,8 @@ export default function LocationHub({
               className={classes.root}
               exclusive
             >
-              {data.maps &&
-                data.maps.map((map, index) => (
+              {maps &&
+                maps.map((map, index) => (
                   <ToggleButton key={index} value={index}>
                     <Typography variant='body1'>{map.variation}</Typography>
                   </ToggleButton>
@@ -90,7 +98,7 @@ export default function LocationHub({
         </Grid>
         <Grid item xs={9}>
           <Box height='80vh'>
-            <LocationMap map={maps[currentMapIndex]} iconName={view} />
+            <LocationMap map={maps?.[currentMapIndex]} iconName={view} />
           </Box>
         </Grid>
       </Grid>

@@ -5,29 +5,36 @@ import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
 import EditIcon from '@material-ui/icons/EditTwoTone';
 import TogglingLabel from './TogglingLabel';
 
-interface Props {
+interface TogglingNumberFieldProps {
   value?: number;
   label: string;
   field: string;
-  saveField?: Function;
+  onSaveField?: Function;
   column?: boolean;
   noEdit?: boolean;
 }
 
-export default function TogglingNumberField(props: Props) {
+export default function TogglingNumberField({
+  value,
+  label,
+  field,
+  onSaveField,
+  column,
+  noEdit,
+}: TogglingNumberFieldProps) {
   const [currentText, setCurrentText] = useState<number>(0);
   const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
-    setCurrentText(props.value ?? 0);
-  }, [props.value]);
+    setCurrentText(value ?? 0);
+  }, [value]);
 
   const toggleEdit = () => {
     setEdit(!edit);
   };
 
   const saveField = () => {
-    props.saveField && props.saveField(props.field, currentText);
+    onSaveField && onSaveField(field, currentText);
     toggleEdit();
   };
 
@@ -39,7 +46,7 @@ export default function TogglingNumberField(props: Props) {
         gutterBottom
       >
         {' '}
-        {props.label}:
+        {label}:
       </Typography>
       <Box display='flex'>
         <IconButton onClick={toggleEdit}>
@@ -58,11 +65,7 @@ export default function TogglingNumberField(props: Props) {
       </Box>
     </>
   ) : (
-    <TogglingLabel
-      label={props.label}
-      toggleEdit={toggleEdit}
-      noEdit={props.noEdit}
-    >
+    <TogglingLabel label={label} toggleEdit={toggleEdit} noEdit={noEdit}>
       <Typography
         style={{ whiteSpace: 'pre-line' }}
         variant='body2'

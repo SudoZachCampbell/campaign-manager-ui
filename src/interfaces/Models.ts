@@ -15,7 +15,7 @@ export interface ITableRows<T> {
 //#region WAMS Metadata
 
 export interface Field {
-  name: keyof Pick<Base, 'id' | 'name'>;
+  name: string;
   type: FieldType;
   addInfo?: string;
   addField?: string;

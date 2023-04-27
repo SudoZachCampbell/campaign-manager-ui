@@ -1,13 +1,23 @@
-import React, { Suspense } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 import { Container } from 'reactstrap';
 import NavMenu from './NavMenu/NavMenu';
 
-export default function Layout(props) {
+interface LayoutProps {
+  pageName: string;
+  pageBanner: any;
+  children: ReactNode;
+}
+
+export default function Layout({
+  pageName,
+  pageBanner,
+  children,
+}: LayoutProps) {
   return (
     <div style={{ height: '1080px' }}>
-      <NavMenu pageName={props.pageName} pageBanner={props.pageBanner} />
+      <NavMenu pageName={pageName} pageBanner={pageBanner} />
       <Container>
-        <Suspense fallback={<h1>Loading</h1>}>{props.children}</Suspense>
+        <Suspense fallback={<h1>Loading</h1>}>{children}</Suspense>
       </Container>
     </div>
   );

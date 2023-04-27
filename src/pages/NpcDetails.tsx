@@ -1,16 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { INpc, Field } from '../interfaces/Models';
+import { Field } from '../interfaces/Models';
 import { Typography, Box, Button } from '@material-ui/core';
-import BP from '../interfaces/Initialisations';
-import { Type, getEntity } from '../api/dndDb';
+import { ApiType, useDnDApi } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary';
 import _ from 'lodash';
 import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
 import LocationAdder from '../components/mapping/LocationAdder';
+import { Npc, NpcsClient } from '../api/Model';
 
 const multiline: string[] = ['background'];
 
@@ -45,41 +45,42 @@ const fields: Field[] = [
   },
 ];
 
+const npcClient = new NpcsClient();
+
 export default function NpcDetails(props: {
   setPageName: Function;
   setPageBanner: Function;
 }) {
-  const [npc, setNpc] = useState<INpc>(BP.Npc);
-  const [loading, setLoading] = useState<boolean>(true);
   const [editLocation, setEditLocation] = useState<boolean>(false);
-
-  props.setPageName(npc.name);
-  npc.picture && props.setPageBanner(`npc/${npc.picture}`);
 
   const { id } = useParams<{ id: string }>();
 
-  const populateNpcData = async () => {
-    const data = await getEntity<INpc>(Type.NPC, id, expand);
-    console.log(`NPC Details Data: `, data);
-    setNpc(data);
-    setLoading(false);
-  };
+  const {
+    loading,
+    invoke,
+    response: npc,
+  } = useDnDApi(npcClient.get(id, expand.join(',')));
 
   useEffect(() => {
-    populateNpcData();
+    invoke();
   }, []);
 
-  const setLocation = (npc) => {
-    setNpc(() => {
-      setEditLocation(false);
-      return npc;
-    });
+  useEffect(() => {
+    npc?.name && props.setPageName(npc.name);
+    npc?.picture && props.setPageBanner(`npc/${npc.picture}`);
+  }, [npc]);
+
+  const setLocation = (id: string) => {
+    // setNpc(() => {
+    //   setEditLocation(false);
+    //   return npc;
+    // });
   };
 
   const tabs = {
     headers: ['Monster', 'Pictures', 'Location'],
-    data: [
-      <MonsterSummary id={npc.monster?.id} />,
+    data: npc && [
+      npc.monster && <MonsterSummary id={npc.monster.id} />,
       <Pictures />,
       npc.building?.maps && !editLocation ? (
         <Box p={1}>
@@ -92,30 +93,30 @@ export default function NpcDetails(props: {
         </Box>
       ) : (
         <LocationAdder
-          id={npc.id}
-          type={Type.NPC}
+          onSave={setLocation}
           expand={expand}
-          set={setLocation}
           building={npc.building}
         />
       ),
     ],
   };
 
-  const detailProps = {
-    id,
-    entity: npc,
-    type: Type.NPC,
-    ignoreFields,
-    multiline,
-    expand,
-    tabs,
-    fields,
-  };
-
-  const display = <Details {...detailProps} />;
-
-  const loadingCheck = loading ? <Typography>Loading</Typography> : display;
+  const loadingCheck =
+    loading || !npc ? (
+      <Typography>Loading</Typography>
+    ) : (
+      <Details
+        id={id}
+        entity={npc}
+        type={ApiType.NPC}
+        ignoreFields={ignoreFields}
+        multiline={multiline}
+        expand={expand}
+        tabs={tabs}
+        fields={fields}
+        onSave={}
+      />
+    );
 
   return loadingCheck;
 }

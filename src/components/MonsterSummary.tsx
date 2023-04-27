@@ -8,37 +8,27 @@ import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingEnumField';
 import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
-import { getEntity, Type } from '../api/dndDb';
 import { ClipLoader } from 'react-spinners';
 import { Monster, MonstersClient } from '../api/Model';
+import { ApiType, useDnDApi } from '../api/dndDb';
 
 interface MonsterSummaryProps {
-  id?: string;
+  id: string;
 }
 
 const client = new MonstersClient();
 
 export default function MonsterSummary({ id }: MonsterSummaryProps) {
-  const [monster, setMonster] = useState<Monster | undefined>();
-  const [loading, setLoading] = useState<boolean>(true);
-
   console.log(`MonsterSummary.tsx:25 id`, id);
 
-  const fetchMonsterDetails = async () => {
-    if (id) {
-      setLoading(true);
-      const monster = await client.getMonsterById(id);
-      setMonster(monster);
-      setLoading(false);
-    }
-  };
+  const {
+    loading,
+    invoke,
+    response: monster,
+  } = useDnDApi(client.getMonsterById(id));
 
   useEffect(() => {
-    fetchMonsterDetails();
-  }, [id]);
-
-  useEffect(() => {
-    fetchMonsterDetails();
+    invoke();
   }, [id]);
 
   const fields: Field[] = [
@@ -159,7 +149,7 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
                     <Grid key={field.name} item xs={6}>
                       <TogglingEnumField
                         {...propsObj}
-                        type={Type.MONSTER}
+                        type={ApiType.MONSTER}
                         noEdit
                       />
                     </Grid>
