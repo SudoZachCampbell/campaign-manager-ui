@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Field } from '../interfaces/Models';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { ApiType, useDnDApi } from '../api/dndDb';
 import _ from 'lodash';
 import Details from '../layouts/Details';
 import { FieldType } from '../interfaces/Lookups';
-import { MonstersClient } from '../api/Model';
+import { Monster, MonstersClient } from '../api/Model';
 
 const ignoreFields: string[] = [
   'picture',
@@ -26,7 +26,7 @@ const expand = ['Buildings', 'Locales'];
 
 const client = new MonstersClient();
 
-const fields: Field[] = [
+const fields: Field<Monster>[] = [
   {
     name: 'name',
     type: FieldType.String,
@@ -93,31 +93,20 @@ const fields: Field[] = [
   },
 ];
 
-interface MonsterDetailsProps {
-  setPageName: Function;
-  setPageBanner: Function;
-}
+interface MonsterDetailsProps {}
 
-export default function MonsterDetails({
-  setPageName,
-  setPageBanner,
-}: MonsterDetailsProps) {
-  const { id } = useParams<{ id: string }>();
+export default function MonsterDetails() {
+  const { id: monsterId } = useParams<{ id: string }>();
 
   const {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi(client.getMonsterById(id, expand.join(',')));
+  } = useDnDApi((id: string) => client.getMonsterById(id, expand.join(',')));
 
   useEffect(() => {
-    invoke();
-  }, []);
-
-  useEffect(() => {
-    setPageName(monster?.name);
-    monster?.picture && setPageBanner(`monster/${monster.picture}`);
-  }, [monster]);
+    invoke(monsterId);
+  }, [monsterId]);
 
   const tabs = {
     headers: ['Pictures', 'Location'],
@@ -128,13 +117,13 @@ export default function MonsterDetails({
     <Typography>Loading</Typography>
   ) : monster ? (
     <Details
-      id={id}
       entity={monster}
       type={ApiType.MONSTER}
       ignoreFields={ignoreFields}
       expand={expand}
       tabs={tabs}
       fields={fields}
+      onSave={() => {}}
     />
   ) : (
     <p>Error loading monster</p>

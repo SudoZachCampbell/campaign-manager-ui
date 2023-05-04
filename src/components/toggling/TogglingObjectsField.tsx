@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { Change } from '../ListAdder';
 import { Patch } from '../../interfaces/Requests';
 import _ from 'lodash';
@@ -42,7 +42,6 @@ export default function TogglingObjectsField({
 
   const saveField = (changes: Change) => {
     let patchList: Patch[] = [];
-    console.log('Changes: ', changes);
     patchList = _.reduce(
       changes,
       (accum, changeValue, op) => {
@@ -53,8 +52,10 @@ export default function TogglingObjectsField({
               op === 'add' ? '-' : property.index
             }`,
           };
-          if (property['value']) {
-            patch.value = property['value'];
+          if (op === 'add') {
+            if (property['value']) {
+              patch.value = property['value'];
+            }
           }
           return patch;
         });
@@ -63,7 +64,6 @@ export default function TogglingObjectsField({
       patchList,
     );
     // TODO: Remove warnings around nesting
-    console.log('Patch List: ', patchList);
     if (patchList.length) {
       outerSaveField && outerSaveField(field, patchList);
     }
@@ -77,7 +77,6 @@ export default function TogglingObjectsField({
       case ToggleType.List:
         return;
       case ToggleType.Text:
-        console.log('Current Items: ', currentItems);
         return (
           <Box display='flex' flexDirection='column'>
             {currentItems?.map((instance) => {

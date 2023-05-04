@@ -1,7 +1,9 @@
 import React from 'react';
+// @ts-ignore
 import { Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
+// @ts-ignore
 import L from 'leaflet';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { Base } from '../../api/Model';
 
 export default function LocationMarker({
@@ -10,9 +12,9 @@ export default function LocationMarker({
   icon,
 }: {
   key: number;
-  position: number[];
+  position: [number, number];
   entities: Base[];
-  icon: L.icon[];
+  icon: L.Icon[];
 }) {
   return (
     <Marker
@@ -21,7 +23,9 @@ export default function LocationMarker({
     >
       <Popup>
         {entities.map((entity) => (
-          <Typography variant='subtitle2'>{entity.name}</Typography>
+          <Typography key={entity.id} variant='subtitle2'>
+            {entity.name}
+          </Typography>
         ))}
       </Popup>
     </Marker>

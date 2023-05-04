@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Route } from 'react-router';
+import { Routes } from 'react-router-dom';
 import Layout from './layouts/Layout';
 import Home from './pages/Home';
 import NpcList from './pages/NpcList';
@@ -10,15 +11,13 @@ import 'typeface-roboto';
 import './custom.css';
 import NpcDetails from './pages/NpcDetails';
 import MonsterDetails from './pages/MonsterDetails';
-import { createTheme, MuiThemeProvider } from '@material-ui/core';
+import {
+  createTheme,
+  ThemeProvider,
+  Theme,
+  StyledEngineProvider,
+} from '@mui/material';
 import LocationHub from './pages/LocationHub';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
-const queryConfig = new QueryClient({
-  defaultOptions: {
-    queries: { suspense: true, staleTime: 60000 },
-  },
-});
 
 export default function App() {
   const [pageName, setPageName] = useState('');
@@ -33,46 +32,17 @@ export default function App() {
   });
 
   return (
-    <QueryClientProvider client={queryConfig}>
-      <MuiThemeProvider theme={theme}>
-        <Layout pageName={pageName} pageBanner={pageBanner}>
-          <Route
-            exact
-            path='/'
-            render={(props) => <Home setPageName={setPageName} />}
-          />
-          <Route
-            path='/npcs'
-            render={(props) => <NpcList setPageName={setPageName} />}
-          />
-          <Route
-            path='/monsters'
-            render={(props) => <MonsterList setPageName={setPageName} />}
-          />
-          <Route
-            path='/location-hub'
-            render={(props) => <LocationHub setPageName={setPageName} />}
-          />
-          <Route
-            path='/npcs/:id'
-            render={(props) => (
-              <NpcDetails
-                setPageName={setPageName}
-                setPageBanner={setPageBanner}
-              />
-            )}
-          />
-          <Route
-            path='/monsters/:id'
-            render={(props) => (
-              <MonsterDetails
-                setPageName={setPageName}
-                setPageBanner={setPageBanner}
-              />
-            )}
-          />
-        </Layout>
-      </MuiThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <Layout>
+        <Routes>
+          <Route path='/npcs' element={<NpcList />} />
+          <Route path='/monsters' element={<MonsterList />} />
+          <Route path='/location-hub' element={<LocationHub />} />
+          <Route path='/npcs/:id' element={<NpcDetails />} />
+          <Route path='/monsters/:id' element={<MonsterDetails />} />
+          <Route path='/' element={<Home />} />
+        </Routes>
+      </Layout>
+    </ThemeProvider>
   );
 }

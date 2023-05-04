@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, IconButton, Typography, Grid } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/EditTwoTone';
+import { Box, IconButton, Typography, Grid } from '@mui/material';
+import EditIcon from '@mui/icons-material/EditTwoTone';
 
 interface Props {
   label: string;

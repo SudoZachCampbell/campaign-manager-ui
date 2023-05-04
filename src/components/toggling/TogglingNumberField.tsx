@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, TextField, Typography } from '@material-ui/core';
-import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
-import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
-import EditIcon from '@material-ui/icons/EditTwoTone';
+import { Box, IconButton, TextField, Typography } from '@mui/material';
+import { SaveTwoTone as SaveIcon } from '@mui/icons-material';
+import { CancelTwoTone as CancelIcon } from '@mui/icons-material';
+import EditIcon from '@mui/icons-material/EditTwoTone';
 import TogglingLabel from './TogglingLabel';
 
 interface TogglingNumberFieldProps {
@@ -49,7 +49,7 @@ export default function TogglingNumberField({
         {label}:
       </Typography>
       <Box display='flex'>
-        <IconButton onClick={toggleEdit}>
+        <IconButton onClick={toggleEdit} size="large">
           <CancelIcon />
         </IconButton>
         <TextField
@@ -59,7 +59,7 @@ export default function TogglingNumberField({
             setCurrentText(Number(event.target.value))
           }
         />
-        <IconButton onClick={saveField}>
+        <IconButton onClick={saveField} size="large">
           <SaveIcon />
         </IconButton>
       </Box>

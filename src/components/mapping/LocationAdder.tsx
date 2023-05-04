@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Box,
   Select,
@@ -7,12 +8,9 @@ import {
   Typography,
   InputLabel,
   FormControl,
-  makeStyles,
-  createStyles,
   Theme,
   Button,
-} from '@material-ui/core';
-import { ApiType, PatchType } from '../../api/dndDb';
+} from '@mui/material';
 import _ from 'lodash';
 import {
   Base,
@@ -27,17 +25,23 @@ import {
   RegionsClient,
 } from '../../api/Model';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-  }),
-);
+const PREFIX = 'LocationAdder';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`,
+};
+
+const StyledBox = styled(Box)(({ theme }: { theme: Theme }) => ({
+  [`& .${classes.formControl}`]: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+
+  [`& .${classes.selectEmpty}`]: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const buildingClient = new BuildingsClient();
 const localeClient = new LocalesClient();
@@ -61,14 +65,12 @@ interface Location {
   building?: Building;
 }
 
-export default function LocationAdder<T extends Base>({
+export default function LocationAdder({
   onSave,
   expand,
   building,
 }: LocationAdderProps) {
   const [location, setLocation] = useState<Location>({ continents: [] });
-
-  const classes = useStyles();
 
   useEffect(() => {
     building ? prepopulateData() : populateContinents();
@@ -144,7 +146,6 @@ export default function LocationAdder<T extends Base>({
         region: selectedRegion,
         locales: selectedRegion.locales,
       };
-      console.log('New Location: ', newLocation);
       setLocation(newLocation);
     }
   };
@@ -161,7 +162,6 @@ export default function LocationAdder<T extends Base>({
         locale: selectedLocale,
         buildings: selectedLocale.buildings,
       };
-      console.log('New Location: ', newLocation);
       setLocation(newLocation);
     }
   };
@@ -173,7 +173,6 @@ export default function LocationAdder<T extends Base>({
         ...location,
         building: selectedBuilding,
       };
-      console.log('New Location: ', newLocation);
       setLocation(newLocation);
     }
   };
@@ -185,7 +184,7 @@ export default function LocationAdder<T extends Base>({
   };
 
   return (
-    <Box p={3}>
+    <StyledBox p={3}>
       <Grid container spacing={1}>
         <Grid container>
           <Grid item xs={8}>
@@ -201,11 +200,7 @@ export default function LocationAdder<T extends Base>({
               <InputLabel id='continent-select'>Continent</InputLabel>
               <Select
                 value={location.continent?.id}
-                onChange={(
-                  event: React.ChangeEvent<{
-                    value: unknown;
-                  }>,
-                ) => setContinent(event.target.value as string)}
+                onChange={(event) => setContinent(event.target.value as string)}
               >
                 {location.continents.map((continentItem) => (
                   <MenuItem value={continentItem.id}>
@@ -222,11 +217,7 @@ export default function LocationAdder<T extends Base>({
               <InputLabel id='region-select'>Region</InputLabel>
               <Select
                 value={location.region?.id}
-                onChange={(
-                  event: React.ChangeEvent<{
-                    value: unknown;
-                  }>,
-                ) => setRegion(event.target.value as string)}
+                onChange={(event) => setRegion(event.target.value as string)}
               >
                 {location.regions.map((regionItem) => (
                   <MenuItem value={regionItem.id}>{regionItem.name}</MenuItem>
@@ -245,11 +236,7 @@ export default function LocationAdder<T extends Base>({
               <InputLabel id='locale-select'>Locale</InputLabel>
               <Select
                 value={location.locale?.id}
-                onChange={(
-                  event: React.ChangeEvent<{
-                    value: unknown;
-                  }>,
-                ) => setLocale(event.target.value as string)}
+                onChange={(event) => setLocale(event.target.value as string)}
               >
                 {location.locales.map((localeItem) => (
                   <MenuItem value={localeItem.id}>{localeItem.name}</MenuItem>
@@ -268,11 +255,7 @@ export default function LocationAdder<T extends Base>({
               <InputLabel id='building-select'>Building</InputLabel>
               <Select
                 value={location.building?.id}
-                onChange={(
-                  event: React.ChangeEvent<{
-                    value: unknown;
-                  }>,
-                ) => setBuilding(event.target.value as string)}
+                onChange={(event) => setBuilding(event.target.value as string)}
               >
                 {location.buildings.map((buildingItem) => (
                   <MenuItem value={buildingItem.id}>
@@ -288,6 +271,6 @@ export default function LocationAdder<T extends Base>({
           )
         )}
       </Grid>
-    </Box>
+    </StyledBox>
   );
 }

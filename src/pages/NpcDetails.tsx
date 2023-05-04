@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Field } from '../interfaces/Models';
-import { Typography, Box, Button } from '@material-ui/core';
+import { Typography, Box, Button } from '@mui/material';
 import { ApiType, useDnDApi } from '../api/dndDb';
 import MonsterSummary from '../components/MonsterSummary';
 import _ from 'lodash';
@@ -11,6 +11,7 @@ import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
 import LocationAdder from '../components/mapping/LocationAdder';
 import { Npc, NpcsClient } from '../api/Model';
+import { OperationType } from '../api/Model';
 
 const multiline: string[] = ['background'];
 
@@ -18,7 +19,7 @@ const ignoreFields: string[] = ['picture', 'monster', 'locale', 'building'];
 
 const expand = ['Monster', 'Building.Maps.Map', 'Locale'];
 
-const fields: Field[] = [
+const fields: Field<Npc>[] = [
   {
     name: 'name',
     type: FieldType.String,
@@ -28,7 +29,7 @@ const fields: Field[] = [
     type: FieldType.String,
   },
   {
-    name: 'noteable_events',
+    name: 'noteableEvents',
     type: FieldType.Array,
   },
   {
@@ -47,28 +48,27 @@ const fields: Field[] = [
 
 const npcClient = new NpcsClient();
 
-export default function NpcDetails(props: {
-  setPageName: Function;
-  setPageBanner: Function;
-}) {
+export default function NpcDetails() {
   const [editLocation, setEditLocation] = useState<boolean>(false);
 
-  const { id } = useParams<{ id: string }>();
+  const { id: npcId } = useParams<{ id: string }>();
+
+  const saveNpc = async () => {
+    // if (npcId)
+    //   npcClient.patch(npcId, {
+    //     operations: [{ operationType: OperationType.Add, path }],
+    //   });
+  };
 
   const {
     loading,
     invoke,
     response: npc,
-  } = useDnDApi(npcClient.get(id, expand.join(',')));
+  } = useDnDApi((id: string) => npcClient.get(id, expand.join(',')));
 
   useEffect(() => {
-    invoke();
-  }, []);
-
-  useEffect(() => {
-    npc?.name && props.setPageName(npc.name);
-    npc?.picture && props.setPageBanner(`npc/${npc.picture}`);
-  }, [npc]);
+    invoke(npcId);
+  }, [npcId]);
 
   const setLocation = (id: string) => {
     // setNpc(() => {
@@ -80,16 +80,18 @@ export default function NpcDetails(props: {
   const tabs = {
     headers: ['Monster', 'Pictures', 'Location'],
     data: npc && [
-      npc.monster && <MonsterSummary id={npc.monster.id} />,
+      npc.monster && <MonsterSummary monsterId={npc.monster.id} />,
       <Pictures />,
       npc.building?.maps && !editLocation ? (
         <Box p={1}>
           <Button onClick={() => setEditLocation(true)}>Edit Location</Button>
-          <LocationMap
-            map={npc.building.maps[0].map}
-            iconName='arrow'
-            data={[npc]}
-          />
+          {npc.building.maps[0].map && (
+            <LocationMap
+              map={npc.building.maps[0].map}
+              iconName='arrow'
+              npcs={[npc]}
+            />
+          )}
         </Box>
       ) : (
         <LocationAdder
@@ -106,7 +108,6 @@ export default function NpcDetails(props: {
       <Typography>Loading</Typography>
     ) : (
       <Details
-        id={id}
         entity={npc}
         type={ApiType.NPC}
         ignoreFields={ignoreFields}
@@ -114,7 +115,7 @@ export default function NpcDetails(props: {
         expand={expand}
         tabs={tabs}
         fields={fields}
-        onSave={}
+        onSave={saveNpc}
       />
     );
 

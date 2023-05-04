@@ -1,0 +1,38 @@
+@use '/src/style/constants/colours';
+
+.navbar__container {
+    display: flex;
+    height: 100vh;
+    width: 3%;
+    background-color: colours.$primary-colour;
+}
+
+.navbar__iconlist {
+    margin-top: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navbar__link {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+
+    &:hover {
+        opacity: 50%;
+    }
+
+    * {
+        color: black;
+        margin: 20%;
+        width: 100%;
+        height:auto;
+
+
+    }
+}
+

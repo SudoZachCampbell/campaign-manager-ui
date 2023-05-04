@@ -1,6 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { useDndCollectionApi } from '../api/dndDb';
 import _ from 'lodash';
 import NpcSummary from '../components/NpcSummary';
@@ -8,7 +8,9 @@ import { NpcsClient } from '../api/Model';
 
 const npcClient = new NpcsClient();
 
-const NpcList = (props: any) => {
+interface NpcListProps {}
+
+const NpcList = () => {
   const columns: TableColumn[] = [
     { name: 'name', header: 'Name' },
     { name: 'monster.name', header: 'Monster Name' },
@@ -21,13 +23,12 @@ const NpcList = (props: any) => {
     loading,
     invoke,
     response: npcs,
-  } = useDndCollectionApi(
+  } = useDndCollectionApi(() =>
     npcClient.getAll(1, 10, null, null, expand.join(',')),
   );
 
   useEffect(() => {
     invoke();
-    props.setPageName('Npc List');
   }, []);
 
   const contents = loading ? (

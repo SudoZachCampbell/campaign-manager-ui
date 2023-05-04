@@ -20,13 +20,24 @@ export enum PatchType {
   List = 'list',
 }
 
-export const useDnDApi = <T extends Base>(call: Promise<T>) => {
+export enum ApiType {
+  MONSTER,
+  NPC,
+  BUILDING,
+  LOCALE,
+  REGION,
+  CONTINENT,
+}
+
+export const useDnDApi = <T extends Base>(
+  call: (...props: any[]) => Promise<T>,
+) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<T>();
 
-  const invoke = async () => {
+  const invoke = async (...props: any[]) => {
     setLoading(true);
-    const data = await call;
+    const data = await call(...props);
     setResponse(data);
     setLoading(false);
   };
@@ -34,18 +45,39 @@ export const useDnDApi = <T extends Base>(call: Promise<T>) => {
   return { loading, invoke, response };
 };
 
-export const useDndCollectionApi = <T extends Base>(call: Promise<T[]>) => {
+export const useDndCollectionApi = <T extends Base>(
+  call: (...props: any[]) => Promise<T[]>,
+) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<T[]>();
 
-  const invoke = async () => {
+  const invoke = async (...props: any[]) => {
     setLoading(true);
-    const data = await call;
+    const data = await call(...props);
     setResponse(data);
     setLoading(false);
   };
 
   return { loading, invoke, response };
+};
+
+export const buildJsonPatch = (
+  patchType: PatchType,
+  path: string,
+  value?: string | number,
+  patchList: Patch[] = [],
+) => {
+  if (patchType === PatchType.List) {
+    return patchList;
+  } else {
+    return [
+      {
+        op: patchType,
+        path,
+        value,
+      },
+    ];
+  }
 };
 
 export const getEnumValues = async function (
@@ -58,15 +90,6 @@ export const getEnumValues = async function (
     )}`,
   });
 };
-
-export enum ApiType {
-  MONSTER,
-  NPC,
-  BUILDING,
-  LOCALE,
-  REGION,
-  CONTINENT,
-}
 
 export const ApiClients = {
   [ApiType.MONSTER]: new MonstersClient(),

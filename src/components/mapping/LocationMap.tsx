@@ -1,16 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Map, Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
+// @ts-ignore
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  Popup,
+  ImageOverlay,
+} from 'react-leaflet';
+// @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import PersonIcon from '../../assets/icons/person.svg';
 import BuildingIcon from '../../assets/icons/building.svg';
 import PeopleIcon from '../../assets/icons/people.svg';
 import ArrowIcon from '../../assets/icons/arrow.svg';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import LocationMarker from './LocationMarker';
-import { Monster, Npc } from '../../api/Model';
+import { Map, Monster, Npc } from '../../api/Model';
 
-const personIcon = new L.icon({
+const personIcon = new L.Icon({
   iconUrl: PersonIcon,
   iconRetinaUrl: PersonIcon,
   iconAnchor: [17.5, 25],
@@ -18,7 +26,7 @@ const personIcon = new L.icon({
   iconSize: [45, 45],
 });
 
-const peopleIcon = new L.icon({
+const peopleIcon = new L.Icon({
   iconUrl: PeopleIcon,
   iconRetinaUrl: PeopleIcon,
   iconAnchor: [17.5, 25],
@@ -26,7 +34,7 @@ const peopleIcon = new L.icon({
   iconSize: [45, 45],
 });
 
-const buildingIcon = new L.icon({
+const buildingIcon = new L.Icon({
   iconUrl: BuildingIcon,
   iconRetinaUrl: BuildingIcon,
   iconAnchor: [17.5, 25],
@@ -34,7 +42,7 @@ const buildingIcon = new L.icon({
   iconSize: [45, 45],
 });
 
-const arrowIcon = new L.icon({
+const arrowIcon = new L.Icon({
   iconUrl: ArrowIcon,
   iconRetinaUrl: ArrowIcon,
   iconAnchor: [17.5, 25],
@@ -45,20 +53,24 @@ const arrowIcon = new L.icon({
 export default function LocationMap({
   map,
   iconName,
-  data,
+  npcs,
+  monsters,
 }: {
   map: Map;
   iconName: string;
-  data?: Npc[] | Monster[];
+  npcs?: Npc[];
+  monsters?: Monster[];
 }) {
-  const [bounds, setBounds] = useState<number[][] | null>(null);
-  const [icon, setIcon] = useState([buildingIcon]);
-  const [center, setCenter] = useState([0, 0]);
-  const [dataPlacements, setDataPlacements] = useState<any[]>([]);
+  const [bounds, setBounds] = useState<[number, number][]>();
+  const [icon, setIcon] = useState<L.Icon[]>([buildingIcon]);
+  const [center, setCenter] = useState<[number, number]>([0, 0]);
+  const [dataPlacements, setDataPlacements] = useState<JSX.Element[]>([]);
 
   const mapRef = useRef();
-
-  const style = { height: data?.length ? '50vh' : '80vh', width: '100%' };
+  const style = {
+    height: '80vh',
+    width: '100%',
+  };
 
   function findHHandWW(this: any, ev: Event) {
     setBounds([
@@ -69,7 +81,7 @@ export default function LocationMap({
   }
 
   useEffect(() => {
-    let tempIcon: L.icon[] = [];
+    let tempIcon: L.Icon[] = [];
     switch (iconName) {
       case 'buildings':
         tempIcon = [buildingIcon];
@@ -92,7 +104,7 @@ export default function LocationMap({
 
   useEffect(() => {
     showImage(
-      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`,
+      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.imageUrl}`,
     );
     if (bounds) {
       setCenter([bounds[1][0] / 2, bounds[0][0] / 2]);
@@ -105,23 +117,21 @@ export default function LocationMap({
   }, [center]);
 
   useEffect(() => {
-    console.log('Data: ', dataPlacements);
     if (dataPlacements.length !== 0) {
-      let dataCenter = dataPlacements[0]['props']['position'];
+      let dataCenter = dataPlacements[0]['props']['position'] as [
+        number,
+        number,
+      ];
       bounds && dataCenter && setCenter([...dataCenter]);
     }
   }, [dataPlacements]);
 
   useEffect(() => {
     let dataCenter;
-    data?.forEach((instance, index) => {
+    npcs?.forEach((instance, index) => {
       if (instance.building?.maps) {
         const location = instance.building?.maps[0];
-        console.log(
-          `Location: [${location.coords[0]},${location.coords[1]}], Npc: `,
-          instance,
-        );
-        if (bounds != null) {
+        if (bounds != null && location.coords != null) {
           dataPlacements.push(
             <LocationMarker
               key={index}
@@ -137,21 +147,26 @@ export default function LocationMap({
       }
     });
     setDataPlacements([...dataPlacements]);
-  }, [data, bounds]);
-
-  console.log('Center: ', center);
+  }, [npcs, bounds]);
 
   return bounds ? (
-    <Box display='flex' justifyContent='center' height='100%' overflow='hidden'>
-      <Map
+    <Box
+      display='flex'
+      justifyContent='center'
+      height='100%'
+      width='100%'
+      overflow='hidden'
+    >
+      <MapContainer
         crs={L.CRS.Simple}
         center={center}
         minZoom={-2}
         bounds={bounds}
+        maxBounds={bounds}
         style={style}
-        ref={mapRef}
+        ref={mapRef.current}
       >
-        {data
+        {monsters || npcs
           ? dataPlacements
           : map.buildings?.map(({ coords, building }, index) => {
               switch (iconName) {
@@ -160,36 +175,36 @@ export default function LocationMap({
                     <LocationMarker
                       key={index}
                       position={[bounds[1][0] - coords[0], coords[1]]}
-                      entities={[building]}
+                      entities={building ? [building] : []}
                       icon={icon}
                     />
                   ) : null;
                 case 'npcs':
-                  return coords && building.npcs.length > 0 ? (
+                  return coords && building?.npcs?.length ? (
                     <LocationMarker
                       key={index}
                       position={[bounds[1][0] - coords[0], coords[1]]}
-                      entities={building.npcs}
+                      entities={building?.npcs ?? []}
                       icon={icon}
                     />
                   ) : null;
-                case 'monsters':
-                  return coords && building.monsters.length > 0 ? (
-                    <LocationMarker
-                      key={index}
-                      position={[bounds[1][0] - coords[0], coords[1]]}
-                      entities={building.monsters}
-                      icon={icon}
-                    />
-                  ) : null;
+                // case 'monsters':
+                //   return coords && building?.monsters?.length ? (
+                //     <LocationMarker
+                //       key={index}
+                //       position={[bounds[1][0] - coords[0], coords[1]]}
+                //       entities={building?.monsters ?? []}
+                //       icon={icon}
+                //     />
+                //   ) : null;
               }
             })}
 
         <ImageOverlay
           bounds={bounds}
-          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`}
+          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.imageUrl}`}
         />
-      </Map>
+      </MapContainer>
     </Box>
   ) : null;
 }

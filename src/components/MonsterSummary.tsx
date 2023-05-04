@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { Field } from '../interfaces/Models';
 import _ from 'lodash';
 import { FieldType, ToggleType } from '../interfaces/Lookups';
@@ -13,31 +13,29 @@ import { Monster, MonstersClient } from '../api/Model';
 import { ApiType, useDnDApi } from '../api/dndDb';
 
 interface MonsterSummaryProps {
-  id: string;
+  monsterId: string;
 }
 
 const client = new MonstersClient();
 
-export default function MonsterSummary({ id }: MonsterSummaryProps) {
-  console.log(`MonsterSummary.tsx:25 id`, id);
-
+export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
   const {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi(client.getMonsterById(id));
+  } = useDnDApi((id: string) => client.getMonsterById(id));
 
   useEffect(() => {
-    invoke();
-  }, [id]);
+    invoke(monsterId);
+  }, [monsterId]);
 
-  const fields: Field[] = [
+  const fields: Field<Monster>[] = [
     {
       name: 'name',
       type: FieldType.String,
     },
     {
-      name: 'monster_type',
+      name: 'monsterType',
       type: FieldType.Enum,
     },
     {
@@ -69,7 +67,7 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
       type: FieldType.String,
     },
     {
-      name: 'hit_dice',
+      name: 'hitDice',
       type: FieldType.String,
     },
     {
@@ -77,21 +75,21 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
       type: FieldType.String,
     },
     {
-      name: 'challenge_rating',
+      name: 'challengeRating',
       addInfo: monster && ` (${monster['xp']}xp)`,
       type: FieldType.Number,
     },
     {
-      name: 'passive_perception',
+      name: 'passivePerception',
       type: FieldType.Number,
     },
     {
-      name: 'armor_class',
+      name: 'armorClass',
       type: FieldType.String,
     },
     {
-      name: 'hit_points',
-      addField: 'hit_dice',
+      name: 'hitPoints',
+      addField: 'hitDice',
       type: FieldType.String,
     },
     {
@@ -99,14 +97,13 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
       type: FieldType.Enum,
     },
     {
-      name: 'special_abilities',
+      name: 'specialAbilities',
       type: FieldType.ArrayOfObjects,
       toggleType: ToggleType.Text,
     },
   ];
 
   const renderMonsterArea = () => {
-    console.log(`${monster?.name}: `, monster);
     return (
       <Box>
         <Grid container>
@@ -117,17 +114,12 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
           </Grid>
           <Grid container style={{ marginBottom: '2em' }}>
             {fields.map((field) => {
-              let value = monster && monster[field.name];
+              let value: string = `${monster?.[field.name]}`;
               if (field.addField) {
                 value += ` (${monster && monster[field.addField]})`;
               } else if (field.addInfo) {
                 value += field.addInfo;
               }
-              const propsObj = {
-                label: _.startCase(field.name),
-                field: field.name,
-                value,
-              };
 
               // TODO: Add Object Type
 
@@ -135,20 +127,32 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
                 case FieldType.Number:
                   return (
                     <Grid key={field.name} item xs={6}>
-                      <TogglingNumberField {...propsObj} noEdit />
+                      <TogglingNumberField
+                        label={_.startCase(field.name)}
+                        field={field.name}
+                        value={Number(value)}
+                        noEdit
+                      />
                     </Grid>
                   );
                 case FieldType.String:
                   return (
                     <Grid key={field.name} item xs={6}>
-                      <TogglingTextField {...propsObj} noEdit />
+                      <TogglingTextField
+                        label={_.startCase(field.name)}
+                        field={field.name}
+                        value={value}
+                        noEdit
+                      />
                     </Grid>
                   );
                 case FieldType.Enum:
                   return (
                     <Grid key={field.name} item xs={6}>
                       <TogglingEnumField
-                        {...propsObj}
+                        label={_.startCase(field.name)}
+                        field={field.name}
+                        value={value}
                         type={ApiType.MONSTER}
                         noEdit
                       />
@@ -157,19 +161,26 @@ export default function MonsterSummary({ id }: MonsterSummaryProps) {
                 case FieldType.Array:
                   return (
                     <Grid key={field.name} item xs={6}>
-                      <TogglingList {...propsObj} noEdit />
-                    </Grid>
-                  );
-                case FieldType.ArrayOfObjects:
-                  return (
-                    <Grid key={field.name} item xs={12}>
-                      <TogglingObjectsField
-                        {...propsObj}
+                      <TogglingList
+                        label={_.startCase(field.name)}
+                        field={field.name}
+                        value={[value]}
                         noEdit
-                        toggleType={field.toggleType}
                       />
                     </Grid>
                   );
+                // case FieldType.ArrayOfObjects:
+                //   return (
+                //     <Grid key={field.name} item xs={12}>
+                //       <TogglingObjectsField
+                //         label={_.startCase(field.name)}
+                //         field={field.name}
+                //         value={value}
+                //         noEdit
+                //         toggleType={field.toggleType}
+                //       />
+                //     </Grid>
+                //   );
               }
             })}
           </Grid>

@@ -14,11 +14,11 @@ export interface ITableRows<T> {
 
 //#region WAMS Metadata
 
-export interface Field {
-  name: string;
+export interface Field<T extends Base> {
+  name: Extract<keyof T, string>;
   type: FieldType;
   addInfo?: string;
-  addField?: string;
+  addField?: keyof T;
   toggleType?: ToggleType;
 }
 

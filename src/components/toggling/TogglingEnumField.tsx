@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  IconButton,
-  MenuItem,
-  Select,
-  Typography,
-} from '@material-ui/core';
-import { SaveTwoTone as SaveIcon } from '@material-ui/icons';
+import { Box, IconButton, MenuItem, Select, Typography } from '@mui/material';
+import { SaveTwoTone as SaveIcon } from '@mui/icons-material';
 import { ApiType, getEnumValues } from '../../api/dndDb';
-import { CancelTwoTone as CancelIcon } from '@material-ui/icons';
+import { CancelTwoTone as CancelIcon } from '@mui/icons-material';
 import _ from 'lodash';
 import TogglingLabel from './TogglingLabel';
 
@@ -66,14 +60,12 @@ export default function TogglingEnumField({
         {label}:
       </Typography>
       <Box display='flex'>
-        <IconButton onClick={toggleEdit}>
+        <IconButton onClick={toggleEdit} size='large'>
           <CancelIcon />
         </IconButton>
         <Select
           value={currentValue}
-          onChange={(event: React.ChangeEvent<{ value: unknown }>) =>
-            setCurrentValue(event.target.value as string)
-          }
+          onChange={(event) => setCurrentValue(event.target.value as string)}
         >
           {enumValues.map((value, index) => (
             <MenuItem key={index} value={index}>
@@ -81,7 +73,7 @@ export default function TogglingEnumField({
             </MenuItem>
           ))}
         </Select>
-        <IconButton onClick={saveField}>
+        <IconButton onClick={saveField} size='large'>
           <SaveIcon />
         </IconButton>
       </Box>
@@ -93,7 +85,7 @@ export default function TogglingEnumField({
         variant='body2'
         gutterBottom
       >
-        {_.startCase(enumValues[currentValue])}
+        {/* {_.startCase(enumValues[currentValue])} */}
       </Typography>
     </TogglingLabel>
   );

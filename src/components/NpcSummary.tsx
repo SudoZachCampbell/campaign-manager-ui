@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Box, Button, Grid } from '@material-ui/core';
+import { Box, Button, Grid } from '@mui/material';
 import { Npc, NpcsClient } from '../api/Model';
 import { useDnDApi } from '../api/dndDb';
 
@@ -10,7 +10,11 @@ interface NpcSummaryProps {
 }
 
 export default ({ id }: NpcSummaryProps) => {
-  const { loading, invoke, response: npc } = useDnDApi(npcClient.get(id));
+  const {
+    loading,
+    invoke,
+    response: npc,
+  } = useDnDApi((id: string) => npcClient.get(id));
 
   return npc ? (
     <Box p={3}>

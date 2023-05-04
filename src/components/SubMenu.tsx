@@ -1,13 +1,32 @@
 import React from 'react';
-import SwipeableViews from 'react-swipeable-views';
-import { makeStyles, Theme, useTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { styled } from '@mui/material/styles';
+import { Theme, useTheme } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import AutoSizer from 'react-virtualized-auto-sizer';
+
+const PREFIX = 'SubMenu';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  content: `${PREFIX}-content`,
+};
+
+const Root = styled('div')(({ theme }: { theme: Theme }) => ({
+  [`& .${classes.root}`]: {
+    backgroundColor: theme.palette.background.paper,
+    flexGrow: 1,
+  },
+
+  [`& .${classes.content}`]: {
+    height: '50vh',
+    overflowY: 'hidden',
+  },
+}));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -20,7 +39,7 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
+    <Root
       role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
@@ -32,7 +51,7 @@ function TabPanel(props: TabPanelProps) {
           <Typography>{children}</Typography>
         </Box>
       )}
-    </div>
+    </Root>
   );
 }
 
@@ -43,17 +62,6 @@ function a11yProps(index: any) {
   };
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    flexGrow: 1,
-  },
-  content: {
-    height: '50vh',
-    overflowY: 'hidden',
-  },
-}));
-
 interface SubMenuProps {
   tabs: {
     headers: string[];
@@ -62,7 +70,6 @@ interface SubMenuProps {
 }
 
 export default function SubMenu(props: SubMenuProps) {
-  const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -93,28 +100,20 @@ export default function SubMenu(props: SubMenuProps) {
       <div className={classes.content}>
         <AutoSizer>
           {({ width, height }) => {
-            console.log(`Width: ${width}, Height: ${height}`);
             return (
               <Scrollbars style={{ width, height }}>
-                <SwipeableViews
-                  axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                  index={value}
-                  onChangeIndex={handleChangeIndex}
-                  style={{ position: 'relative' }}
-                >
-                  {props.tabs.data.map((tab, index) => {
-                    return (
-                      <TabPanel
-                        key={index}
-                        value={value}
-                        index={index}
-                        dir={theme.direction}
-                      >
-                        {tab}
-                      </TabPanel>
-                    );
-                  })}
-                </SwipeableViews>
+                {props.tabs.data.map((tab, index) => {
+                  return (
+                    <TabPanel
+                      key={index}
+                      value={value}
+                      index={index}
+                      dir={theme.direction}
+                    >
+                      {tab}
+                    </TabPanel>
+                  );
+                })}
               </Scrollbars>
             );
           }}

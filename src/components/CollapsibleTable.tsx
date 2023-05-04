@@ -1,27 +1,34 @@
 ﻿import { useState } from 'react';
+import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import * as _ from 'lodash';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
-import { makeStyles } from '@material-ui/core';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import { ITableList } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 import { Base } from '../api/Model';
 
-const useRowStyles = makeStyles({
-  root: {
+const PREFIX = 'CollapsibleTable';
+
+const classes = {
+  root: `${PREFIX}-root`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+  [`& .${classes.root}`]: {
     '& > *': {
       borderBottom: 'unset',
     },
@@ -66,13 +73,7 @@ export const CollapsibleTable = <T extends Base>({
           <TableBody>
             {dataSet.map((instance: T) => {
               const picked = _.pick(instance, columnNames);
-              return (
-                <Row
-                  key={instance.id}
-                  Component={Component && <Component id={instance.id} />}
-                  instance={picked}
-                />
-              );
+              return <Row key={instance.id} instance={picked} />;
             })}
           </TableBody>
         </Table>
@@ -91,7 +92,6 @@ const Row = <T extends Base>({
   instance,
 }: RowProps<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
-  const classes = useRowStyles();
 
   const types = {
     NpcSummary: NpcSummary,

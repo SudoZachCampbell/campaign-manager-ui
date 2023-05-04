@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Field } from '../interfaces/Models';
 import { FieldType } from '../interfaces/Lookups';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid } from '@mui/material';
 import { ApiType, PatchType } from '../api/dndDb';
 import SubMenu from '../components/SubMenu';
 import TogglingTextField from '../components/toggling/TogglingTextField';
@@ -14,19 +14,17 @@ import _ from 'lodash';
 import { Base } from '../api/Model';
 
 interface Props<T extends Base> {
-  id: string;
   entity: T;
   type: ApiType;
   ignoreFields: string[];
   multiline?: string[];
   expand: string[];
-  fields: Field[];
+  fields: Field<T>[];
   tabs: any;
   onSave: () => void;
 }
 
 export default <T extends Base>({
-  id,
   entity,
   type,
   ignoreFields,
@@ -39,28 +37,28 @@ export default <T extends Base>({
   const [updatedEntity, setUpdatedEntity] = useState<T>();
 
   const saveField = async (field: string, value: any) => {
-    const data: T = await updateEntity<T>(
-      type,
-      id,
-      PatchType.Add,
-      `/${_.camelCase(field)}`,
-      [''],
-      value,
-    );
-    setUpdatedEntity(data);
+    // const data: T = await updateEntity<T>(
+    //   type,
+    //   entity.id,
+    //   PatchType.Add,
+    //   `/${_.camelCase(field)}`,
+    //   [''],
+    //   value,
+    // );
+    // setUpdatedEntity(data);
   };
 
   const saveList = async (field: string, patchList: Patch[]) => {
-    const data: T = await updateEntity<T>(
-      type,
-      id,
-      PatchType.List,
-      '',
-      expand,
-      '',
-      patchList,
-    );
-    setUpdatedEntity(data);
+    // const data: T = await updateEntity<T>(
+    //   type,
+    //   entity.id,
+    //   PatchType.List,
+    //   '',
+    //   expand,
+    //   '',
+    //   patchList,
+    // );
+    // setUpdatedEntity(data);
   };
 
   useEffect(() => {
@@ -77,44 +75,51 @@ export default <T extends Base>({
                 !field.name.includes('id') &&
                 !ignoreFields.includes(field.name)
               ) {
-                const propsObj = {
-                  key: field.name,
-                  label: _.startCase(field.name),
-                  field: field.name,
-                  value: updatedEntity[field.name],
-                };
-
+                const value = `${updatedEntity[field.name]}`;
                 // TODO: Add Object Type
-                if (propsObj.value) {
+                if (value) {
                   switch (field.type) {
                     case FieldType.Number:
                       return (
                         <TogglingNumberField
-                          {...propsObj}
-                          value={Number(propsObj.value)}
+                          key={field.name}
+                          label={_.startCase(field.name)}
+                          field={field.name}
+                          value={Number(value)}
                           onSaveField={saveField}
                         />
                       );
                     case FieldType.String:
                       return (
                         <TogglingTextField
-                          {...propsObj}
-                          value={propsObj.value.toString()}
-                          column={multiline?.includes(field.name)}
+                          key={field.name}
+                          label={_.startCase(field.name)}
+                          field={field.name}
+                          value={value}
                           onSaveField={saveField}
+                          column={multiline?.includes(field.name)}
                         />
                       );
                     case FieldType.Enum:
                       return (
                         <TogglingEnumField
-                          {...propsObj}
+                          key={field.name}
+                          label={_.startCase(field.name)}
+                          field={field.name}
+                          value={value}
                           type={type}
                           onSaveField={saveField}
                         />
                       );
                     case FieldType.Array:
                       return (
-                        <TogglingList {...propsObj} onSaveField={saveList} />
+                        <TogglingList
+                          key={field.name}
+                          label={_.startCase(field.name)}
+                          field={field.name}
+                          value={[value]}
+                          onSaveField={saveList}
+                        />
                       );
                   }
                 }
