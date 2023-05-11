@@ -8,7 +8,22 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class BuildingsClient {
+export class Client {
+  authToken = '';
+  protected constructor() {}
+
+  setAuthToken(token: string) {
+    this.authToken = token;
+  }
+
+  protected transformOptions = (options: RequestInit): Promise<RequestInit> => {
+    // @ts-ignore
+    options.headers['Authorization'] = `Bearer ${this.authToken}`;
+    return Promise.resolve(options);
+  };
+}
+
+export class AccountsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -20,6 +35,187 @@ export class BuildingsClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
+    super();
+    this.http = http ? http : (window as any);
+    this.baseUrl =
+      baseUrl !== undefined && baseUrl !== null
+        ? baseUrl
+        : 'http://localhost:5000';
+  }
+
+  login(attempt: LoginAttempt): Promise<string> {
+    let url_ = this.baseUrl + '/Accounts/Login';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(attempt);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processLogin(_response);
+      });
+  }
+
+  protected processLogin(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  createAccount(user: Account): Promise<Account> {
+    let url_ = this.baseUrl + '/Accounts';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(user);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateAccount(_response);
+      });
+  }
+
+  protected processCreateAccount(response: Response): Promise<Account> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Account.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Account>(null as any);
+  }
+
+  deleteAccount(id: string): Promise<Account> {
+    let url_ = this.baseUrl + '/Accounts/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteAccount(_response);
+      });
+  }
+
+  protected processDeleteAccount(response: Response): Promise<Account> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Account.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Account>(null as any);
+  }
+}
+
+export class BuildingsClient extends Client {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
+  ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -76,9 +272,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetBuildingsFromLocale(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetBuildingsFromLocale(_response);
+      });
   }
 
   protected processGetBuildingsFromLocale(
@@ -121,13 +321,31 @@ export class BuildingsClient {
   getBuildingById(
     id: string,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Building> {
     let url_ = this.baseUrl + '/Buildings/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -137,9 +355,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetBuildingById(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetBuildingById(_response);
+      });
   }
 
   protected processGetBuildingById(response: Response): Promise<Building> {
@@ -175,13 +397,31 @@ export class BuildingsClient {
     id: string,
     patchDoc: JsonPatchDocumentOfBuilding,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Building> {
     let url_ = this.baseUrl + '/Buildings/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(patchDoc);
@@ -195,9 +435,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPatchBuilding(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPatchBuilding(_response);
+      });
   }
 
   protected processPatchBuilding(response: Response): Promise<Building> {
@@ -247,9 +491,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPutBuilding(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPutBuilding(_response);
+      });
   }
 
   protected processPutBuilding(
@@ -319,9 +567,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeleteBuilding(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteBuilding(_response);
+      });
   }
 
   protected processDeleteBuilding(response: Response): Promise<Building> {
@@ -368,9 +620,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPostBuilding(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPostBuilding(_response);
+      });
   }
 
   protected processPostBuilding(response: Response): Promise<Building> {
@@ -416,9 +672,13 @@ export class BuildingsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetEnum(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
   }
 
   protected processGetEnum(response: Response): Promise<string[]> {
@@ -456,7 +716,7 @@ export class BuildingsClient {
   }
 }
 
-export class ContinentsClient {
+export class ContinentsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -468,6 +728,7 @@ export class ContinentsClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -520,9 +781,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetContinents(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetContinents(_response);
+      });
   }
 
   protected processGetContinents(response: Response): Promise<Continent[]> {
@@ -575,9 +840,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPostContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPostContinent(_response);
+      });
   }
 
   protected processPostContinent(response: Response): Promise<Continent> {
@@ -612,13 +881,31 @@ export class ContinentsClient {
   getContinentById(
     id: string,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Continent> {
     let url_ = this.baseUrl + '/Continents/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -628,9 +915,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetContinentById(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetContinentById(_response);
+      });
   }
 
   protected processGetContinentById(response: Response): Promise<Continent> {
@@ -666,13 +957,31 @@ export class ContinentsClient {
     id: string,
     patchDoc: JsonPatchDocumentOfContinent,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Continent> {
     let url_ = this.baseUrl + '/Continents/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(patchDoc);
@@ -686,9 +995,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPatchContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPatchContinent(_response);
+      });
   }
 
   protected processPatchContinent(response: Response): Promise<Continent> {
@@ -738,9 +1051,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPutContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPutContinent(_response);
+      });
   }
 
   protected processPutContinent(
@@ -810,9 +1127,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeleteContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteContinent(_response);
+      });
   }
 
   protected processDeleteContinent(response: Response): Promise<Continent> {
@@ -858,9 +1179,13 @@ export class ContinentsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetEnum(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
   }
 
   protected processGetEnum(response: Response): Promise<string[]> {
@@ -898,7 +1223,7 @@ export class ContinentsClient {
   }
 }
 
-export class LocalesClient {
+export class LocalesClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -910,6 +1235,7 @@ export class LocalesClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -917,13 +1243,34 @@ export class LocalesClient {
         : 'http://localhost:5000';
   }
 
-  getLocale(id: string, include?: string | null | undefined): Promise<Locale> {
+  getLocale(
+    id: string,
+    include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
+  ): Promise<Locale> {
     let url_ = this.baseUrl + '/Locales/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -933,9 +1280,13 @@ export class LocalesClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetLocale(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetLocale(_response);
+      });
   }
 
   protected processGetLocale(response: Response): Promise<Locale> {
@@ -1016,9 +1367,13 @@ export class LocalesClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetRegionsFromContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetRegionsFromContinent(_response);
+      });
   }
 
   protected processGetRegionsFromContinent(
@@ -1058,7 +1413,7 @@ export class LocalesClient {
   }
 }
 
-export class MonstersClient {
+export class MonstersClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -1070,6 +1425,7 @@ export class MonstersClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -1122,9 +1478,13 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetMonsters(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetMonsters(_response);
+      });
   }
 
   protected processGetMonsters(response: Response): Promise<Monster[]> {
@@ -1161,7 +1521,10 @@ export class MonstersClient {
     return Promise.resolve<Monster[]>(null as any);
   }
 
-  postMonster(monster: Monster): Promise<Monster> {
+  createMonster(
+    monster: Monster,
+    user?: Account | null | undefined,
+  ): Promise<Monster> {
     let url_ = this.baseUrl + '/Monsters';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -1171,17 +1534,22 @@ export class MonstersClient {
       body: content_,
       method: 'POST',
       headers: {
+        Authorization: user !== undefined && user !== null ? '' + user : '',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPostMonster(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateMonster(_response);
+      });
   }
 
-  protected processPostMonster(response: Response): Promise<Monster> {
+  protected processCreateMonster(response: Response): Promise<Monster> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1213,13 +1581,31 @@ export class MonstersClient {
   getMonsterById(
     id: string,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Monster> {
     let url_ = this.baseUrl + '/Monsters/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1229,9 +1615,13 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetMonsterById(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetMonsterById(_response);
+      });
   }
 
   protected processGetMonsterById(response: Response): Promise<Monster> {
@@ -1263,17 +1653,35 @@ export class MonstersClient {
     return Promise.resolve<Monster>(null as any);
   }
 
-  patchMonster(
+  updateMonsterPATCH(
     id: string,
     patchDoc: JsonPatchDocumentOfMonster,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Monster> {
     let url_ = this.baseUrl + '/Monsters/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(patchDoc);
@@ -1287,12 +1695,16 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPatchMonster(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateMonsterPATCH(_response);
+      });
   }
 
-  protected processPatchMonster(response: Response): Promise<Monster> {
+  protected processUpdateMonsterPATCH(response: Response): Promise<Monster> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1321,7 +1733,7 @@ export class MonstersClient {
     return Promise.resolve<Monster>(null as any);
   }
 
-  putMonster(id: string, monster: Monster): Promise<FileResponse | null> {
+  updateMonsterPUT(id: string, monster: Monster): Promise<FileResponse | null> {
     let url_ = this.baseUrl + '/Monsters/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
@@ -1339,12 +1751,16 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPutMonster(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateMonsterPUT(_response);
+      });
   }
 
-  protected processPutMonster(
+  protected processUpdateMonsterPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -1411,9 +1827,13 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeleteMonster(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteMonster(_response);
+      });
   }
 
   protected processDeleteMonster(response: Response): Promise<Monster> {
@@ -1459,9 +1879,13 @@ export class MonstersClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetEnum(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
   }
 
   protected processGetEnum(response: Response): Promise<string[]> {
@@ -1499,7 +1923,7 @@ export class MonstersClient {
   }
 }
 
-export class NpcsClient {
+export class NpcsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -1511,6 +1935,7 @@ export class NpcsClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -1563,9 +1988,13 @@ export class NpcsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetAll(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetAll(_response);
+      });
   }
 
   protected processGetAll(response: Response): Promise<Npc[]> {
@@ -1602,13 +2031,34 @@ export class NpcsClient {
     return Promise.resolve<Npc[]>(null as any);
   }
 
-  get(id: string, include?: string | null | undefined): Promise<Npc> {
+  get(
+    id: string,
+    include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
+  ): Promise<Npc> {
     let url_ = this.baseUrl + '/Npcs/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1618,9 +2068,13 @@ export class NpcsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGet(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGet(_response);
+      });
   }
 
   protected processGet(response: Response): Promise<Npc> {
@@ -1656,13 +2110,31 @@ export class NpcsClient {
     id: string,
     patchDoc: JsonPatchDocumentOfNpc,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Npc> {
     let url_ = this.baseUrl + '/Npcs/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(patchDoc);
@@ -1676,9 +2148,13 @@ export class NpcsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPatch(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPatch(_response);
+      });
   }
 
   protected processPatch(response: Response): Promise<Npc> {
@@ -1711,7 +2187,7 @@ export class NpcsClient {
   }
 }
 
-export class PlayersClient {
+export class RegionsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -1723,295 +2199,7 @@ export class PlayersClient {
     baseUrl?: string,
     http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
   ) {
-    this.http = http ? http : (window as any);
-    this.baseUrl =
-      baseUrl !== undefined && baseUrl !== null
-        ? baseUrl
-        : 'http://localhost:5000';
-  }
-
-  getPlayers(): Promise<Player[]> {
-    let url_ = this.baseUrl + '/Players';
-    url_ = url_.replace(/[?&]$/, '');
-
-    let options_: RequestInit = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetPlayers(_response);
-    });
-  }
-
-  protected processGetPlayers(response: Response): Promise<Player[]> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ''
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        if (Array.isArray(resultData200)) {
-          result200 = [] as any;
-          for (let item of resultData200) result200!.push(Player.fromJS(item));
-        } else {
-          result200 = <any>null;
-        }
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Player[]>(null as any);
-  }
-
-  postPlayer(player: Player): Promise<Player> {
-    let url_ = this.baseUrl + '/Players';
-    url_ = url_.replace(/[?&]$/, '');
-
-    const content_ = JSON.stringify(player);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPostPlayer(_response);
-    });
-  }
-
-  protected processPostPlayer(response: Response): Promise<Player> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ''
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = Player.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Player>(null as any);
-  }
-
-  getPlayer(id: string): Promise<Player> {
-    let url_ = this.baseUrl + '/Players/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    url_ = url_.replace(/[?&]$/, '');
-
-    let options_: RequestInit = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetPlayer(_response);
-    });
-  }
-
-  protected processGetPlayer(response: Response): Promise<Player> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ''
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = Player.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Player>(null as any);
-  }
-
-  putPlayer(id: string, player: Player): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Players/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    url_ = url_.replace(/[?&]$/, '');
-
-    const content_ = JSON.stringify(player);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/octet-stream',
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPutPlayer(_response);
-    });
-  }
-
-  protected processPutPlayer(response: Response): Promise<FileResponse | null> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200 || status === 206) {
-      const contentDisposition = response.headers
-        ? response.headers.get('content-disposition')
-        : undefined;
-      let fileNameMatch = contentDisposition
-        ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(
-            contentDisposition,
-          )
-        : undefined;
-      let fileName =
-        fileNameMatch && fileNameMatch.length > 1
-          ? fileNameMatch[3] || fileNameMatch[2]
-          : undefined;
-      if (fileName) {
-        fileName = decodeURIComponent(fileName);
-      } else {
-        fileNameMatch = contentDisposition
-          ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition)
-          : undefined;
-        fileName =
-          fileNameMatch && fileNameMatch.length > 1
-            ? fileNameMatch[1]
-            : undefined;
-      }
-      return response.blob().then((blob) => {
-        return {
-          fileName: fileName,
-          data: blob,
-          status: status,
-          headers: _headers,
-        };
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<FileResponse | null>(null as any);
-  }
-
-  deletePlayer(id: string): Promise<Player> {
-    let url_ = this.baseUrl + '/Players/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
-    url_ = url_.replace(/[?&]$/, '');
-
-    let options_: RequestInit = {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-      },
-    };
-
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeletePlayer(_response);
-    });
-  }
-
-  protected processDeletePlayer(response: Response): Promise<Player> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        let resultData200 =
-          _responseText === ''
-            ? null
-            : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = Player.fromJS(resultData200);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Player>(null as any);
-  }
-}
-
-export class RegionsClient {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
+    super();
     this.http = http ? http : (window as any);
     this.baseUrl =
       baseUrl !== undefined && baseUrl !== null
@@ -2068,9 +2256,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetRegionsFromContinent(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetRegionsFromContinent(_response);
+      });
   }
 
   protected processGetRegionsFromContinent(
@@ -2112,13 +2304,31 @@ export class RegionsClient {
   getRegionById(
     id: string,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Region> {
     let url_ = this.baseUrl + '/Regions/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2128,9 +2338,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetRegionById(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetRegionById(_response);
+      });
   }
 
   protected processGetRegionById(response: Response): Promise<Region> {
@@ -2166,13 +2380,31 @@ export class RegionsClient {
     id: string,
     patchDoc: JsonPatchDocumentOfRegion,
     include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
   ): Promise<Region> {
     let url_ = this.baseUrl + '/Regions/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     if (include !== undefined && include !== null)
-      url_ += 'include=' + encodeURIComponent('' + include) + '&';
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(patchDoc);
@@ -2186,9 +2418,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPatchRegion(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPatchRegion(_response);
+      });
   }
 
   protected processPatchRegion(response: Response): Promise<Region> {
@@ -2238,9 +2474,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPutRegion(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPutRegion(_response);
+      });
   }
 
   protected processPutRegion(response: Response): Promise<FileResponse | null> {
@@ -2308,9 +2548,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processDeleteRegion(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteRegion(_response);
+      });
   }
 
   protected processDeleteRegion(response: Response): Promise<Region> {
@@ -2357,9 +2601,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processPostRegion(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processPostRegion(_response);
+      });
   }
 
   protected processPostRegion(response: Response): Promise<Region> {
@@ -2405,9 +2653,13 @@ export class RegionsClient {
       },
     };
 
-    return this.http.fetch(url_, options_).then((_response: Response) => {
-      return this.processGetEnum(_response);
-    });
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
   }
 
   protected processGetEnum(response: Response): Promise<string[]> {
@@ -2445,9 +2697,52 @@ export class RegionsClient {
   }
 }
 
+export class LoginAttempt implements ILoginAttempt {
+  username?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+
+  constructor(data?: ILoginAttempt) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.username = _data['username'];
+      this.email = _data['email'];
+      this.password = _data['password'];
+    }
+  }
+
+  static fromJS(data: any): LoginAttempt {
+    data = typeof data === 'object' ? data : {};
+    let result = new LoginAttempt();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
+}
+
+export interface ILoginAttempt {
+  username?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+}
+
 export class Base implements IBase {
   id!: string;
-  name?: string | undefined;
 
   constructor(data?: IBase) {
     if (data) {
@@ -2461,7 +2756,6 @@ export class Base implements IBase {
   init(_data?: any) {
     if (_data) {
       this.id = _data['id'];
-      this.name = _data['name'];
     }
   }
 
@@ -2475,355 +2769,111 @@ export class Base implements IBase {
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
     data['id'] = this.id;
-    data['name'] = this.name;
     return data;
   }
 }
 
 export interface IBase {
   id: string;
-  name?: string | undefined;
 }
 
-export class Building extends Base implements IBuilding {
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  map?: string | undefined;
-  npcs?: Npc[] | undefined;
-  monsters?: MonsterBuilding[] | undefined;
-  players?: Player[] | undefined;
-  maps?: BuildingMap[] | undefined;
+export class Account extends Base implements IAccount {
+  username!: string;
+  email!: string;
+  password?: string | undefined;
+  role?: string | undefined;
+  monsters?: Monster[] | undefined;
 
-  constructor(data?: IBuilding) {
+  constructor(data?: IAccount) {
     super(data);
   }
 
   init(_data?: any) {
     super.init(_data);
     if (_data) {
-      this.localeId = _data['localeId'];
-      this.locale = _data['locale']
-        ? Locale.fromJS(_data['locale'])
-        : <any>undefined;
-      this.map = _data['map'];
-      if (Array.isArray(_data['npcs'])) {
-        this.npcs = [] as any;
-        for (let item of _data['npcs']) this.npcs!.push(Npc.fromJS(item));
-      }
+      this.username = _data['username'];
+      this.email = _data['email'];
+      this.password = _data['password'];
+      this.role = _data['role'];
       if (Array.isArray(_data['monsters'])) {
         this.monsters = [] as any;
         for (let item of _data['monsters'])
-          this.monsters!.push(MonsterBuilding.fromJS(item));
-      }
-      if (Array.isArray(_data['players'])) {
-        this.players = [] as any;
-        for (let item of _data['players'])
-          this.players!.push(Player.fromJS(item));
-      }
-      if (Array.isArray(_data['maps'])) {
-        this.maps = [] as any;
-        for (let item of _data['maps'])
-          this.maps!.push(BuildingMap.fromJS(item));
+          this.monsters!.push(Monster.fromJS(item));
       }
     }
   }
 
-  static fromJS(data: any): Building {
+  static fromJS(data: any): Account {
     data = typeof data === 'object' ? data : {};
-    let result = new Building();
+    let result = new Account();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['localeId'] = this.localeId;
-    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
-    data['map'] = this.map;
-    if (Array.isArray(this.npcs)) {
-      data['npcs'] = [];
-      for (let item of this.npcs) data['npcs'].push(item.toJSON());
-    }
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['role'] = this.role;
     if (Array.isArray(this.monsters)) {
       data['monsters'] = [];
       for (let item of this.monsters) data['monsters'].push(item.toJSON());
     }
-    if (Array.isArray(this.players)) {
-      data['players'] = [];
-      for (let item of this.players) data['players'].push(item.toJSON());
-    }
-    if (Array.isArray(this.maps)) {
-      data['maps'] = [];
-      for (let item of this.maps) data['maps'].push(item.toJSON());
-    }
     super.toJSON(data);
     return data;
   }
 }
 
-export interface IBuilding extends IBase {
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  map?: string | undefined;
-  npcs?: Npc[] | undefined;
-  monsters?: MonsterBuilding[] | undefined;
-  players?: Player[] | undefined;
-  maps?: BuildingMap[] | undefined;
+export interface IAccount extends IBase {
+  username: string;
+  email: string;
+  password?: string | undefined;
+  role?: string | undefined;
+  monsters?: Monster[] | undefined;
 }
 
-export class Locale extends Base implements ILocale {
-  regionId?: string | undefined;
-  region?: Region | undefined;
-  buildings?: Building[] | undefined;
-  dungeons?: Dungeon[] | undefined;
-  players?: Player[] | undefined;
-  npcs?: Npc[] | undefined;
-  monsters?: MonsterLocale[] | undefined;
-  maps?: Map[] | undefined;
+export class Owned extends Base implements IOwned {
+  ownerId!: string;
+  owner?: Account | undefined;
 
-  constructor(data?: ILocale) {
+  constructor(data?: IOwned) {
     super(data);
   }
 
   init(_data?: any) {
     super.init(_data);
     if (_data) {
-      this.regionId = _data['regionId'];
-      this.region = _data['region']
-        ? Region.fromJS(_data['region'])
+      this.ownerId = _data['ownerId'];
+      this.owner = _data['owner']
+        ? Account.fromJS(_data['owner'])
         : <any>undefined;
-      if (Array.isArray(_data['buildings'])) {
-        this.buildings = [] as any;
-        for (let item of _data['buildings'])
-          this.buildings!.push(Building.fromJS(item));
-      }
-      if (Array.isArray(_data['dungeons'])) {
-        this.dungeons = [] as any;
-        for (let item of _data['dungeons'])
-          this.dungeons!.push(Dungeon.fromJS(item));
-      }
-      if (Array.isArray(_data['players'])) {
-        this.players = [] as any;
-        for (let item of _data['players'])
-          this.players!.push(Player.fromJS(item));
-      }
-      if (Array.isArray(_data['npcs'])) {
-        this.npcs = [] as any;
-        for (let item of _data['npcs']) this.npcs!.push(Npc.fromJS(item));
-      }
-      if (Array.isArray(_data['monsters'])) {
-        this.monsters = [] as any;
-        for (let item of _data['monsters'])
-          this.monsters!.push(MonsterLocale.fromJS(item));
-      }
-      if (Array.isArray(_data['maps'])) {
-        this.maps = [] as any;
-        for (let item of _data['maps']) this.maps!.push(Map.fromJS(item));
-      }
     }
   }
 
-  static fromJS(data: any): Locale {
+  static fromJS(data: any): Owned {
     data = typeof data === 'object' ? data : {};
-    let result = new Locale();
+    let result = new Owned();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['regionId'] = this.regionId;
-    data['region'] = this.region ? this.region.toJSON() : <any>undefined;
-    if (Array.isArray(this.buildings)) {
-      data['buildings'] = [];
-      for (let item of this.buildings) data['buildings'].push(item.toJSON());
-    }
-    if (Array.isArray(this.dungeons)) {
-      data['dungeons'] = [];
-      for (let item of this.dungeons) data['dungeons'].push(item.toJSON());
-    }
-    if (Array.isArray(this.players)) {
-      data['players'] = [];
-      for (let item of this.players) data['players'].push(item.toJSON());
-    }
-    if (Array.isArray(this.npcs)) {
-      data['npcs'] = [];
-      for (let item of this.npcs) data['npcs'].push(item.toJSON());
-    }
-    if (Array.isArray(this.monsters)) {
-      data['monsters'] = [];
-      for (let item of this.monsters) data['monsters'].push(item.toJSON());
-    }
-    if (Array.isArray(this.maps)) {
-      data['maps'] = [];
-      for (let item of this.maps) data['maps'].push(item.toJSON());
-    }
+    data['ownerId'] = this.ownerId;
+    data['owner'] = this.owner ? this.owner.toJSON() : <any>undefined;
     super.toJSON(data);
     return data;
   }
 }
 
-export interface ILocale extends IBase {
-  regionId?: string | undefined;
-  region?: Region | undefined;
-  buildings?: Building[] | undefined;
-  dungeons?: Dungeon[] | undefined;
-  players?: Player[] | undefined;
-  npcs?: Npc[] | undefined;
-  monsters?: MonsterLocale[] | undefined;
-  maps?: Map[] | undefined;
+export interface IOwned extends IBase {
+  ownerId: string;
+  owner?: Account | undefined;
 }
 
-export class Region extends Base implements IRegion {
-  locales?: Locale[] | undefined;
-  continentId?: string | undefined;
-  continent?: Continent | undefined;
-  map?: string | undefined;
-
-  constructor(data?: IRegion) {
-    super(data);
-  }
-
-  init(_data?: any) {
-    super.init(_data);
-    if (_data) {
-      if (Array.isArray(_data['locales'])) {
-        this.locales = [] as any;
-        for (let item of _data['locales'])
-          this.locales!.push(Locale.fromJS(item));
-      }
-      this.continentId = _data['continentId'];
-      this.continent = _data['continent']
-        ? Continent.fromJS(_data['continent'])
-        : <any>undefined;
-      this.map = _data['map'];
-    }
-  }
-
-  static fromJS(data: any): Region {
-    data = typeof data === 'object' ? data : {};
-    let result = new Region();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    if (Array.isArray(this.locales)) {
-      data['locales'] = [];
-      for (let item of this.locales) data['locales'].push(item.toJSON());
-    }
-    data['continentId'] = this.continentId;
-    data['continent'] = this.continent
-      ? this.continent.toJSON()
-      : <any>undefined;
-    data['map'] = this.map;
-    super.toJSON(data);
-    return data;
-  }
-}
-
-export interface IRegion extends IBase {
-  locales?: Locale[] | undefined;
-  continentId?: string | undefined;
-  continent?: Continent | undefined;
-  map?: string | undefined;
-}
-
-export class Continent extends Base implements IContinent {
-  regions?: Region[] | undefined;
-  map?: string | undefined;
-
-  constructor(data?: IContinent) {
-    super(data);
-  }
-
-  init(_data?: any) {
-    super.init(_data);
-    if (_data) {
-      if (Array.isArray(_data['regions'])) {
-        this.regions = [] as any;
-        for (let item of _data['regions'])
-          this.regions!.push(Region.fromJS(item));
-      }
-      this.map = _data['map'];
-    }
-  }
-
-  static fromJS(data: any): Continent {
-    data = typeof data === 'object' ? data : {};
-    let result = new Continent();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    if (Array.isArray(this.regions)) {
-      data['regions'] = [];
-      for (let item of this.regions) data['regions'].push(item.toJSON());
-    }
-    data['map'] = this.map;
-    super.toJSON(data);
-    return data;
-  }
-}
-
-export interface IContinent extends IBase {
-  regions?: Region[] | undefined;
-  map?: string | undefined;
-}
-
-export class Dungeon extends Base implements IDungeon {
-  type?: string | undefined;
-  map?: string | undefined;
-  building?: Building | undefined;
-  locale?: Locale | undefined;
-
-  constructor(data?: IDungeon) {
-    super(data);
-  }
-
-  init(_data?: any) {
-    super.init(_data);
-    if (_data) {
-      this.type = _data['type'];
-      this.map = _data['map'];
-      this.building = _data['building']
-        ? Building.fromJS(_data['building'])
-        : <any>undefined;
-      this.locale = _data['locale']
-        ? Locale.fromJS(_data['locale'])
-        : <any>undefined;
-    }
-  }
-
-  static fromJS(data: any): Dungeon {
-    data = typeof data === 'object' ? data : {};
-    let result = new Dungeon();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['type'] = this.type;
-    data['map'] = this.map;
-    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
-    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
-    super.toJSON(data);
-    return data;
-  }
-}
-
-export interface IDungeon extends IBase {
-  type?: string | undefined;
-  map?: string | undefined;
-  building?: Building | undefined;
-  locale?: Locale | undefined;
-}
-
-export class Creature extends Base implements ICreature {
+export class Creature extends Owned implements ICreature {
+  name!: string;
   strength!: number;
   dexterity!: number;
   constitution!: number;
@@ -2833,13 +2883,13 @@ export class Creature extends Base implements ICreature {
   proficiencies?: Proficiencies[] | undefined;
   armorClass!: number;
   hitPoints!: number;
-  hitDice?: string | undefined;
-  size?: string | undefined;
+  hitDice!: string;
+  size!: string;
   speed?: Speed[] | undefined;
-  languages?: string | undefined;
+  languages!: string;
   alignment!: Alignment;
   reactions?: CreatureAction[] | undefined;
-  picture?: string | undefined;
+  picture!: string;
 
   constructor(data?: ICreature) {
     super(data);
@@ -2848,6 +2898,7 @@ export class Creature extends Base implements ICreature {
   init(_data?: any) {
     super.init(_data);
     if (_data) {
+      this.name = _data['name'];
       this.strength = _data['strength'];
       this.dexterity = _data['dexterity'];
       this.constitution = _data['constitution'];
@@ -2887,6 +2938,7 @@ export class Creature extends Base implements ICreature {
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
     data['strength'] = this.strength;
     data['dexterity'] = this.dexterity;
     data['constitution'] = this.constitution;
@@ -2918,7 +2970,8 @@ export class Creature extends Base implements ICreature {
   }
 }
 
-export interface ICreature extends IBase {
+export interface ICreature extends IOwned {
+  name: string;
   strength: number;
   dexterity: number;
   constitution: number;
@@ -2928,512 +2981,13 @@ export interface ICreature extends IBase {
   proficiencies?: Proficiencies[] | undefined;
   armorClass: number;
   hitPoints: number;
-  hitDice?: string | undefined;
-  size?: string | undefined;
+  hitDice: string;
+  size: string;
   speed?: Speed[] | undefined;
-  languages?: string | undefined;
+  languages: string;
   alignment: Alignment;
   reactions?: CreatureAction[] | undefined;
-  picture?: string | undefined;
-}
-
-export class Player extends Creature implements IPlayer {
-  level!: number;
-  xp!: number;
-  inspiration!: boolean;
-  playerName?: string | undefined;
-  background?: string | undefined;
-  faction?: string | undefined;
-  race?: string | undefined;
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  buildingId?: string | undefined;
-  building?: Building | undefined;
-
-  constructor(data?: IPlayer) {
-    super(data);
-  }
-
-  init(_data?: any) {
-    super.init(_data);
-    if (_data) {
-      this.level = _data['level'];
-      this.xp = _data['xp'];
-      this.inspiration = _data['inspiration'];
-      this.playerName = _data['playerName'];
-      this.background = _data['background'];
-      this.faction = _data['faction'];
-      this.race = _data['race'];
-      this.localeId = _data['localeId'];
-      this.locale = _data['locale']
-        ? Locale.fromJS(_data['locale'])
-        : <any>undefined;
-      this.buildingId = _data['buildingId'];
-      this.building = _data['building']
-        ? Building.fromJS(_data['building'])
-        : <any>undefined;
-    }
-  }
-
-  static fromJS(data: any): Player {
-    data = typeof data === 'object' ? data : {};
-    let result = new Player();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['level'] = this.level;
-    data['xp'] = this.xp;
-    data['inspiration'] = this.inspiration;
-    data['playerName'] = this.playerName;
-    data['background'] = this.background;
-    data['faction'] = this.faction;
-    data['race'] = this.race;
-    data['localeId'] = this.localeId;
-    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
-    data['buildingId'] = this.buildingId;
-    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
-    super.toJSON(data);
-    return data;
-  }
-}
-
-export interface IPlayer extends ICreature {
-  level: number;
-  xp: number;
-  inspiration: boolean;
-  playerName?: string | undefined;
-  background?: string | undefined;
-  faction?: string | undefined;
-  race?: string | undefined;
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  buildingId?: string | undefined;
-  building?: Building | undefined;
-}
-
-export class Proficiencies implements IProficiencies {
-  name?: string | undefined;
-  value!: number;
-
-  constructor(data?: IProficiencies) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.name = _data['name'];
-      this.value = _data['value'];
-    }
-  }
-
-  static fromJS(data: any): Proficiencies {
-    data = typeof data === 'object' ? data : {};
-    let result = new Proficiencies();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['name'] = this.name;
-    data['value'] = this.value;
-    return data;
-  }
-}
-
-export interface IProficiencies {
-  name?: string | undefined;
-  value: number;
-}
-
-export class Speed implements ISpeed {
-  name?: string | undefined;
-  value!: number;
-  measurement?: string | undefined;
-
-  constructor(data?: ISpeed) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.name = _data['name'];
-      this.value = _data['value'];
-      this.measurement = _data['measurement'];
-    }
-  }
-
-  static fromJS(data: any): Speed {
-    data = typeof data === 'object' ? data : {};
-    let result = new Speed();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['name'] = this.name;
-    data['value'] = this.value;
-    data['measurement'] = this.measurement;
-    return data;
-  }
-}
-
-export interface ISpeed {
-  name?: string | undefined;
-  value: number;
-  measurement?: string | undefined;
-}
-
-export enum Alignment {
-  LawfulGood = 0,
-  LawfulNeutral = 1,
-  LawfulEvil = 2,
-  NeutralGood = 3,
-  TrueNeutral = 4,
-  NeutralEvil = 5,
-  ChaoticGood = 6,
-  ChaoticNeutral = 7,
-  ChaoticEvil = 8,
-  Any = 9,
-  None = 10,
-}
-
-export class CreatureAction implements ICreatureAction {
-  name?: string | undefined;
-  type?: string | undefined;
-  desc?: string | undefined;
-  count?: number | undefined;
-  attackBonus?: number | undefined;
-  damage?: Damage[] | undefined;
-  usage?: Usage | undefined;
-  actions?: CreatureAction[] | undefined;
-  dc?: DC | undefined;
-
-  constructor(data?: ICreatureAction) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.name = _data['name'];
-      this.type = _data['type'];
-      this.desc = _data['desc'];
-      this.count = _data['count'];
-      this.attackBonus = _data['attackBonus'];
-      if (Array.isArray(_data['damage'])) {
-        this.damage = [] as any;
-        for (let item of _data['damage'])
-          this.damage!.push(Damage.fromJS(item));
-      }
-      this.usage = _data['usage']
-        ? Usage.fromJS(_data['usage'])
-        : <any>undefined;
-      if (Array.isArray(_data['actions'])) {
-        this.actions = [] as any;
-        for (let item of _data['actions'])
-          this.actions!.push(CreatureAction.fromJS(item));
-      }
-      this.dc = _data['dc'] ? DC.fromJS(_data['dc']) : <any>undefined;
-    }
-  }
-
-  static fromJS(data: any): CreatureAction {
-    data = typeof data === 'object' ? data : {};
-    let result = new CreatureAction();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['name'] = this.name;
-    data['type'] = this.type;
-    data['desc'] = this.desc;
-    data['count'] = this.count;
-    data['attackBonus'] = this.attackBonus;
-    if (Array.isArray(this.damage)) {
-      data['damage'] = [];
-      for (let item of this.damage) data['damage'].push(item.toJSON());
-    }
-    data['usage'] = this.usage ? this.usage.toJSON() : <any>undefined;
-    if (Array.isArray(this.actions)) {
-      data['actions'] = [];
-      for (let item of this.actions) data['actions'].push(item.toJSON());
-    }
-    data['dc'] = this.dc ? this.dc.toJSON() : <any>undefined;
-    return data;
-  }
-}
-
-export interface ICreatureAction {
-  name?: string | undefined;
-  type?: string | undefined;
-  desc?: string | undefined;
-  count?: number | undefined;
-  attackBonus?: number | undefined;
-  damage?: Damage[] | undefined;
-  usage?: Usage | undefined;
-  actions?: CreatureAction[] | undefined;
-  dc?: DC | undefined;
-}
-
-export class Damage implements IDamage {
-  damageType?: string | undefined;
-  damageDice?: string | undefined;
-  damageBonus?: number | undefined;
-
-  constructor(data?: IDamage) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.damageType = _data['damageType'];
-      this.damageDice = _data['damageDice'];
-      this.damageBonus = _data['damageBonus'];
-    }
-  }
-
-  static fromJS(data: any): Damage {
-    data = typeof data === 'object' ? data : {};
-    let result = new Damage();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['damageType'] = this.damageType;
-    data['damageDice'] = this.damageDice;
-    data['damageBonus'] = this.damageBonus;
-    return data;
-  }
-}
-
-export interface IDamage {
-  damageType?: string | undefined;
-  damageDice?: string | undefined;
-  damageBonus?: number | undefined;
-}
-
-export class Usage implements IUsage {
-  type?: string | undefined;
-  times?: number | undefined;
-  minValue?: number | undefined;
-
-  constructor(data?: IUsage) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.type = _data['type'];
-      this.times = _data['times'];
-      this.minValue = _data['minValue'];
-    }
-  }
-
-  static fromJS(data: any): Usage {
-    data = typeof data === 'object' ? data : {};
-    let result = new Usage();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['type'] = this.type;
-    data['times'] = this.times;
-    data['minValue'] = this.minValue;
-    return data;
-  }
-}
-
-export interface IUsage {
-  type?: string | undefined;
-  times?: number | undefined;
-  minValue?: number | undefined;
-}
-
-export class DC implements IDC {
-  dcType?: string | undefined;
-  dcValue!: number;
-  successType?: string | undefined;
-
-  constructor(data?: IDC) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.dcType = _data['dcType'];
-      this.dcValue = _data['dcValue'];
-      this.successType = _data['successType'];
-    }
-  }
-
-  static fromJS(data: any): DC {
-    data = typeof data === 'object' ? data : {};
-    let result = new DC();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['dcType'] = this.dcType;
-    data['dcValue'] = this.dcValue;
-    data['successType'] = this.successType;
-    return data;
-  }
-}
-
-export interface IDC {
-  dcType?: string | undefined;
-  dcValue: number;
-  successType?: string | undefined;
-}
-
-export class Npc extends Base implements INpc {
-  picture?: string | undefined;
-  background?: string | undefined;
-  noteableEvents?: any[] | undefined;
-  beliefs?: any[] | undefined;
-  passions?: any[] | undefined;
-  flaws?: any[] | undefined;
-  monsterId?: string | undefined;
-  monster?: Monster | undefined;
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  buildingId?: string | undefined;
-  building?: Building | undefined;
-
-  constructor(data?: INpc) {
-    super(data);
-  }
-
-  init(_data?: any) {
-    super.init(_data);
-    if (_data) {
-      this.picture = _data['picture'];
-      this.background = _data['background'];
-      if (Array.isArray(_data['noteableEvents'])) {
-        this.noteableEvents = [] as any;
-        for (let item of _data['noteableEvents'])
-          this.noteableEvents!.push(item);
-      }
-      if (Array.isArray(_data['beliefs'])) {
-        this.beliefs = [] as any;
-        for (let item of _data['beliefs']) this.beliefs!.push(item);
-      }
-      if (Array.isArray(_data['passions'])) {
-        this.passions = [] as any;
-        for (let item of _data['passions']) this.passions!.push(item);
-      }
-      if (Array.isArray(_data['flaws'])) {
-        this.flaws = [] as any;
-        for (let item of _data['flaws']) this.flaws!.push(item);
-      }
-      this.monsterId = _data['monsterId'];
-      this.monster = _data['monster']
-        ? Monster.fromJS(_data['monster'])
-        : <any>undefined;
-      this.localeId = _data['localeId'];
-      this.locale = _data['locale']
-        ? Locale.fromJS(_data['locale'])
-        : <any>undefined;
-      this.buildingId = _data['buildingId'];
-      this.building = _data['building']
-        ? Building.fromJS(_data['building'])
-        : <any>undefined;
-    }
-  }
-
-  static fromJS(data: any): Npc {
-    data = typeof data === 'object' ? data : {};
-    let result = new Npc();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === 'object' ? data : {};
-    data['picture'] = this.picture;
-    data['background'] = this.background;
-    if (Array.isArray(this.noteableEvents)) {
-      data['noteableEvents'] = [];
-      for (let item of this.noteableEvents) data['noteableEvents'].push(item);
-    }
-    if (Array.isArray(this.beliefs)) {
-      data['beliefs'] = [];
-      for (let item of this.beliefs) data['beliefs'].push(item);
-    }
-    if (Array.isArray(this.passions)) {
-      data['passions'] = [];
-      for (let item of this.passions) data['passions'].push(item);
-    }
-    if (Array.isArray(this.flaws)) {
-      data['flaws'] = [];
-      for (let item of this.flaws) data['flaws'].push(item);
-    }
-    data['monsterId'] = this.monsterId;
-    data['monster'] = this.monster ? this.monster.toJSON() : <any>undefined;
-    data['localeId'] = this.localeId;
-    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
-    data['buildingId'] = this.buildingId;
-    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
-    super.toJSON(data);
-    return data;
-  }
-}
-
-export interface INpc extends IBase {
-  picture?: string | undefined;
-  background?: string | undefined;
-  noteableEvents?: any[] | undefined;
-  beliefs?: any[] | undefined;
-  passions?: any[] | undefined;
-  flaws?: any[] | undefined;
-  monsterId?: string | undefined;
-  monster?: Monster | undefined;
-  localeId?: string | undefined;
-  locale?: Locale | undefined;
-  buildingId?: string | undefined;
-  building?: Building | undefined;
+  picture: string;
 }
 
 export class Monster extends Creature implements IMonster {
@@ -3582,13 +3136,18 @@ export enum MonsterType {
   None = 14,
 }
 
-export class MonsterLocale implements IMonsterLocale {
-  monsterId!: string;
-  monster?: Monster | undefined;
-  localeId!: string;
-  locale?: Locale | undefined;
+export class CreatureAction implements ICreatureAction {
+  name!: string;
+  type!: string;
+  desc!: string;
+  count?: number | undefined;
+  attackBonus?: number | undefined;
+  damage?: Damage[] | undefined;
+  usage?: Usage | undefined;
+  actions?: CreatureAction[] | undefined;
+  dc?: DC | undefined;
 
-  constructor(data?: IMonsterLocale) {
+  constructor(data?: ICreatureAction) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -3599,6 +3158,238 @@ export class MonsterLocale implements IMonsterLocale {
 
   init(_data?: any) {
     if (_data) {
+      this.name = _data['name'];
+      this.type = _data['type'];
+      this.desc = _data['desc'];
+      this.count = _data['count'];
+      this.attackBonus = _data['attackBonus'];
+      if (Array.isArray(_data['damage'])) {
+        this.damage = [] as any;
+        for (let item of _data['damage'])
+          this.damage!.push(Damage.fromJS(item));
+      }
+      this.usage = _data['usage']
+        ? Usage.fromJS(_data['usage'])
+        : <any>undefined;
+      if (Array.isArray(_data['actions'])) {
+        this.actions = [] as any;
+        for (let item of _data['actions'])
+          this.actions!.push(CreatureAction.fromJS(item));
+      }
+      this.dc = _data['dc'] ? DC.fromJS(_data['dc']) : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): CreatureAction {
+    data = typeof data === 'object' ? data : {};
+    let result = new CreatureAction();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['type'] = this.type;
+    data['desc'] = this.desc;
+    data['count'] = this.count;
+    data['attackBonus'] = this.attackBonus;
+    if (Array.isArray(this.damage)) {
+      data['damage'] = [];
+      for (let item of this.damage) data['damage'].push(item.toJSON());
+    }
+    data['usage'] = this.usage ? this.usage.toJSON() : <any>undefined;
+    if (Array.isArray(this.actions)) {
+      data['actions'] = [];
+      for (let item of this.actions) data['actions'].push(item.toJSON());
+    }
+    data['dc'] = this.dc ? this.dc.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface ICreatureAction {
+  name: string;
+  type: string;
+  desc: string;
+  count?: number | undefined;
+  attackBonus?: number | undefined;
+  damage?: Damage[] | undefined;
+  usage?: Usage | undefined;
+  actions?: CreatureAction[] | undefined;
+  dc?: DC | undefined;
+}
+
+export class Damage implements IDamage {
+  damageType!: string;
+  damageDice!: string;
+  damageBonus?: number | undefined;
+
+  constructor(data?: IDamage) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.damageType = _data['damageType'];
+      this.damageDice = _data['damageDice'];
+      this.damageBonus = _data['damageBonus'];
+    }
+  }
+
+  static fromJS(data: any): Damage {
+    data = typeof data === 'object' ? data : {};
+    let result = new Damage();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['damageType'] = this.damageType;
+    data['damageDice'] = this.damageDice;
+    data['damageBonus'] = this.damageBonus;
+    return data;
+  }
+}
+
+export interface IDamage {
+  damageType: string;
+  damageDice: string;
+  damageBonus?: number | undefined;
+}
+
+export class Usage implements IUsage {
+  type!: string;
+  times?: number | undefined;
+  minValue?: number | undefined;
+
+  constructor(data?: IUsage) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.type = _data['type'];
+      this.times = _data['times'];
+      this.minValue = _data['minValue'];
+    }
+  }
+
+  static fromJS(data: any): Usage {
+    data = typeof data === 'object' ? data : {};
+    let result = new Usage();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['type'] = this.type;
+    data['times'] = this.times;
+    data['minValue'] = this.minValue;
+    return data;
+  }
+}
+
+export interface IUsage {
+  type: string;
+  times?: number | undefined;
+  minValue?: number | undefined;
+}
+
+export class DC implements IDC {
+  dcType!: string;
+  dcValue!: number;
+  successType!: string;
+
+  constructor(data?: IDC) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.dcType = _data['dcType'];
+      this.dcValue = _data['dcValue'];
+      this.successType = _data['successType'];
+    }
+  }
+
+  static fromJS(data: any): DC {
+    data = typeof data === 'object' ? data : {};
+    let result = new DC();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['dcType'] = this.dcType;
+    data['dcValue'] = this.dcValue;
+    data['successType'] = this.successType;
+    return data;
+  }
+}
+
+export interface IDC {
+  dcType: string;
+  dcValue: number;
+  successType: string;
+}
+
+export class Npc extends Creature implements INpc {
+  background!: string;
+  noteableEvents?: any[] | undefined;
+  beliefs?: any[] | undefined;
+  passions?: any[] | undefined;
+  flaws?: any[] | undefined;
+  monsterId?: string | undefined;
+  monster?: Monster | undefined;
+  localeId?: string | undefined;
+  locale?: Locale | undefined;
+  buildingId?: string | undefined;
+  building?: Building | undefined;
+
+  constructor(data?: INpc) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.background = _data['background'];
+      if (Array.isArray(_data['noteableEvents'])) {
+        this.noteableEvents = [] as any;
+        for (let item of _data['noteableEvents'])
+          this.noteableEvents!.push(item);
+      }
+      if (Array.isArray(_data['beliefs'])) {
+        this.beliefs = [] as any;
+        for (let item of _data['beliefs']) this.beliefs!.push(item);
+      }
+      if (Array.isArray(_data['passions'])) {
+        this.passions = [] as any;
+        for (let item of _data['passions']) this.passions!.push(item);
+      }
+      if (Array.isArray(_data['flaws'])) {
+        this.flaws = [] as any;
+        for (let item of _data['flaws']) this.flaws!.push(item);
+      }
       this.monsterId = _data['monsterId'];
       this.monster = _data['monster']
         ? Monster.fromJS(_data['monster'])
@@ -3607,31 +3398,367 @@ export class MonsterLocale implements IMonsterLocale {
       this.locale = _data['locale']
         ? Locale.fromJS(_data['locale'])
         : <any>undefined;
+      this.buildingId = _data['buildingId'];
+      this.building = _data['building']
+        ? Building.fromJS(_data['building'])
+        : <any>undefined;
     }
   }
 
-  static fromJS(data: any): MonsterLocale {
+  static fromJS(data: any): Npc {
     data = typeof data === 'object' ? data : {};
-    let result = new MonsterLocale();
+    let result = new Npc();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
+    data['background'] = this.background;
+    if (Array.isArray(this.noteableEvents)) {
+      data['noteableEvents'] = [];
+      for (let item of this.noteableEvents) data['noteableEvents'].push(item);
+    }
+    if (Array.isArray(this.beliefs)) {
+      data['beliefs'] = [];
+      for (let item of this.beliefs) data['beliefs'].push(item);
+    }
+    if (Array.isArray(this.passions)) {
+      data['passions'] = [];
+      for (let item of this.passions) data['passions'].push(item);
+    }
+    if (Array.isArray(this.flaws)) {
+      data['flaws'] = [];
+      for (let item of this.flaws) data['flaws'].push(item);
+    }
     data['monsterId'] = this.monsterId;
     data['monster'] = this.monster ? this.monster.toJSON() : <any>undefined;
     data['localeId'] = this.localeId;
     data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
+    data['buildingId'] = this.buildingId;
+    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
+    super.toJSON(data);
     return data;
   }
 }
 
-export interface IMonsterLocale {
-  monsterId: string;
+export interface INpc extends ICreature {
+  background: string;
+  noteableEvents?: any[] | undefined;
+  beliefs?: any[] | undefined;
+  passions?: any[] | undefined;
+  flaws?: any[] | undefined;
+  monsterId?: string | undefined;
   monster?: Monster | undefined;
-  localeId: string;
+  localeId?: string | undefined;
   locale?: Locale | undefined;
+  buildingId?: string | undefined;
+  building?: Building | undefined;
+}
+
+export class Locale extends Owned implements ILocale {
+  name!: string;
+  regionId?: string | undefined;
+  region?: Region | undefined;
+  buildings?: Building[] | undefined;
+  dungeons?: Dungeon[] | undefined;
+  players?: Player[] | undefined;
+  npcs?: Npc[] | undefined;
+  monsters?: MonsterLocale[] | undefined;
+  maps?: Map[] | undefined;
+
+  constructor(data?: ILocale) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      this.regionId = _data['regionId'];
+      this.region = _data['region']
+        ? Region.fromJS(_data['region'])
+        : <any>undefined;
+      if (Array.isArray(_data['buildings'])) {
+        this.buildings = [] as any;
+        for (let item of _data['buildings'])
+          this.buildings!.push(Building.fromJS(item));
+      }
+      if (Array.isArray(_data['dungeons'])) {
+        this.dungeons = [] as any;
+        for (let item of _data['dungeons'])
+          this.dungeons!.push(Dungeon.fromJS(item));
+      }
+      if (Array.isArray(_data['players'])) {
+        this.players = [] as any;
+        for (let item of _data['players'])
+          this.players!.push(Player.fromJS(item));
+      }
+      if (Array.isArray(_data['npcs'])) {
+        this.npcs = [] as any;
+        for (let item of _data['npcs']) this.npcs!.push(Npc.fromJS(item));
+      }
+      if (Array.isArray(_data['monsters'])) {
+        this.monsters = [] as any;
+        for (let item of _data['monsters'])
+          this.monsters!.push(MonsterLocale.fromJS(item));
+      }
+      if (Array.isArray(_data['maps'])) {
+        this.maps = [] as any;
+        for (let item of _data['maps']) this.maps!.push(Map.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): Locale {
+    data = typeof data === 'object' ? data : {};
+    let result = new Locale();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['regionId'] = this.regionId;
+    data['region'] = this.region ? this.region.toJSON() : <any>undefined;
+    if (Array.isArray(this.buildings)) {
+      data['buildings'] = [];
+      for (let item of this.buildings) data['buildings'].push(item.toJSON());
+    }
+    if (Array.isArray(this.dungeons)) {
+      data['dungeons'] = [];
+      for (let item of this.dungeons) data['dungeons'].push(item.toJSON());
+    }
+    if (Array.isArray(this.players)) {
+      data['players'] = [];
+      for (let item of this.players) data['players'].push(item.toJSON());
+    }
+    if (Array.isArray(this.npcs)) {
+      data['npcs'] = [];
+      for (let item of this.npcs) data['npcs'].push(item.toJSON());
+    }
+    if (Array.isArray(this.monsters)) {
+      data['monsters'] = [];
+      for (let item of this.monsters) data['monsters'].push(item.toJSON());
+    }
+    if (Array.isArray(this.maps)) {
+      data['maps'] = [];
+      for (let item of this.maps) data['maps'].push(item.toJSON());
+    }
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface ILocale extends IOwned {
+  name: string;
+  regionId?: string | undefined;
+  region?: Region | undefined;
+  buildings?: Building[] | undefined;
+  dungeons?: Dungeon[] | undefined;
+  players?: Player[] | undefined;
+  npcs?: Npc[] | undefined;
+  monsters?: MonsterLocale[] | undefined;
+  maps?: Map[] | undefined;
+}
+
+export class Region extends Owned implements IRegion {
+  name!: string;
+  locales?: Locale[] | undefined;
+  continentId?: string | undefined;
+  continent?: Continent | undefined;
+  map!: string;
+
+  constructor(data?: IRegion) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      if (Array.isArray(_data['locales'])) {
+        this.locales = [] as any;
+        for (let item of _data['locales'])
+          this.locales!.push(Locale.fromJS(item));
+      }
+      this.continentId = _data['continentId'];
+      this.continent = _data['continent']
+        ? Continent.fromJS(_data['continent'])
+        : <any>undefined;
+      this.map = _data['map'];
+    }
+  }
+
+  static fromJS(data: any): Region {
+    data = typeof data === 'object' ? data : {};
+    let result = new Region();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    if (Array.isArray(this.locales)) {
+      data['locales'] = [];
+      for (let item of this.locales) data['locales'].push(item.toJSON());
+    }
+    data['continentId'] = this.continentId;
+    data['continent'] = this.continent
+      ? this.continent.toJSON()
+      : <any>undefined;
+    data['map'] = this.map;
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IRegion extends IOwned {
+  name: string;
+  locales?: Locale[] | undefined;
+  continentId?: string | undefined;
+  continent?: Continent | undefined;
+  map: string;
+}
+
+export class Continent extends Owned implements IContinent {
+  name!: string;
+  regions?: Region[] | undefined;
+  map?: string | undefined;
+
+  constructor(data?: IContinent) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      if (Array.isArray(_data['regions'])) {
+        this.regions = [] as any;
+        for (let item of _data['regions'])
+          this.regions!.push(Region.fromJS(item));
+      }
+      this.map = _data['map'];
+    }
+  }
+
+  static fromJS(data: any): Continent {
+    data = typeof data === 'object' ? data : {};
+    let result = new Continent();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    if (Array.isArray(this.regions)) {
+      data['regions'] = [];
+      for (let item of this.regions) data['regions'].push(item.toJSON());
+    }
+    data['map'] = this.map;
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IContinent extends IOwned {
+  name: string;
+  regions?: Region[] | undefined;
+  map?: string | undefined;
+}
+
+export class Building extends Owned implements IBuilding {
+  name!: string;
+  localeId?: string | undefined;
+  locale?: Locale | undefined;
+  map!: string;
+  npcs?: Npc[] | undefined;
+  monsters?: MonsterBuilding[] | undefined;
+  players?: Player[] | undefined;
+  maps?: BuildingMap[] | undefined;
+
+  constructor(data?: IBuilding) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      this.localeId = _data['localeId'];
+      this.locale = _data['locale']
+        ? Locale.fromJS(_data['locale'])
+        : <any>undefined;
+      this.map = _data['map'];
+      if (Array.isArray(_data['npcs'])) {
+        this.npcs = [] as any;
+        for (let item of _data['npcs']) this.npcs!.push(Npc.fromJS(item));
+      }
+      if (Array.isArray(_data['monsters'])) {
+        this.monsters = [] as any;
+        for (let item of _data['monsters'])
+          this.monsters!.push(MonsterBuilding.fromJS(item));
+      }
+      if (Array.isArray(_data['players'])) {
+        this.players = [] as any;
+        for (let item of _data['players'])
+          this.players!.push(Player.fromJS(item));
+      }
+      if (Array.isArray(_data['maps'])) {
+        this.maps = [] as any;
+        for (let item of _data['maps'])
+          this.maps!.push(BuildingMap.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): Building {
+    data = typeof data === 'object' ? data : {};
+    let result = new Building();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['localeId'] = this.localeId;
+    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
+    data['map'] = this.map;
+    if (Array.isArray(this.npcs)) {
+      data['npcs'] = [];
+      for (let item of this.npcs) data['npcs'].push(item.toJSON());
+    }
+    if (Array.isArray(this.monsters)) {
+      data['monsters'] = [];
+      for (let item of this.monsters) data['monsters'].push(item.toJSON());
+    }
+    if (Array.isArray(this.players)) {
+      data['players'] = [];
+      for (let item of this.players) data['players'].push(item.toJSON());
+    }
+    if (Array.isArray(this.maps)) {
+      data['maps'] = [];
+      for (let item of this.maps) data['maps'].push(item.toJSON());
+    }
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IBuilding extends IOwned {
+  name: string;
+  localeId?: string | undefined;
+  locale?: Locale | undefined;
+  map: string;
+  npcs?: Npc[] | undefined;
+  monsters?: MonsterBuilding[] | undefined;
+  players?: Player[] | undefined;
+  maps?: BuildingMap[] | undefined;
 }
 
 export class MonsterBuilding implements IMonsterBuilding {
@@ -3686,72 +3813,183 @@ export interface IMonsterBuilding {
   building?: Building | undefined;
 }
 
-export class Map extends Base implements IMap {
-  variation?: string | undefined;
-  imageUrl?: string | undefined;
-  center?: any[] | undefined;
-  localeId!: string;
+export class Player extends Creature implements IPlayer {
+  level!: number;
+  xp!: number;
+  inspiration!: boolean;
+  characterName!: string;
+  playerName!: string;
+  background!: string;
+  faction!: string;
+  race!: string;
+  localeId?: string | undefined;
   locale?: Locale | undefined;
-  buildings?: BuildingMap[] | undefined;
+  buildingId?: string | undefined;
+  building?: Building | undefined;
 
-  constructor(data?: IMap) {
+  constructor(data?: IPlayer) {
     super(data);
   }
 
   init(_data?: any) {
     super.init(_data);
     if (_data) {
-      this.variation = _data['variation'];
-      this.imageUrl = _data['imageUrl'];
-      if (Array.isArray(_data['center'])) {
-        this.center = [] as any;
-        for (let item of _data['center']) this.center!.push(item);
-      }
+      this.level = _data['level'];
+      this.xp = _data['xp'];
+      this.inspiration = _data['inspiration'];
+      this.characterName = _data['characterName'];
+      this.playerName = _data['playerName'];
+      this.background = _data['background'];
+      this.faction = _data['faction'];
+      this.race = _data['race'];
       this.localeId = _data['localeId'];
       this.locale = _data['locale']
         ? Locale.fromJS(_data['locale'])
         : <any>undefined;
-      if (Array.isArray(_data['buildings'])) {
-        this.buildings = [] as any;
-        for (let item of _data['buildings'])
-          this.buildings!.push(BuildingMap.fromJS(item));
-      }
+      this.buildingId = _data['buildingId'];
+      this.building = _data['building']
+        ? Building.fromJS(_data['building'])
+        : <any>undefined;
     }
   }
 
-  static fromJS(data: any): Map {
+  static fromJS(data: any): Player {
     data = typeof data === 'object' ? data : {};
-    let result = new Map();
+    let result = new Player();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === 'object' ? data : {};
-    data['variation'] = this.variation;
-    data['imageUrl'] = this.imageUrl;
-    if (Array.isArray(this.center)) {
-      data['center'] = [];
-      for (let item of this.center) data['center'].push(item);
-    }
+    data['level'] = this.level;
+    data['xp'] = this.xp;
+    data['inspiration'] = this.inspiration;
+    data['characterName'] = this.characterName;
+    data['playerName'] = this.playerName;
+    data['background'] = this.background;
+    data['faction'] = this.faction;
+    data['race'] = this.race;
     data['localeId'] = this.localeId;
     data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
-    if (Array.isArray(this.buildings)) {
-      data['buildings'] = [];
-      for (let item of this.buildings) data['buildings'].push(item.toJSON());
-    }
+    data['buildingId'] = this.buildingId;
+    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
     super.toJSON(data);
     return data;
   }
 }
 
-export interface IMap extends IBase {
-  variation?: string | undefined;
-  imageUrl?: string | undefined;
-  center?: any[] | undefined;
-  localeId: string;
+export interface IPlayer extends ICreature {
+  level: number;
+  xp: number;
+  inspiration: boolean;
+  characterName: string;
+  playerName: string;
+  background: string;
+  faction: string;
+  race: string;
+  localeId?: string | undefined;
   locale?: Locale | undefined;
-  buildings?: BuildingMap[] | undefined;
+  buildingId?: string | undefined;
+  building?: Building | undefined;
+}
+
+export class Proficiencies implements IProficiencies {
+  name!: string;
+  value!: number;
+
+  constructor(data?: IProficiencies) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.name = _data['name'];
+      this.value = _data['value'];
+    }
+  }
+
+  static fromJS(data: any): Proficiencies {
+    data = typeof data === 'object' ? data : {};
+    let result = new Proficiencies();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['value'] = this.value;
+    return data;
+  }
+}
+
+export interface IProficiencies {
+  name: string;
+  value: number;
+}
+
+export class Speed implements ISpeed {
+  name!: string;
+  value!: number;
+  measurement!: string;
+
+  constructor(data?: ISpeed) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.name = _data['name'];
+      this.value = _data['value'];
+      this.measurement = _data['measurement'];
+    }
+  }
+
+  static fromJS(data: any): Speed {
+    data = typeof data === 'object' ? data : {};
+    let result = new Speed();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['value'] = this.value;
+    data['measurement'] = this.measurement;
+    return data;
+  }
+}
+
+export interface ISpeed {
+  name: string;
+  value: number;
+  measurement: string;
+}
+
+export enum Alignment {
+  LawfulGood = 0,
+  LawfulNeutral = 1,
+  LawfulEvil = 2,
+  NeutralGood = 3,
+  TrueNeutral = 4,
+  NeutralEvil = 5,
+  ChaoticGood = 6,
+  ChaoticNeutral = 7,
+  ChaoticEvil = 8,
+  Any = 9,
+  None = 10,
 }
 
 export class BuildingMap implements IBuildingMap {
@@ -3759,7 +3997,7 @@ export class BuildingMap implements IBuildingMap {
   building?: Building | undefined;
   mapId!: string;
   map?: Map | undefined;
-  coords?: any[] | undefined;
+  coords?: number[] | undefined;
 
   constructor(data?: IBuildingMap) {
     if (data) {
@@ -3811,7 +4049,184 @@ export interface IBuildingMap {
   building?: Building | undefined;
   mapId: string;
   map?: Map | undefined;
-  coords?: any[] | undefined;
+  coords?: number[] | undefined;
+}
+
+export class Map extends Owned implements IMap {
+  name!: string;
+  variation!: string;
+  imageUrl!: string;
+  center?: any[] | undefined;
+  localeId!: string;
+  locale?: Locale | undefined;
+  buildings?: BuildingMap[] | undefined;
+
+  constructor(data?: IMap) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      this.variation = _data['variation'];
+      this.imageUrl = _data['imageUrl'];
+      if (Array.isArray(_data['center'])) {
+        this.center = [] as any;
+        for (let item of _data['center']) this.center!.push(item);
+      }
+      this.localeId = _data['localeId'];
+      this.locale = _data['locale']
+        ? Locale.fromJS(_data['locale'])
+        : <any>undefined;
+      if (Array.isArray(_data['buildings'])) {
+        this.buildings = [] as any;
+        for (let item of _data['buildings'])
+          this.buildings!.push(BuildingMap.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): Map {
+    data = typeof data === 'object' ? data : {};
+    let result = new Map();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['variation'] = this.variation;
+    data['imageUrl'] = this.imageUrl;
+    if (Array.isArray(this.center)) {
+      data['center'] = [];
+      for (let item of this.center) data['center'].push(item);
+    }
+    data['localeId'] = this.localeId;
+    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
+    if (Array.isArray(this.buildings)) {
+      data['buildings'] = [];
+      for (let item of this.buildings) data['buildings'].push(item.toJSON());
+    }
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IMap extends IOwned {
+  name: string;
+  variation: string;
+  imageUrl: string;
+  center?: any[] | undefined;
+  localeId: string;
+  locale?: Locale | undefined;
+  buildings?: BuildingMap[] | undefined;
+}
+
+export class Dungeon extends Owned implements IDungeon {
+  name!: string;
+  type!: string;
+  map?: string | undefined;
+  building?: Building | undefined;
+  locale?: Locale | undefined;
+
+  constructor(data?: IDungeon) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      this.name = _data['name'];
+      this.type = _data['type'];
+      this.map = _data['map'];
+      this.building = _data['building']
+        ? Building.fromJS(_data['building'])
+        : <any>undefined;
+      this.locale = _data['locale']
+        ? Locale.fromJS(_data['locale'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): Dungeon {
+    data = typeof data === 'object' ? data : {};
+    let result = new Dungeon();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['name'] = this.name;
+    data['type'] = this.type;
+    data['map'] = this.map;
+    data['building'] = this.building ? this.building.toJSON() : <any>undefined;
+    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IDungeon extends IOwned {
+  name: string;
+  type: string;
+  map?: string | undefined;
+  building?: Building | undefined;
+  locale?: Locale | undefined;
+}
+
+export class MonsterLocale implements IMonsterLocale {
+  monsterId!: string;
+  monster?: Monster | undefined;
+  localeId!: string;
+  locale?: Locale | undefined;
+
+  constructor(data?: IMonsterLocale) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.monsterId = _data['monsterId'];
+      this.monster = _data['monster']
+        ? Monster.fromJS(_data['monster'])
+        : <any>undefined;
+      this.localeId = _data['localeId'];
+      this.locale = _data['locale']
+        ? Locale.fromJS(_data['locale'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): MonsterLocale {
+    data = typeof data === 'object' ? data : {};
+    let result = new MonsterLocale();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['monsterId'] = this.monsterId;
+    data['monster'] = this.monster ? this.monster.toJSON() : <any>undefined;
+    data['localeId'] = this.localeId;
+    data['locale'] = this.locale ? this.locale.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface IMonsterLocale {
+  monsterId: string;
+  monster?: Monster | undefined;
+  localeId: string;
+  locale?: Locale | undefined;
 }
 
 export class JsonPatchDocumentOfBuilding

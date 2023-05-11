@@ -1,3 +1,9 @@
 $primary-colour: #DDAC79;
 $secondary-colour: #AC79DD;
 $tertiary-colour: #79DDAC;
+
+:export {
+    primaryColour: $primary-colour;
+    secondaryColour: secondary-colour;
+    tertiaryColour: tertiary-colour;
+}

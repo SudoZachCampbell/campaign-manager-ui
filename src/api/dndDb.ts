@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
 import {
+  ApiException,
   Base,
   BuildingsClient,
   ContinentsClient,
@@ -29,20 +30,24 @@ export enum ApiType {
   CONTINENT,
 }
 
-export const useDnDApi = <T extends Base>(
+export const useDnDApi = <T extends Base | string>(
   call: (...props: any[]) => Promise<T>,
 ) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<T>();
+  const [apiError, setApiError] = useState<ApiException>();
 
   const invoke = async (...props: any[]) => {
     setLoading(true);
-    const data = await call(...props);
-    setResponse(data);
+    try {
+      setResponse(await call(...props));
+    } catch (e) {
+      setApiError(e as ApiException);
+    }
     setLoading(false);
   };
 
-  return { loading, invoke, response };
+  return { loading, invoke, response, apiError };
 };
 
 export const useDndCollectionApi = <T extends Base>(

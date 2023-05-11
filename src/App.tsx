@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import { Route } from 'react-router';
 import { Routes } from 'react-router-dom';
-import Layout from './layouts/Layout';
 import Home from './pages/Home';
 import NpcList from './pages/NpcList';
 import MonsterList from './pages/MonsterList';
@@ -18,6 +17,10 @@ import {
   StyledEngineProvider,
 } from '@mui/material';
 import LocationHub from './pages/LocationHub';
+import Login from './pages/Login';
+import { GuestLayout } from './layouts/GuestLayout';
+import { AuthLayout } from './layouts/AuthLayout';
+import { AccountLayout } from './layouts/AccountLayout';
 
 export default function App() {
   const [pageName, setPageName] = useState('');
@@ -33,16 +36,21 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route element={<AuthLayout />}>
+          <Route element={<AccountLayout />}>
+            <Route path='/monsters' element={<MonsterList />} />
+            <Route path='/location-hub' element={<LocationHub />} />
+            <Route path='/' element={<Home />} />
+          </Route>
+          <Route element={<GuestLayout />}>
+            <Route path='/login' element={<Login />} />
+          </Route>
           <Route path='/npcs' element={<NpcList />} />
-          <Route path='/monsters' element={<MonsterList />} />
-          <Route path='/location-hub' element={<LocationHub />} />
           <Route path='/npcs/:id' element={<NpcDetails />} />
           <Route path='/monsters/:id' element={<MonsterDetails />} />
-          <Route path='/' element={<Home />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </ThemeProvider>
   );
 }

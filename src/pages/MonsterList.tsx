@@ -5,17 +5,22 @@ import _ from 'lodash';
 import MonsterSummary from '../components/MonsterSummary';
 import { MonstersClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
+import { useAuth } from '../hooks/useAuth';
 
 const client = new MonstersClient();
 
 interface MonsterListProps {}
 
 export default function MonsterList() {
+  const { token } = useAuth();
+
   const columns: TableColumn[] = [
     { name: 'name', header: 'Name' },
     { name: 'passivePerception', header: 'Passive Perception' },
     { name: 'alignment', header: 'Alignment' },
   ];
+
+  client.setAuthToken(token);
 
   const {
     loading,

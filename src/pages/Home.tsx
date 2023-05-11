@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useAuth } from '../hooks/useAuth';
 
 interface HomeProps {}
 
 export default function Home() {
+  const { token } = useAuth();
+
+  console.log(`Home.tsx:11 token`, token);
   return (
     <Box>
       <Typography variant='h1' component='h2' gutterBottom>

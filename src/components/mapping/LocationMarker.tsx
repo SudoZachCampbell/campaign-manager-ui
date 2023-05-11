@@ -24,7 +24,7 @@ export default function LocationMarker({
       <Popup>
         {entities.map((entity) => (
           <Typography key={entity.id} variant='subtitle2'>
-            {entity.name}
+            {/* {entity.name} */}
           </Typography>
         ))}
       </Popup>
