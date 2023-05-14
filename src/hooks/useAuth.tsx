@@ -38,14 +38,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = async (data: string) => {
     setToken(data);
     setPayload(jwtDecode<JwtPayload>(data));
-    navigate('/');
   };
 
   // call this function to sign out logged in user
   const logout = () => {
     setToken(null);
     setPayload(null);
-    navigate('/login', { replace: true });
   };
 
   console.log(`useAuth.tsx:51 token`, token);

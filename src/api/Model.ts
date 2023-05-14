@@ -97,11 +97,11 @@ export class AccountsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  createAccount(user: Account): Promise<Account> {
+  createAccount(createAttempt: CreateAttempt): Promise<string> {
     let url_ = this.baseUrl + '/Accounts';
     url_ = url_.replace(/[?&]$/, '');
 
-    const content_ = JSON.stringify(user);
+    const content_ = JSON.stringify(createAttempt);
 
     let options_: RequestInit = {
       body: content_,
@@ -121,7 +121,7 @@ export class AccountsClient extends Client {
       });
   }
 
-  protected processCreateAccount(response: Response): Promise<Account> {
+  protected processCreateAccount(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -134,7 +134,8 @@ export class AccountsClient extends Client {
           _responseText === ''
             ? null
             : JSON.parse(_responseText, this.jsonParseReviver);
-        result200 = Account.fromJS(resultData200);
+        result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -147,7 +148,7 @@ export class AccountsClient extends Client {
         );
       });
     }
-    return Promise.resolve<Account>(null as any);
+    return Promise.resolve<string>(null as any);
   }
 
   deleteAccount(id: string): Promise<Account> {
@@ -2736,6 +2737,50 @@ export class LoginAttempt implements ILoginAttempt {
 }
 
 export interface ILoginAttempt {
+  username?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+}
+
+export class CreateAttempt implements ICreateAttempt {
+  username?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+
+  constructor(data?: ICreateAttempt) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.username = _data['username'];
+      this.email = _data['email'];
+      this.password = _data['password'];
+    }
+  }
+
+  static fromJS(data: any): CreateAttempt {
+    data = typeof data === 'object' ? data : {};
+    let result = new CreateAttempt();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['username'] = this.username;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    return data;
+  }
+}
+
+export interface ICreateAttempt {
   username?: string | undefined;
   email?: string | undefined;
   password?: string | undefined;
