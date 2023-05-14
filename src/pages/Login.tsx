@@ -33,46 +33,31 @@ export default function Login() {
   const auth = useAuth();
 
   const {
-    loading: loginLoading,
-    invoke: loginInvoke,
-    response: loginResponse,
-    apiError: loginError,
-  } = useDnDApi((login: string, pass: string) =>
-    accountsClient.login(new LoginAttempt({ username: login, password: pass })),
-  );
-
-  const {
-    loading: createLoading,
-    invoke: createInvoke,
-    response: createResponse,
-    apiError: createError,
-  } = useDnDApi((login: string, pass: string, email: string) =>
-    accountsClient.createAccount(
-      new CreateAttempt({ username: login, password: pass, email }),
-    ),
+    loading,
+    invoke,
+    response: responseToken,
+    apiError,
+  } = useDnDApi((login: string, pass: string, email?: string) =>
+    creating
+      ? accountsClient.createAccount(
+          new CreateAttempt({ username: login, password: pass, email }),
+        )
+      : accountsClient.login(
+          new LoginAttempt({ username: login, password: pass }),
+        ),
   );
 
   const attemptLogin = () => {
     if (valid) {
-      if (creating) {
-        createInvoke(username, password, email);
-      } else {
-        loginInvoke(username ?? email, password);
-      }
+      invoke(username, password, creating ? email : null);
     }
   };
 
   useEffect(() => {
-    if (!loginLoading && loginResponse) {
-      login(loginResponse);
+    if (!loading && responseToken) {
+      login(responseToken);
     }
-  }, [loginResponse]);
-
-  useEffect(() => {
-    if (!createLoading && createResponse) {
-      login(createResponse);
-    }
-  }, [createResponse]);
+  }, [responseToken]);
 
   const login = (token: string) => {
     let tokenObject = jwtDecode<JwtPayload>(token);
@@ -83,13 +68,14 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (loginError !== null) {
+    if (apiError !== null) {
       setUsername('');
       setPassword('');
+      setEmail('');
     }
-  }, [loginError]);
+  }, [apiError]);
 
-  return createLoading || loginLoading ? (
+  return loading ? (
     <PuffLoader color={colours.primaryColour} />
   ) : (
     <div className='login__container'>
@@ -110,20 +96,18 @@ export default function Login() {
           </a>
         </div>
         <div>
-          <label htmlFor='loginName'>Username: </label>
           <input
-            id='loginName'
             type='text'
             className='login__input'
+            placeholder='Username'
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
-          <label htmlFor='password'>Password: </label>
           <input
-            id='password'
             type='password'
             className='login__input'
+            placeholder='Password'
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
@@ -131,34 +115,34 @@ export default function Login() {
           <>
             {' '}
             <div>
-              <label htmlFor='repeatPassword'>Repeat: </label>
               <input
-                id='repeatPassword'
                 type='password'
                 className='login__input'
+                placeholder='Confirm Password'
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor='email'>Email: </label>
               <input
-                id='email'
                 type='text'
                 className='login__input'
+                placeholder='Email'
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </>
         )}
-        <div>
-          <Link to=''>Forgot Password</Link>
-        </div>
-        <div>
-          <input type='submit' value={creating ? 'Create' : 'Login'} />
-        </div>
-        {creating
-          ? createError && <p>{createError.response}</p>
-          : loginError && <p>{loginError.response}</p>}
+        {creating || (
+          <Link className='login__forgot' to=''>
+            Forgot Password
+          </Link>
+        )}
+        <input
+          className='login__button'
+          type='submit'
+          value={creating ? 'Create' : 'Login'}
+        />
+        {apiError && <p>{apiError.response}</p>}
       </form>
     </div>
   );
