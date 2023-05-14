@@ -9,12 +9,12 @@ export const AccountLayout = () => {
   const outlet = useOutlet();
   const user = useAuth();
   const navigate = useNavigate();
-
-  console.log(`AccountLayout.tsx:12 user.token`, user.token);
-
   useEffect(() => {
-    if (!user.token) {
-      console.log(`AccountLayout.tsx:15 hit`);
+    if (
+      !user.token ||
+      new Date() > new Date(Number(user.payload?.exp) * 1000)
+    ) {
+      user.logout();
       navigate('/login');
     }
   }, []);

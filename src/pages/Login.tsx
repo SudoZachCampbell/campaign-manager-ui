@@ -33,7 +33,6 @@ export default function Login() {
   useEffect(() => {
     if (!loading && response) {
       let token = jwtDecode<JwtPayload>(response);
-      console.log(`Login.tsx:35 auth`, auth);
       if (token) {
         auth.login(response);
       }

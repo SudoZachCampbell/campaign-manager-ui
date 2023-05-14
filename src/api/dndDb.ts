@@ -55,15 +55,19 @@ export const useDndCollectionApi = <T extends Base>(
 ) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<T[]>();
+  const [apiError, setApiError] = useState<ApiException>();
 
   const invoke = async (...props: any[]) => {
     setLoading(true);
-    const data = await call(...props);
-    setResponse(data);
+    try {
+      setResponse(await call(...props));
+    } catch (e) {
+      setApiError(e as ApiException);
+    }
     setLoading(false);
   };
 
-  return { loading, invoke, response };
+  return { loading, invoke, response, apiError };
 };
 
 export const buildJsonPatch = (
