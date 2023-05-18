@@ -10,25 +10,26 @@ import { Link } from 'react-router-dom';
 
 import './Login.styles.scss';
 import colours from '../style/constants/_colours.scss';
+import { FormProvider, useForm } from 'react-hook-form';
 
 const accountsClient = new AccountsClient();
 
-interface ValidForm {
-  username: boolean;
-  password: boolean;
-  email?: boolean;
-  confirmPassword?: boolean;
+interface FormObject {
+  username: string;
+  password: string;
+  email?: string;
+  confirmPassword?: string;
 }
 
 export default function Login() {
-  const [username, setUsername] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
   const [creating, setCreating] = useState<boolean>(false);
-  const [valid, setValid] = useState<ValidForm>({
-    username: false,
-    password: false,
-  });
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormObject>({ mode: 'onBlur' });
 
   const auth = useAuth();
 
@@ -47,10 +48,8 @@ export default function Login() {
         ),
   );
 
-  const attemptLogin = () => {
-    if (valid) {
-      invoke(username, password, creating ? email : null);
-    }
+  const attemptLogin = ({ username, password, email }: FormObject) => {
+    invoke(username, password, creating ? email : null);
   };
 
   useEffect(() => {
@@ -63,23 +62,16 @@ export default function Login() {
     let tokenObject = jwtDecode<JwtPayload>(token);
     if (tokenObject) {
       auth.login(token);
-      // setLoggingIn(true);
     }
   };
 
-  useEffect(() => {
-    if (apiError !== null) {
-      setUsername('');
-      setPassword('');
-      setEmail('');
-    }
-  }, [apiError]);
+  console.log(`Login.tsx:67 errors`, errors);
 
   return loading ? (
     <PuffLoader color={colours.primaryColour} />
   ) : (
     <div className='login__container'>
-      <form onSubmit={attemptLogin} className='login__form'>
+      <form onSubmit={handleSubmit(attemptLogin)} className='login__form'>
         <div className='login__toggles'>
           <a
             className={`toggle ${creating || 'selected'}`}
@@ -95,40 +87,87 @@ export default function Login() {
             Create
           </a>
         </div>
-        <div>
+        <div className='login__input__group'>
           <input
+            {...register('username', {
+              required: 'Username is required',
+              validate: {
+                uniqueness: async (value: string) =>
+                  (await accountsClient.validateUsername(value)) ||
+                  'Username must be unique',
+              },
+            })}
             type='text'
-            className='login__input'
+            className={`login__input ${errors.username && 'invalid'}`}
             placeholder='Username'
-            onChange={(e) => setUsername(e.target.value)}
           />
+          <div className='login__error'>{errors.username?.message}</div>
         </div>
-        <div>
+        <div className='login__input__group'>
           <input
+            {...register('password', {
+              required: 'Password is required',
+              maxLength: 32,
+              pattern: {
+                value:
+                  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                message:
+                  '8 characters, 1 uppercase, 1 lowercase, a number, a special character',
+              },
+            })}
             type='password'
-            className='login__input'
+            className={`login__input ${errors.password && 'invalid'}`}
             placeholder='Password'
-            onChange={(e) => setPassword(e.target.value)}
           />
+          <div className='login__error'>{errors.password?.message}</div>
         </div>
         {creating && (
           <>
-            {' '}
-            <div>
+            <div className='login__input__group'>
               <input
+                {...register('confirmPassword', {
+                  required: creating && 'Password Confirmation is required',
+                  validate: (
+                    value: string | undefined,
+                    formValues: FormObject,
+                  ) => value === formValues.password || 'Passwords must match',
+                })}
                 type='password'
-                className='login__input'
+                className={`login__input ${
+                  errors.confirmPassword && 'invalid'
+                }`}
                 placeholder='Confirm Password'
-                onChange={(e) => setPassword(e.target.value)}
               />
+              <div className='login__error'>
+                {errors.confirmPassword?.message}
+              </div>
             </div>
-            <div>
+            <div className='login__input__group'>
               <input
-                type='text'
-                className='login__input'
+                {...register('email', {
+                  required: creating && 'Email is required',
+                  pattern: {
+                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                    message: 'Must be a valid email',
+                  },
+                  validate: {
+                    uniqueness: async (value?: string) => {
+                      if (value === undefined || value === null) {
+                        return true;
+                      } else {
+                        return (
+                          (await accountsClient.validateEmail(value)) ||
+                          'Email must be unique'
+                        );
+                      }
+                    },
+                  },
+                })}
+                type='email'
+                className={`login__input ${errors.email && 'invalid'}`}
                 placeholder='Email'
-                onChange={(e) => setEmail(e.target.value)}
               />
+              <div className='login__error'>{errors.email?.message}</div>
             </div>
           </>
         )}

@@ -8,14 +8,20 @@
 
 .login__form {
     display: flex;
+    width: 17vw;
     flex-direction: column;
-    padding: 5vh 5vh; 
+    padding: 5vh 2vh; 
     gap: 20px;
     transition: max-height 2s, width 2s;
+    border-radius: 10px;
     background-color: rgba(128, 128, 128, 0.1);
     justify-content: space-around;
     align-items: center;
     transition: width 0.75s, height 0.75s;
+
+    .login__input__group    {
+        width: 75%;
+    }
 }
 
 .login__toggles {
@@ -24,7 +30,6 @@
 
     .toggle {
         color: gray;
-
 
         &:hover {
             cursor: pointer;
@@ -51,13 +56,25 @@
     border: none;
     border: solid 1px #000;
     border-radius: 4px;
-    width: 12vw;
+    width: 100%;
     padding-left: 3%;
 
     &::placeholder {
         font-size: 1rem;
     }
-}  
+
+    &.invalid {
+        border: 2px solid red
+    }
+}
+
+.login__error {
+    color: red;
+    font-size: 0.75rem;
+    margin: 0.4rem 0 0 0.5rem;
+    width: 100%;
+    word-wrap: break-word;
+}
 
 .login__forgot {
     font-size: 0.75rem;
