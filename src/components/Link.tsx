@@ -1,14 +1,26 @@
 import { ReactNode } from 'react';
 
 interface LinkProps {
-  to: string;
-  children: ReactNode;
+  children?: ReactNode;
+  to?: string;
   className?: string;
+  onClick?: Function;
+  newTab?: Function;
 }
 
-const Link = ({ to, children, className }: LinkProps) => {
+const Link = ({ to, children, className, onClick, newTab }: LinkProps) => {
+  const additionalProps = newTab && {
+    target: '_blank',
+    rel: 'noopener noreferrer',
+  };
+
   return (
-    <a className={className} href={to}>
+    <a
+      className={className}
+      href={to}
+      onClick={() => onClick?.()}
+      {...additionalProps}
+    >
       {children}
     </a>
   );

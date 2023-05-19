@@ -21,6 +21,7 @@ import Login from './pages/Login';
 import { GuestLayout } from './layouts/GuestLayout';
 import { AuthLayout } from './layouts/AuthLayout';
 import { AccountLayout } from './layouts/AccountLayout';
+import { CampaignList } from './pages/CampaignList';
 
 export default function App() {
   const [pageName, setPageName] = useState('');
@@ -39,6 +40,7 @@ export default function App() {
       <Routes>
         <Route element={<AuthLayout />}>
           <Route element={<AccountLayout />}>
+            <Route path='/campaigns' element={<CampaignList />} />
             <Route path='/monsters' element={<MonsterList />} />
             <Route path='/location-hub' element={<LocationHub />} />
             <Route path='/' element={<Home />} />

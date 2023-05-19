@@ -44,10 +44,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = () => {
     setToken(null);
     setPayload(null);
+    navigate('/login');
   };
-
-  console.log(`useAuth.tsx:51 token`, token);
-  console.log(`useAuth.tsx:51 payload`, payload);
 
   const value = useMemo<UserAuth>(
     () => ({

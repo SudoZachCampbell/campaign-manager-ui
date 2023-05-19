@@ -1,27 +1,43 @@
 import React from 'react';
 import './NavMenu.styles.scss';
-import { GrHome, GrMapLocation, GrUser, GrGroup } from 'react-icons/gr';
-import { GiFishMonster } from 'react-icons/gi';
+import {
+  GiSpellBook,
+  GiHouse,
+  GiPikeman,
+  GiBlackKnightHelm,
+  GiHound,
+  GiTreasureMap,
+  GiExitDoor,
+} from 'react-icons/gi';
 import { Link } from '../../components/Link';
+import { useAuth } from '../../hooks/useAuth';
 
 const NavMenu = () => {
+  const { logout } = useAuth();
+
   return (
     <div className='navbar__container'>
       <div className='navbar__iconlist'>
         <Link className='navbar__link' to='/'>
-          <GrHome />
+          <GiHouse />
+        </Link>
+        <Link className='navbar__link' to='/campaigns'>
+          <GiSpellBook />
         </Link>
         <Link className='navbar__link' to='/players'>
-          <GrUser />
+          <GiPikeman />
         </Link>
         <Link className='navbar__link' to='/npcs'>
-          <GrGroup />
+          <GiBlackKnightHelm />
         </Link>
         <Link className='navbar__link' to='/monsters'>
-          <GiFishMonster />
+          <GiHound />
         </Link>
         <Link className='navbar__link' to='/location-hub'>
-          <GrMapLocation />
+          <GiTreasureMap />
+        </Link>
+        <Link className='navbar__link' onClick={logout}>
+          <GiExitDoor />
         </Link>
       </div>
     </div>

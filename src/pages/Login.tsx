@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDnDApi } from '../api/dndDb';
-import { Account, AccountsClient, CreateAttempt, Map } from '../api/Model';
+import { AccountsClient, CreateAttempt } from '../api/Model';
 import { LoginAttempt } from '../api/Model';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../hooks/useAuth';
@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 import './Login.styles.scss';
 import colours from '../style/constants/_colours.scss';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 const accountsClient = new AccountsClient();
 
@@ -27,7 +27,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    getValues,
+    reset,
     formState: { errors },
   } = useForm<FormObject>({ mode: 'onBlur' });
 
@@ -52,18 +52,22 @@ export default function Login() {
     invoke(username, password, creating ? email : null);
   };
 
-  useEffect(() => {
-    if (!loading && responseToken) {
-      login(responseToken);
-    }
-  }, [responseToken]);
-
   const login = (token: string) => {
     let tokenObject = jwtDecode<JwtPayload>(token);
     if (tokenObject) {
       auth.login(token);
     }
   };
+
+  useEffect(() => {
+    if (!loading && responseToken) {
+      login(responseToken);
+    }
+  }, [loading, responseToken]);
+
+  useEffect(() => {
+    reset({}, { keepValues: true });
+  }, [creating]);
 
   console.log(`Login.tsx:67 errors`, errors);
 
@@ -92,9 +96,16 @@ export default function Login() {
             {...register('username', {
               required: 'Username is required',
               validate: {
-                uniqueness: async (value: string) =>
-                  (await accountsClient.validateUsername(value)) ||
-                  'Username must be unique',
+                uniqueness: async (value: string) => {
+                  if (creating) {
+                    return (
+                      (await accountsClient.validateUsername(value)) ||
+                      'Username must be unique'
+                    );
+                  } else {
+                    return true;
+                  }
+                },
               },
             })}
             type='text'

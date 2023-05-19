@@ -823,6 +823,520 @@ export class BuildingsClient extends Client {
   }
 }
 
+export class CampaignClient extends Client {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
+  ) {
+    super();
+    this.http = http ? http : (window as any);
+    this.baseUrl =
+      baseUrl !== undefined && baseUrl !== null
+        ? baseUrl
+        : 'http://localhost:5000';
+  }
+
+  getCampaigns(
+    page?: number | undefined,
+    pageSize?: number | undefined,
+    filter?: string | null | undefined,
+    orderBy?: string | null | undefined,
+    include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+  ): Promise<Campaign[]> {
+    let url_ = this.baseUrl + '/Campaign?';
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'Page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    if (orderBy !== undefined && orderBy !== null)
+      url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetCampaigns(_response);
+      });
+  }
+
+  protected processGetCampaigns(response: Response): Promise<Campaign[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        if (Array.isArray(resultData200)) {
+          result200 = [] as any;
+          for (let item of resultData200)
+            result200!.push(Campaign.fromJS(item));
+        } else {
+          result200 = <any>null;
+        }
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Campaign[]>(null as any);
+  }
+
+  createCampaign(
+    monster: Campaign,
+    user?: Account | null | undefined,
+  ): Promise<Campaign> {
+    let url_ = this.baseUrl + '/Campaign';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(monster);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        Authorization: user !== undefined && user !== null ? '' + user : '',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateCampaign(_response);
+      });
+  }
+
+  protected processCreateCampaign(response: Response): Promise<Campaign> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Campaign.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Campaign>(null as any);
+  }
+
+  getCampaignById(
+    id: string,
+    include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
+  ): Promise<Campaign> {
+    let url_ = this.baseUrl + '/Campaign/{id}?';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetCampaignById(_response);
+      });
+  }
+
+  protected processGetCampaignById(response: Response): Promise<Campaign> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Campaign.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Campaign>(null as any);
+  }
+
+  updateCampaignPATCH(
+    id: string,
+    patchDoc: JsonPatchDocumentOfCampaign,
+    include?: string | null | undefined,
+    includeProperties?: string[] | null | undefined,
+    expand?: string | null | undefined,
+    expandProperties?: string[] | null | undefined,
+    filter?: string | null | undefined,
+  ): Promise<Campaign> {
+    let url_ = this.baseUrl + '/Campaign/{id}?';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (includeProperties !== undefined && includeProperties !== null)
+      includeProperties &&
+        includeProperties.forEach((item) => {
+          url_ += 'IncludeProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (expandProperties !== undefined && expandProperties !== null)
+      expandProperties &&
+        expandProperties.forEach((item) => {
+          url_ += 'ExpandProperties=' + encodeURIComponent('' + item) + '&';
+        });
+    if (filter !== undefined && filter !== null)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(patchDoc);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateCampaignPATCH(_response);
+      });
+  }
+
+  protected processUpdateCampaignPATCH(response: Response): Promise<Campaign> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Campaign.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Campaign>(null as any);
+  }
+
+  updateCampaignPUT(
+    id: string,
+    monster: Campaign,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/Campaign/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(monster);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateCampaignPUT(_response);
+      });
+  }
+
+  protected processUpdateCampaignPUT(
+    response: Response,
+  ): Promise<FileResponse | null> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200 || status === 206) {
+      const contentDisposition = response.headers
+        ? response.headers.get('content-disposition')
+        : undefined;
+      let fileNameMatch = contentDisposition
+        ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(
+            contentDisposition,
+          )
+        : undefined;
+      let fileName =
+        fileNameMatch && fileNameMatch.length > 1
+          ? fileNameMatch[3] || fileNameMatch[2]
+          : undefined;
+      if (fileName) {
+        fileName = decodeURIComponent(fileName);
+      } else {
+        fileNameMatch = contentDisposition
+          ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition)
+          : undefined;
+        fileName =
+          fileNameMatch && fileNameMatch.length > 1
+            ? fileNameMatch[1]
+            : undefined;
+      }
+      return response.blob().then((blob) => {
+        return {
+          fileName: fileName,
+          data: blob,
+          status: status,
+          headers: _headers,
+        };
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<FileResponse | null>(null as any);
+  }
+
+  deleteCampaign(id: string): Promise<Campaign> {
+    let url_ = this.baseUrl + '/Campaign/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteCampaign(_response);
+      });
+  }
+
+  protected processDeleteCampaign(response: Response): Promise<Campaign> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        result200 = Campaign.fromJS(resultData200);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Campaign>(null as any);
+  }
+
+  getEnum(name: string | null): Promise<string[]> {
+    let url_ = this.baseUrl + '/Campaign/GetEnum/{name}';
+    if (name === undefined || name === null)
+      throw new Error("The parameter 'name' must be defined.");
+    url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
+  }
+
+  protected processGetEnum(response: Response): Promise<string[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        let resultData200 =
+          _responseText === ''
+            ? null
+            : JSON.parse(_responseText, this.jsonParseReviver);
+        if (Array.isArray(resultData200)) {
+          result200 = [] as any;
+          for (let item of resultData200) result200!.push(item);
+        } else {
+          result200 = <any>null;
+        }
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string[]>(null as any);
+  }
+}
+
 export class ContinentsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
@@ -4578,6 +5092,179 @@ export abstract class IContractResolver implements IIContractResolver {
 }
 
 export interface IIContractResolver {}
+
+export class Campaign extends Owned implements ICampaign {
+  players?: AccountCampaign[] | undefined;
+
+  constructor(data?: ICampaign) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+    if (_data) {
+      if (Array.isArray(_data['players'])) {
+        this.players = [] as any;
+        for (let item of _data['players'])
+          this.players!.push(AccountCampaign.fromJS(item));
+      }
+    }
+  }
+
+  static fromJS(data: any): Campaign {
+    data = typeof data === 'object' ? data : {};
+    let result = new Campaign();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    if (Array.isArray(this.players)) {
+      data['players'] = [];
+      for (let item of this.players) data['players'].push(item.toJSON());
+    }
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface ICampaign extends IOwned {
+  players?: AccountCampaign[] | undefined;
+}
+
+export class AccountCampaign implements IAccountCampaign {
+  accountId!: string;
+  account?: Account | undefined;
+  campaignId!: string;
+  campaign?: Campaign | undefined;
+
+  constructor(data?: IAccountCampaign) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.accountId = _data['accountId'];
+      this.account = _data['account']
+        ? Account.fromJS(_data['account'])
+        : <any>undefined;
+      this.campaignId = _data['campaignId'];
+      this.campaign = _data['campaign']
+        ? Campaign.fromJS(_data['campaign'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): AccountCampaign {
+    data = typeof data === 'object' ? data : {};
+    let result = new AccountCampaign();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    data['accountId'] = this.accountId;
+    data['account'] = this.account ? this.account.toJSON() : <any>undefined;
+    data['campaignId'] = this.campaignId;
+    data['campaign'] = this.campaign ? this.campaign.toJSON() : <any>undefined;
+    return data;
+  }
+}
+
+export interface IAccountCampaign {
+  accountId: string;
+  account?: Account | undefined;
+  campaignId: string;
+  campaign?: Campaign | undefined;
+}
+
+export class JsonPatchDocumentOfCampaign
+  implements IJsonPatchDocumentOfCampaign
+{
+  operations?: OperationOfCampaign[] | undefined;
+  contractResolver?: IContractResolver | undefined;
+
+  constructor(data?: IJsonPatchDocumentOfCampaign) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      if (Array.isArray(_data['operations'])) {
+        this.operations = [] as any;
+        for (let item of _data['operations'])
+          this.operations!.push(OperationOfCampaign.fromJS(item));
+      }
+      this.contractResolver = _data['contractResolver']
+        ? IContractResolver.fromJS(_data['contractResolver'])
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): JsonPatchDocumentOfCampaign {
+    data = typeof data === 'object' ? data : {};
+    let result = new JsonPatchDocumentOfCampaign();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    if (Array.isArray(this.operations)) {
+      data['operations'] = [];
+      for (let item of this.operations) data['operations'].push(item.toJSON());
+    }
+    data['contractResolver'] = this.contractResolver
+      ? this.contractResolver.toJSON()
+      : <any>undefined;
+    return data;
+  }
+}
+
+export interface IJsonPatchDocumentOfCampaign {
+  operations?: OperationOfCampaign[] | undefined;
+  contractResolver?: IContractResolver | undefined;
+}
+
+export class OperationOfCampaign
+  extends Operation
+  implements IOperationOfCampaign
+{
+  constructor(data?: IOperationOfCampaign) {
+    super(data);
+  }
+
+  init(_data?: any) {
+    super.init(_data);
+  }
+
+  static fromJS(data: any): OperationOfCampaign {
+    data = typeof data === 'object' ? data : {};
+    let result = new OperationOfCampaign();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === 'object' ? data : {};
+    super.toJSON(data);
+    return data;
+  }
+}
+
+export interface IOperationOfCampaign extends IOperation {}
 
 export class JsonPatchDocumentOfContinent
   implements IJsonPatchDocumentOfContinent
