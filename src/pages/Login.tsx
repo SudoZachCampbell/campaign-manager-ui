@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 
 import './Login.styles.scss';
 import colours from '../style/constants/_colours.scss';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { FormTextField } from '../components/formInputs/FormTextField';
+import { TextField } from '../components/inputs/TextField';
 
 const accountsClient = new AccountsClient();
 
@@ -25,10 +27,12 @@ export default function Login() {
   const [creating, setCreating] = useState<boolean>(false);
 
   const {
-    register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
+    watch,
+    trigger,
   } = useForm<FormObject>({ mode: 'onBlur' });
 
   const auth = useAuth();
@@ -69,7 +73,17 @@ export default function Login() {
     reset({}, { keepValues: true });
   }, [creating]);
 
-  console.log(`Login.tsx:67 errors`, errors);
+  useEffect(() => {
+    if (watch('confirmPassword')) {
+      trigger('password');
+    }
+  }, [watch('confirmPassword')]);
+
+  useEffect(() => {
+    if (watch('password')) {
+      trigger('confirmPassword');
+    }
+  }, [watch('password')]);
 
   return loading ? (
     <PuffLoader color={colours.primaryColour} />
@@ -91,95 +105,116 @@ export default function Login() {
             Create
           </a>
         </div>
-        <div className='login__input__group'>
-          <input
-            {...register('username', {
-              required: 'Username is required',
-              validate: {
-                uniqueness: async (value: string) => {
-                  if (creating) {
-                    return (
-                      (await accountsClient.validateUsername(value)) ||
-                      'Username must be unique'
-                    );
-                  } else {
-                    return true;
-                  }
-                },
+        <Controller
+          name='username'
+          control={control}
+          rules={{
+            required: 'Username is required',
+            validate: {
+              uniqueness: async (value: string) => {
+                if (creating) {
+                  return (
+                    (await accountsClient.validateUsername(value)) ||
+                    'Username must be unique'
+                  );
+                } else {
+                  return true;
+                }
               },
-            })}
-            type='text'
-            className={`login__input ${errors.username && 'invalid'}`}
-            placeholder='Username'
-          />
-          <div className='login__error'>{errors.username?.message}</div>
-        </div>
-        <div className='login__input__group'>
-          <input
-            {...register('password', {
-              required: 'Password is required',
-              maxLength: 32,
-              pattern: {
-                value:
-                  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
-                message:
-                  '8 characters, 1 uppercase, 1 lowercase, a number, a special character',
-              },
-            })}
-            type='password'
-            className={`login__input ${errors.password && 'invalid'}`}
-            placeholder='Password'
-          />
-          <div className='login__error'>{errors.password?.message}</div>
-        </div>
+            },
+          }}
+          render={({ field: { onChange, onBlur, name, value } }) => (
+            <FormTextField
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              value={value}
+              errorsLookup={errors}
+              label='Username'
+            />
+          )}
+        />
+        <Controller
+          name='password'
+          control={control}
+          rules={{
+            required: 'Password is required',
+            maxLength: 32,
+            pattern: {
+              value:
+                /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+              message:
+                '8 characters, 1 uppercase, 1 lowercase, a number, a special character',
+            },
+          }}
+          render={({ field: { onChange, onBlur, name, value } }) => (
+            <FormTextField
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              value={value}
+              errorsLookup={errors}
+              label='Password'
+              type='password'
+            />
+          )}
+        />
         {creating && (
           <>
-            <div className='login__input__group'>
-              <input
-                {...register('confirmPassword', {
-                  required: creating && 'Password Confirmation is required',
-                  validate: (
-                    value: string | undefined,
-                    formValues: FormObject,
-                  ) => value === formValues.password || 'Passwords must match',
-                })}
-                type='password'
-                className={`login__input ${
-                  errors.confirmPassword && 'invalid'
-                }`}
-                placeholder='Confirm Password'
-              />
-              <div className='login__error'>
-                {errors.confirmPassword?.message}
-              </div>
-            </div>
-            <div className='login__input__group'>
-              <input
-                {...register('email', {
-                  required: creating && 'Email is required',
-                  pattern: {
-                    value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                    message: 'Must be a valid email',
+            <Controller
+              name='confirmPassword'
+              control={control}
+              rules={{
+                required: creating && 'Password Confirmation is required',
+                validate: (value: string | undefined, formValues: FormObject) =>
+                  value === formValues.password || 'Passwords must match',
+              }}
+              render={({ field: { onChange, onBlur, name, value } }) => (
+                <FormTextField
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  name={name}
+                  value={value}
+                  errorsLookup={errors}
+                  label='Confirm Password'
+                  type='password'
+                />
+              )}
+            />
+            <Controller
+              name='email'
+              control={control}
+              rules={{
+                required: creating && 'Email is required',
+                pattern: {
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  message: 'Must be a valid email',
+                },
+                validate: {
+                  uniqueness: async (value?: string) => {
+                    if (value === undefined || value === null) {
+                      return true;
+                    } else {
+                      return (
+                        (await accountsClient.validateEmail(value)) ||
+                        'Email must be unique'
+                      );
+                    }
                   },
-                  validate: {
-                    uniqueness: async (value?: string) => {
-                      if (value === undefined || value === null) {
-                        return true;
-                      } else {
-                        return (
-                          (await accountsClient.validateEmail(value)) ||
-                          'Email must be unique'
-                        );
-                      }
-                    },
-                  },
-                })}
-                type='email'
-                className={`login__input ${errors.email && 'invalid'}`}
-                placeholder='Email'
-              />
-              <div className='login__error'>{errors.email?.message}</div>
-            </div>
+                },
+              }}
+              render={({ field: { onChange, onBlur, name, value } }) => (
+                <FormTextField
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  name={name}
+                  value={value}
+                  errorsLookup={errors}
+                  label='Email'
+                  type='email'
+                />
+              )}
+            />
           </>
         )}
         {creating || (

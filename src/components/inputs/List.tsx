@@ -1,42 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
-  List,
   ListItem,
+  List as MuiList,
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
 import { FiberManualRecordOutlined as FiberIcon } from '@mui/icons-material';
-import { ListAdder, Change } from '../inputs/ListAdder';
+import { ListAdder, Change } from './ListAdder';
 import { Patch } from '../../interfaces/Requests';
 import _ from 'lodash';
-import TogglingLabel from './TogglingLabel';
 
-interface TogglingListProps {
+interface ListProps {
   value: string[];
   label: string;
   field: string;
   onSaveField?: Function;
-  noEdit?: boolean;
 }
 
-export default function TogglingList({
-  value,
-  label,
-  field,
-  onSaveField,
-  noEdit,
-}: TogglingListProps) {
+export const List = ({ value, label, field, onSaveField }: ListProps) => {
   const [currentItems, setCurrentItems] = useState<string[]>([]);
-  const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrentItems(value);
   }, [value]);
-
-  const toggleEdit = () => {
-    setEdit(!edit);
-  };
 
   const saveField = (changes: Change) => {
     let patchList: Patch[] = [];
@@ -63,10 +50,9 @@ export default function TogglingList({
     if (patchList.length) {
       onSaveField && onSaveField(field, patchList);
     }
-    toggleEdit();
   };
 
-  const returnField = edit ? (
+  return (
     <>
       <Typography variant='subtitle2' style={{ marginRight: '1em' }}>
         {' '}
@@ -74,24 +60,5 @@ export default function TogglingList({
       </Typography>
       <ListAdder label={label} items={currentItems} saveField={saveField} />
     </>
-  ) : (
-    <TogglingLabel label={label} column toggleEdit={toggleEdit} noEdit={noEdit}>
-      <List>
-        {currentItems?.map((item, index) => {
-          return (
-            <ListItem key={index}>
-              <ListItemIcon>
-                <FiberIcon fontSize='small' />
-              </ListItemIcon>
-              <ListItemText
-                primary={item}
-                primaryTypographyProps={{ variant: 'body2' }}
-              />
-            </ListItem>
-          );
-        })}
-      </List>
-    </TogglingLabel>
   );
-  return returnField;
-}
+};

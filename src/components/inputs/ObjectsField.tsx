@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { Change } from '../inputs/ListAdder';
+import { Change } from './ListAdder';
 import { Patch } from '../../interfaces/Requests';
 import _ from 'lodash';
-import TogglingLabel from './TogglingLabel';
 import { ToggleType } from '../../interfaces/Lookups';
-import TogglingTextField from './TogglingTextField';
+import { TextField } from './TextField';
 
-interface ToggledObject {
+interface ObjectField {
   name: string;
   desc: string;
 }
 
-interface TogglingObjectsFieldProps {
-  value: ToggledObject[];
+interface ObjectsFieldProps {
+  value: ObjectField[];
   label: string;
   field: string;
   outerSaveField?: Function;
@@ -21,24 +20,19 @@ interface TogglingObjectsFieldProps {
   toggleType?: ToggleType;
 }
 
-export default function TogglingObjectsField({
+export const ObjectsField = ({
   value,
   label,
   field,
   outerSaveField,
   noEdit,
   toggleType,
-}: TogglingObjectsFieldProps) {
-  const [currentItems, setCurrentItems] = useState<ToggledObject[]>([]);
-  const [edit, setEdit] = useState<boolean>(false);
+}: ObjectsFieldProps) => {
+  const [currentItems, setCurrentItems] = useState<ObjectField[]>([]);
 
   useEffect(() => {
     setCurrentItems(value);
   }, [value]);
-
-  const toggleEdit = () => {
-    setEdit(!edit);
-  };
 
   const saveField = (changes: Change) => {
     let patchList: Patch[] = [];
@@ -67,7 +61,6 @@ export default function TogglingObjectsField({
     if (patchList.length) {
       outerSaveField && outerSaveField(field, patchList);
     }
-    toggleEdit();
   };
 
   const returnField = () => {
@@ -80,14 +73,13 @@ export default function TogglingObjectsField({
         return (
           <Box display='flex' flexDirection='column'>
             {currentItems?.map((instance) => {
-              return (
-                <TogglingTextField
-                  label={instance['name']}
-                  value={instance['desc']}
-                  field={field}
-                  noEdit={noEdit}
-                />
-              );
+              // return (
+              //   // <TextField
+              //   //   label={instance['name']}
+              //   //   value={instance['desc']}
+              //   //   field={field}
+              //   // />
+              // );
             })}
           </Box>
         );
@@ -96,9 +88,9 @@ export default function TogglingObjectsField({
     }
   };
 
-  return (
-    <TogglingLabel label={label} title column toggleEdit={toggleEdit} noEdit>
-      {returnField()}
-    </TogglingLabel>
-  );
-}
+  // return (
+  //   <Label label={label} title column noEdit>
+  //     {returnField()}
+  //   </Label>
+  // );
+};

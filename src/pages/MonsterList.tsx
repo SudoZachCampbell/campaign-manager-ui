@@ -12,15 +12,13 @@ const client = new MonstersClient();
 interface MonsterListProps {}
 
 export default function MonsterList() {
-  const { token } = useAuth();
+  client.setAuthToken(useAuth().token);
 
   const columns: TableColumn[] = [
     { name: 'name', header: 'Name' },
     { name: 'passivePerception', header: 'Passive Perception' },
     { name: 'alignment', header: 'Alignment' },
   ];
-
-  client.setAuthToken(token);
 
   const {
     loading,

@@ -8,7 +8,7 @@ import SubMenu from '../components/SubMenu';
 import TogglingTextField from '../components/toggling/TogglingTextField';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
-import TogglingEnumField from '../components/toggling/TogglingEnumField';
+import TogglingEnumField from '../components/toggling/TogglingSelect';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 import { Base } from '../api/Model';

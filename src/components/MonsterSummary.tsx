@@ -6,7 +6,7 @@ import { FieldType, ToggleType } from '../interfaces/Lookups';
 import TogglingTextField from '../components/toggling/TogglingTextField';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
-import TogglingEnumField from '../components/toggling/TogglingEnumField';
+import TogglingEnumField from '../components/toggling/TogglingSelect';
 import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
 import { ClipLoader } from 'react-spinners';
 import { Monster, MonstersClient } from '../api/Model';

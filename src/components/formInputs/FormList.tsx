@@ -1,42 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import {
   Typography,
-  List,
   ListItem,
+  List as MuiList,
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
 import { FiberManualRecordOutlined as FiberIcon } from '@mui/icons-material';
-import { ListAdder, Change } from '../inputs/ListAdder';
+import { FormListAdder, Change } from './FormListAdder';
 import { Patch } from '../../interfaces/Requests';
 import _ from 'lodash';
-import TogglingLabel from './TogglingLabel';
 
-interface TogglingListProps {
+interface FormListProps {
   value: string[];
   label: string;
   field: string;
   onSaveField?: Function;
-  noEdit?: boolean;
 }
 
-export default function TogglingList({
+export const FormList = ({
   value,
   label,
   field,
   onSaveField,
-  noEdit,
-}: TogglingListProps) {
+}: FormListProps) => {
   const [currentItems, setCurrentItems] = useState<string[]>([]);
-  const [edit, setEdit] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrentItems(value);
   }, [value]);
-
-  const toggleEdit = () => {
-    setEdit(!edit);
-  };
 
   const saveField = (changes: Change) => {
     let patchList: Patch[] = [];
@@ -63,35 +55,15 @@ export default function TogglingList({
     if (patchList.length) {
       onSaveField && onSaveField(field, patchList);
     }
-    toggleEdit();
   };
 
-  const returnField = edit ? (
+  return (
     <>
       <Typography variant='subtitle2' style={{ marginRight: '1em' }}>
         {' '}
         {label}:
       </Typography>
-      <ListAdder label={label} items={currentItems} saveField={saveField} />
+      <FormListAdder label={label} items={currentItems} saveField={saveField} />
     </>
-  ) : (
-    <TogglingLabel label={label} column toggleEdit={toggleEdit} noEdit={noEdit}>
-      <List>
-        {currentItems?.map((item, index) => {
-          return (
-            <ListItem key={index}>
-              <ListItemIcon>
-                <FiberIcon fontSize='small' />
-              </ListItemIcon>
-              <ListItemText
-                primary={item}
-                primaryTypographyProps={{ variant: 'body2' }}
-              />
-            </ListItem>
-          );
-        })}
-      </List>
-    </TogglingLabel>
   );
-  return returnField;
-}
+};

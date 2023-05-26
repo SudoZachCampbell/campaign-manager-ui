@@ -43,12 +43,13 @@ export interface Change {
   [op: string]: Record<string, { index: string; value?: string }>;
 }
 
-export function ListAdder(props: {
+interface ListAdderProps {
   label: string;
   items: string[];
   saveField: Function;
-  toggleEdit: Function;
-}) {
+}
+
+export const ListAdder = ({ label, items, saveField }: ListAdderProps) => {
   interface List {
     index: number;
     value: string;
@@ -70,7 +71,7 @@ export function ListAdder(props: {
   }
 
   useEffect(() => {
-    const newList = props.items.map((value, index) => {
+    const newList = items.map((value, index) => {
       return {
         index,
         value,
@@ -141,12 +142,8 @@ export function ListAdder(props: {
     setDeleteIndex(-1);
   };
 
-  const saveField = () => {
-    props.saveField(changes);
-  };
-
   const toggleEdit = () => {
-    props.toggleEdit();
+    toggleEdit();
   };
 
   const listArea = (
@@ -178,7 +175,7 @@ export function ListAdder(props: {
       <IconButton onClick={toggleEdit} size='large'>
         <CancelIcon />
       </IconButton>
-      <IconButton onClick={saveField} size='large'>
+      <IconButton onClick={() => saveField(changes)} size='large'>
         <SaveIcon />
       </IconButton>
       <ConfirmationDialogRaw
@@ -189,14 +186,14 @@ export function ListAdder(props: {
         keepMounted
         open={deleteIndex !== -1}
         onClose={handleDeleteClose}
-        title={props.label}
+        title={label}
         value={deleteIndex}
       />
     </Box>
   );
 
   return listArea;
-}
+};
 
 export interface ConfirmationDialogRawProps {
   classes: Record<'paper', string>;
@@ -242,6 +239,7 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
         </Typography>
       </DialogContent>
       <DialogActions>
+        props
         <Button autoFocus onClick={handleCancel} color='primary'>
           Cancel
         </Button>

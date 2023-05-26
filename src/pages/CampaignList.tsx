@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
-import { CampaignClient } from '../api/Model';
+import { CampaignsClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
-const campaignClient = new CampaignClient();
+const client = new CampaignsClient();
 
 export const CampaignList = () => {
+  client.setAuthToken(useAuth().token);
+  const navigate = useNavigate();
+
   const { invoke, response: campaigns } = useDndCollectionApi(() =>
-    campaignClient.getCampaigns(),
+    client.getCampaigns(),
   );
 
   useEffect(() => {
@@ -23,6 +28,9 @@ export const CampaignList = () => {
           ))}
         </tbody>
       </table>
+      <button onClick={() => navigate('/campaigns/create')}>
+        New Campaign
+      </button>
     </div>
   );
 };
