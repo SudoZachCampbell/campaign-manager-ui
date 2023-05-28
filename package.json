@@ -39,7 +39,10 @@
     "typeface-roboto": "0.0.75"
   },
   "devDependencies": {
+    "@types/eslint": "^8.40.0",
+    "@types/react": "^18.2.7",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
     "ajv": "^6.12.6",
     "cross-env": "^7.0.2",
     "eslint": "^8.39.0",

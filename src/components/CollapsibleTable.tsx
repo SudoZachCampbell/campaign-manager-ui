@@ -1,39 +1,9 @@
 ﻿import { useState } from 'react';
-import { styled } from '@mui/material/styles';
 import * as React from 'react';
 import * as _ from 'lodash';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
-import { ITableList } from '../interfaces/Models';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 import { Base } from '../api/Model';
-
-const PREFIX = 'CollapsibleTable';
-
-const classes = {
-  root: `${PREFIX}-root`,
-};
-
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
-const Root = styled('div')({
-  [`& .${classes.root}`]: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-});
 
 //#region TableData
 export interface CollapsibleTableProps<T> {
@@ -46,80 +16,90 @@ export interface TableColumn {
   name: string;
   header: string;
   hidden?: boolean;
+  link?: (props: Record<string, any>) => string;
 }
 
-export const CollapsibleTable = <T extends Base>({
+interface TableData extends Base {
+  name: string;
+}
+
+export const CollapsibleTable = <T extends TableData>({
   dataSet,
   Component,
   columns,
 }: CollapsibleTableProps<T>): JSX.Element => {
-  const columnNames = columns.reduce<string[]>((acc, { name }) => {
-    acc.push(name);
-    return acc;
-  }, []);
+  const columnLookup = columns.reduce<Record<string, TableColumn>>(
+    (acc, column) => {
+      acc[column.name] = column;
+      return acc;
+    },
+    {},
+  );
+
+  console.log(`CollapsibleTable.tsx:39 columnLookup`, columnLookup);
 
   return (
-    <Grid item style={{ margin: 'auto' }} xs={10}>
-      <TableContainer component={Paper}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell key='Empty'></TableCell>
-              {columns.map(({ header }) => (
-                <TableCell key={header}>{header}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {dataSet.map((instance: T) => {
-              const picked = _.pick(instance, columnNames);
-              return <Row key={instance.id} instance={picked} />;
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Grid>
+    <div className='table__container'>
+      <table>
+        <thead>
+          <tr>
+            <td key='Empty'></td>
+            {columns.map(({ header }) => (
+              <td key={header}>{header}</td>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {dataSet.map((instance: T) => {
+            console.log(`CollapsibleTable.tsx:52 instance`, instance);
+            return (
+              <Row
+                key={instance.id}
+                instance={instance}
+                columnMeta={columnLookup}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
 interface RowProps<T> {
-  Component?: React.ReactNode;
   instance: Partial<T>;
+  columnMeta: Record<string, TableColumn>;
 }
 
 const Row = <T extends Base>({
-  Component,
   instance,
+  columnMeta,
 }: RowProps<T>): JSX.Element => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const types = {
-    NpcSummary: NpcSummary,
-    MonsterSummary: MonsterSummary,
-  };
-
   return (
-    <>
-      <TableRow className={classes.root}>
-        <TableCell>
-          <IconButton size='small' onClick={() => setOpen(!open)}>
+    <tr>
+      <td>
+        {/* <IconButton size='small' onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </TableCell>
-        {Object.entries(instance).map(([key, instanceData]) => {
-          return <TableCell key={key}>{instanceData}</TableCell>;
-        })}
-      </TableRow>
-      <TableRow>
-        <TableCell
-          style={{ paddingBottom: 0, paddingTop: 0 }}
-          colSpan={Object.keys(instance).length + 1}
-        >
-          <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box>{Component}</Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
+          </IconButton> */}
+      </td>
+      {Object.entries(instance).reduce<JSX.Element[]>(
+        (acc, [key, instanceData]) => {
+          const columnEntry = columnMeta[key];
+          if (columnEntry) {
+            acc.push(
+              <td key={key}>
+                {columnEntry.link ? (
+                  <a href={columnEntry.link(instance)}>{instanceData}</a>
+                ) : (
+                  instanceData
+                )}
+              </td>,
+            );
+          }
+          return acc;
+        },
+        [],
+      )}
+    </tr>
   );
 };

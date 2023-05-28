@@ -24,7 +24,6 @@ export const FormSelect = ({
   errorsLookup,
   options,
 }: FormSelectProps) => {
-  console.log(`FormSelect.tsx:26 options`, options);
   return (
     <div className='form__input__group'>
       <Select

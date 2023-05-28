@@ -1,12 +1,12 @@
-import { Controller, useForm } from 'react-hook-form';
-import { Campaign, CampaignsClient, CampaignType } from '../api/Model';
-import { useAuth } from '../hooks/useAuth';
-import { useParams } from 'react-router-dom';
-import { useDnDApi } from '../api/dndDb';
-import { useEffect } from 'react';
-import { FormTextField } from '../components/formInputs/FormTextField';
 import _ from 'lodash';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Campaign, CampaignType, CampaignsClient } from '../api/Model';
+import { useDnDApi } from '../api/dndDb';
 import { FormSelect } from '../components/formInputs/FormSelect';
+import { FormawdawdTextField } from '../components/formInputs/FormTextField';
+import { useAuth } from '../hooks/useAuth';
 
 interface CampaignDetailsProps {}
 
@@ -14,6 +14,7 @@ const client = new CampaignsClient();
 
 export const CampaignDetails = ({}: CampaignDetailsProps) => {
   const { id: campaignId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const { invoke, response: campaign } = useDnDApi(() =>
     client.getCampaignById(campaignId ?? ''),
@@ -36,20 +37,12 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
     trigger,
   } = useForm<Campaign>({ mode: 'onBlur' });
 
-  const updateCampaign = (payload: Campaign) => {
+  const updateCampaign = async (payload: Campaign) => {
     if (campaignId) {
     } else {
-      client.createCampaign(payload);
+      const { id } = await client.createCampaign(payload);
     }
   };
-
-  console.log(
-    `CampaignDetails.tsx:46 Object.values(CampaignType)`,
-    Object.values(CampaignType).slice(
-      0,
-      Object.values(CampaignType).length / 2,
-    ),
-  );
 
   return (
     <div>
@@ -76,12 +69,10 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
               onBlur={onBlur}
               name={name}
               value={value}
-              options={Object.values(CampaignType)
-                .slice(0, Object.values(CampaignType).length / 2)
-                .map((type) => ({
-                  value: type.toString(),
-                  label: _.startCase(type.toString()),
-                }))}
+              options={Object.values(CampaignType).map((type) => ({
+                value: type.toString(),
+                label: _.startCase(type.toString()),
+              }))}
             />
           )}
         />

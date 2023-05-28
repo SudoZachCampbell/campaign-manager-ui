@@ -24,7 +24,7 @@ const NpcList = () => {
     invoke,
     response: npcs,
   } = useDndCollectionApi(() =>
-    npcClient.getAll(1, 10, null, null, expand.join(',')),
+    npcClient.getAll(1, 10, '', null, expand.join(',')),
   );
 
   useEffect(() => {

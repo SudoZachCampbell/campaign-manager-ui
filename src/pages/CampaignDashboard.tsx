@@ -16,7 +16,7 @@ export const CampaignDashboard = ({}: CampaignDashboardProps) => {
   const { id: campaignId } = useParams<{ id: string }>();
 
   const { invoke, response: campaign } = useDnDApi(() =>
-    client.getCampaignById(campaignId ?? ''),
+    client.getCampaignById(campaignId ?? '', 'monsters'),
   );
 
   useEffect(() => {
@@ -26,30 +26,20 @@ export const CampaignDashboard = ({}: CampaignDashboardProps) => {
   }, [campaignId]);
 
   client.setAuthToken(useAuth().token);
-
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-    watch,
-    trigger,
-  } = useForm<Campaign>({ mode: 'onBlur' });
-
-  const updateCampaign = (payload: Campaign) => {
-    if (campaignId) {
-    } else {
-      client.createCampaign(payload);
-    }
-  };
-
-  console.log(
-    `CampaignDetails.tsx:46 Object.values(CampaignType)`,
-    Object.values(CampaignType).slice(
-      0,
-      Object.values(CampaignType).length / 2,
-    ),
+  return (
+    <div className='campaigndash__container'>
+      <div className='campaigndash__top'>
+        <div className='campaigndash__monster_container'>
+          <table>
+            <thead></thead>
+            <tbody>{}</tbody>
+          </table>
+        </div>
+        <div className='campaigndash__location__container'></div>
+      </div>
+      <div className='campaigndash__bottom'>
+        <div className='campaigndash__player__container'></div>
+      </div>
+    </div>
   );
-
-  return <div></div>;
 };

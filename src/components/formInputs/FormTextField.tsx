@@ -10,7 +10,7 @@ interface FormTextFieldProps<T> {
   errorsLookup?: Record<string, any>;
   label?: string;
   className?: string;
-  type?: 'text' | 'password' | 'email';
+  type?: 'text' | 'password' | 'email' | 'number';
 }
 
 export const FormTextField = <T,>({

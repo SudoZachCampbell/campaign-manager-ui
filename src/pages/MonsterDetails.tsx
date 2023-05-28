@@ -1,141 +1,81 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Field } from '../interfaces/Models';
 import { Typography } from '@mui/material';
-import { ApiType, useDnDApi } from '../api/dndDb';
 import _ from 'lodash';
+import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Campaign, CampaignType, Monster, MonstersClient } from '../api/Model';
+import { ApiType, useDnDApi } from '../api/dndDb';
+import { FormSelect } from '../components/formInputs/FormSelect';
+import { FormTextField } from '../components/formInputs/FormTextField';
+import { useAuth } from '../hooks/useAuth';
 import Details from '../layouts/Details';
-import { FieldType } from '../interfaces/Lookups';
-import { Monster, MonstersClient } from '../api/Model';
-
-const ignoreFields: string[] = [
-  'picture',
-  'buildings',
-  'locales',
-  'npcs',
-  'reactions',
-  'speed',
-  'proficiencies',
-  'actions',
-  'legendary_actions',
-  'special_abilities',
-];
-
-const expand = ['Buildings', 'Locales'];
-
-const client = new MonstersClient();
-
-const fields: Field<Monster>[] = [
-  {
-    name: 'name',
-    type: FieldType.String,
-  },
-  {
-    name: 'size',
-    type: FieldType.String,
-  },
-  {
-    name: 'hitDice',
-    type: FieldType.String,
-  },
-  {
-    name: 'languages',
-    type: FieldType.String,
-  },
-  {
-    name: 'challengeRating',
-    type: FieldType.Number,
-  },
-  {
-    name: 'passivePerception',
-    type: FieldType.Number,
-  },
-  {
-    name: 'monsterType',
-    type: FieldType.Enum,
-  },
-  {
-    name: 'strength',
-    type: FieldType.Number,
-  },
-  {
-    name: 'dexterity',
-    type: FieldType.Number,
-  },
-  {
-    name: 'constitution',
-    type: FieldType.Number,
-  },
-  {
-    name: 'intelligence',
-    type: FieldType.Number,
-  },
-  {
-    name: 'wisdom',
-    type: FieldType.Number,
-  },
-  {
-    name: 'charisma',
-    type: FieldType.Number,
-  },
-  {
-    name: 'armorClass',
-    type: FieldType.String,
-  },
-  {
-    name: 'hitPoints',
-    type: FieldType.String,
-  },
-  {
-    name: 'alignment',
-    type: FieldType.Enum,
-  },
-];
 
 interface MonsterDetailsProps {}
 
-export default function MonsterDetails() {
+const client = new MonstersClient();
+
+export const MonsterDetails = ({}: MonsterDetailsProps) => {
   const { id: monsterId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  client.setAuthToken(useAuth().token);
 
   const {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi((id: string) => client.getMonsterById(id, expand.join(',')));
+  } = useDnDApi((id: string) => client.getMonsterById(id, null, ''));
 
   useEffect(() => {
-    invoke(monsterId);
+    if (monsterId) {
+      invoke();
+    }
   }, [monsterId]);
 
-  const tabs = {
-    headers: ['Pictures', 'Location'],
-    data: [<Pictures />, <Location />],
+  const { handleSubmit, control } = useForm<Monster>({ mode: 'onBlur' });
+
+  const updateMonster = async (payload: Monster) => {
+    if (monsterId) {
+    } else {
+      await client.createMonster(payload);
+      navigate(`/monsters`);
+    }
   };
 
-  const loadingCheck = loading ? (
-    <Typography>Loading</Typography>
-  ) : monster ? (
-    <Details
-      entity={monster}
-      type={ApiType.MONSTER}
-      ignoreFields={ignoreFields}
-      expand={expand}
-      tabs={tabs}
-      fields={fields}
-      onSave={() => {}}
-    />
-  ) : (
-    <p>Error loading monster</p>
+  return (
+    <div>
+      <form onSubmit={handleSubmit(updateMonster)}>
+        <Controller
+          name='name'
+          control={control}
+          render={({ field: { onChange, onBlur, name, value } }) => (
+            <FormTextField
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              value={value}
+              label='Name'
+            />
+          )}
+        />
+        <Controller
+          name='type'
+          control={control}
+          render={({ field: { onChange, onBlur, name, value } }) => (
+            <FormSelect
+              onChange={onChange}
+              onBlur={onBlur}
+              name={name}
+              value={value}
+              options={Object.values(CampaignType).map((type) => ({
+                value: type.toString(),
+                label: _.startCase(type.toString()),
+              }))}
+            />
+          )}
+        />
+        <input value='Create' type='submit' />
+      </form>
+    </div>
   );
-
-  return loadingCheck;
-}
-
-function Pictures() {
-  return <Typography>Test Pictures</Typography>;
-}
-
-function Location() {
-  return <Typography>Test Location</Typography>;
-}
+};

@@ -1,10 +1,22 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PuffLoader } from 'react-spinners';
 import { CampaignsClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
+import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
 import { useAuth } from '../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 
 const client = new CampaignsClient();
+
+const columns: TableColumn[] = [
+  {
+    name: 'id',
+    header: 'ID',
+    link: ({ id }) => `/campaigns/${id}/dashboard`,
+  },
+  { name: 'name', header: 'Name' },
+  { name: 'type', header: 'Type' },
+];
 
 export const CampaignList = () => {
   client.setAuthToken(useAuth().token);
@@ -18,19 +30,14 @@ export const CampaignList = () => {
     invoke();
   }, []);
 
-  return (
+  return campaigns ? (
     <div>
-      <table>
-        <thead></thead>
-        <tbody>
-          {campaigns?.map((campaign) => (
-            <tr>{campaign.id}</tr>
-          ))}
-        </tbody>
-      </table>
+      <CollapsibleTable dataSet={campaigns} columns={columns} />
       <button onClick={() => navigate('/campaigns/create')}>
         New Campaign
       </button>
     </div>
+  ) : (
+    <PuffLoader />
   );
 };

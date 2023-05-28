@@ -9,7 +9,7 @@ import 'typeface-roboto';
 
 import './custom.css';
 import NpcDetails from './pages/NpcDetails';
-import MonsterDetails from './pages/MonsterDetails';
+import { MonsterDetails } from './pages/MonsterDetails';
 import {
   createTheme,
   ThemeProvider,
@@ -23,6 +23,7 @@ import { AuthLayout } from './layouts/AuthLayout';
 import { AccountLayout } from './layouts/AccountLayout';
 import { CampaignList } from './pages/CampaignList';
 import { CampaignDetails } from './pages/CampaignDetails';
+import { CampaignDashboard } from './pages/CampaignDashboard';
 
 export default function App() {
   const [pageName, setPageName] = useState('');
@@ -44,6 +45,10 @@ export default function App() {
             <Route path='/campaigns' element={<CampaignList />} />
             <Route path='/campaigns/create' element={<CampaignDetails />} />
             <Route path='/campaigns/update/:id' element={<CampaignDetails />} />
+            <Route
+              path='/campaigns/:id/dashboard'
+              element={<CampaignDashboard />}
+            />
             <Route path='/monsters' element={<MonsterList />} />
             <Route path='/location-hub' element={<LocationHub />} />
             <Route path='/' element={<Home />} />

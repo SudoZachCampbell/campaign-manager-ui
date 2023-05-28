@@ -9,8 +9,6 @@ import { useAuth } from '../hooks/useAuth';
 
 const client = new MonstersClient();
 
-interface MonsterListProps {}
-
 export default function MonsterList() {
   client.setAuthToken(useAuth().token);
 

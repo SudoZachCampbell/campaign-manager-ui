@@ -13,7 +13,7 @@ interface TextFieldProps {
   pattern?: string;
   required?: boolean;
   disabled?: boolean;
-  type?: 'text' | 'password' | 'email';
+  type?: 'text' | 'password' | 'email' | 'number';
 }
 
 export const TextField = ({
