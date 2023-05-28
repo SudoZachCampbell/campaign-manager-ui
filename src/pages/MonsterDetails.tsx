@@ -43,7 +43,19 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
         handleSubmit,
         control,
         formState: {errors},
-    } = useForm<Monster>({mode: 'onBlur'});
+    } = useForm<Monster>({
+        defaultValues: {
+            alignment: Alignment.None,
+            strength: 10,
+            dexterity: 10,
+            constitution: 10,
+            intelligence: 10,
+            wisdom: 10,
+            charisma: 10,
+            armorClass: 0,
+            hitPoints: 0
+        }, mode: 'onBlur'
+    });
 
     const updateMonster = async (payload: Monster) => {
         if (monsterId) {
@@ -55,6 +67,9 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
 
     return (
         <div>
+            <div>
+                <h1>{monster?.name ?? 'Create Monster'}</h1>
+            </div>
             <form onSubmit={handleSubmit(updateMonster)}>
                 <Controller
                     name="name"
@@ -95,6 +110,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Strength"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -188,6 +204,38 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                     )}
                 />
                 <Controller
+                    name="passivePerception"
+                    control={control}
+                    render={({field: {onChange, onBlur, name, value}}) => (
+                        <FormTextField
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name={name}
+                            value={value}
+                            label="Passive Perception"
+                            type="number"
+                            min="0"
+                            errorsLookup={errors}
+                        />
+                    )}
+                />
+                <Controller
+                    name="challengeRating"
+                    control={control}
+                    render={({field: {onChange, onBlur, name, value}}) => (
+                        <FormTextField
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name={name}
+                            value={value}
+                            label="Challenge Rating"
+                            type="number"
+                            min="0"
+                            errorsLookup={errors}
+                        />
+                    )}
+                />
+                <Controller
                     name="armorClass"
                     control={control}
                     render={({field: {onChange, onBlur, name, value}}) => (
@@ -259,6 +307,20 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Languages"
+                            errorsLookup={errors}
+                        />
+                    )}
+                />
+                <Controller
+                    name="proficiencies"
+                    control={control}
+                    render={({field: {onChange, onBlur, name, value}}) => (
+                        <FormTextField
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name={name}
+                            value={value}
+                            label="Proficiencies"
                             errorsLookup={errors}
                         />
                     )}

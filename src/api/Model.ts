@@ -709,7 +709,7 @@ export class CampaignsClient extends Client {
         return Promise.resolve<Campaign[]>(null as any);
     }
 
-    createCampaign(campaign: Campaign, user?: Account | null | undefined): Promise<Campaign> {
+    createCampaign(campaign: Campaign, user?: Account | null | undefined): Promise<string> {
         let url_ = this.baseUrl + "/Campaigns";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -732,26 +732,27 @@ export class CampaignsClient extends Client {
         });
     }
 
-    protected processCreateCampaign(response: Response): Promise<Campaign> {
+    protected processCreateCampaign(response: Response): Promise<string> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && response.headers.forEach) {
             response.headers.forEach((v: any, k: any) => _headers[k] = v);
         }
         ;
-        if (status === 200) {
+        if (status === 201) {
             return response.text().then((_responseText) => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = Campaign.fromJS(resultData200);
-                return result200;
+                let result201: any = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+
+                return result201;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Campaign>(null as any);
+        return Promise.resolve<string>(null as any);
     }
 
     getCampaignById(id: string, include?: string | null | undefined, expand?: string | null | undefined, filter?: string | undefined): Promise<Campaign> {
@@ -1582,7 +1583,7 @@ export class MonstersClient extends Client {
         return Promise.resolve<Monster[]>(null as any);
     }
 
-    createMonster(monster: Monster, user?: Account | null | undefined): Promise<Monster> {
+    createMonster(monster: Monster, user?: Account | null | undefined): Promise<string> {
         let url_ = this.baseUrl + "/Monsters";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1605,26 +1606,27 @@ export class MonstersClient extends Client {
         });
     }
 
-    protected processCreateMonster(response: Response): Promise<Monster> {
+    protected processCreateMonster(response: Response): Promise<string> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && response.headers.forEach) {
             response.headers.forEach((v: any, k: any) => _headers[k] = v);
         }
         ;
-        if (status === 200) {
+        if (status === 201) {
             return response.text().then((_responseText) => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = Monster.fromJS(resultData200);
-                return result200;
+                let result201: any = null;
+                let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+
+                return result201;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Monster>(null as any);
+        return Promise.resolve<string>(null as any);
     }
 
     getMonsterById(id: string, include?: string | null | undefined, expand?: string | null | undefined, filter?: string | undefined): Promise<Monster> {
