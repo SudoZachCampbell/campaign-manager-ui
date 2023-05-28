@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Campaign, CampaignType, CampaignsClient } from '../api/Model';
 import { useDnDApi } from '../api/dndDb';
 import { FormSelect } from '../components/formInputs/FormSelect';
-import { FormawdawdTextField } from '../components/formInputs/FormTextField';
+import { FormTextField } from '../components/formInputs/FormTextField';
 import { useAuth } from '../hooks/useAuth';
 
 interface CampaignDetailsProps {}
@@ -48,7 +48,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
     <div>
       <form onSubmit={handleSubmit(updateCampaign)}>
         <Controller
-          name='name'
+          name="name"
           control={control}
           render={({ field: { onChange, onBlur, name, value } }) => (
             <FormTextField
@@ -56,12 +56,12 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
               onBlur={onBlur}
               name={name}
               value={value}
-              label='Name'
+              label="Name"
             />
           )}
         />
         <Controller
-          name='type'
+          name="type"
           control={control}
           render={({ field: { onChange, onBlur, name, value } }) => (
             <FormSelect
@@ -76,7 +76,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
             />
           )}
         />
-        <input value='Create' type='submit' />
+        <input value="Create" type="submit" />
       </form>
     </div>
   );

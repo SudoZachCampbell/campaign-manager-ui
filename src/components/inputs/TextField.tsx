@@ -8,8 +8,8 @@ interface TextFieldProps {
   onChange?: (event: { target: any; type?: any }) => void;
   onBlur?: (event: { target: any; type?: any }) => void;
   name?: string;
-  maxLength?: number;
-  minLength?: number;
+  max?: string;
+  min?: string;
   pattern?: string;
   required?: boolean;
   disabled?: boolean;
@@ -23,8 +23,8 @@ export const TextField = ({
   onChange,
   onBlur,
   name,
-  maxLength,
-  minLength,
+  max,
+  min,
   pattern,
   required,
   disabled,
@@ -42,8 +42,8 @@ export const TextField = ({
       onChange={_onChange}
       onBlur={onBlur}
       name={name}
-      maxLength={maxLength}
-      minLength={minLength}
+      max={max}
+      min={min}
       pattern={pattern}
       required={required}
       disabled={disabled}

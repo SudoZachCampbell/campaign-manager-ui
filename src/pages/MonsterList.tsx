@@ -6,11 +6,13 @@ import MonsterSummary from '../components/MonsterSummary';
 import { MonstersClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 const client = new MonstersClient();
 
 export default function MonsterList() {
   client.setAuthToken(useAuth().token);
+  const navigate = useNavigate();
 
   const columns: TableColumn[] = [
     { name: 'name', header: 'Name' },
@@ -33,7 +35,10 @@ export default function MonsterList() {
       <em>Loading...</em>
     </p>
   ) : monsters ? (
-    <CollapsibleTable dataSet={monsters} columns={columns} />
+    <>
+      <CollapsibleTable dataSet={monsters} columns={columns} />
+      <button onClick={() => navigate('/monsters/create')}>New Monster</button>
+    </>
   ) : (
     <p>
       <em>Error loading Monsters</em>

@@ -42,23 +42,24 @@ export default function App() {
       <Routes>
         <Route element={<AuthLayout />}>
           <Route element={<AccountLayout />}>
-            <Route path='/campaigns' element={<CampaignList />} />
-            <Route path='/campaigns/create' element={<CampaignDetails />} />
-            <Route path='/campaigns/update/:id' element={<CampaignDetails />} />
+            <Route path="/campaigns" element={<CampaignList />} />
+            <Route path="/campaigns/create" element={<CampaignDetails />} />
+            <Route path="/campaigns/update/:id" element={<CampaignDetails />} />
             <Route
-              path='/campaigns/:id/dashboard'
+              path="/campaigns/:id/dashboard"
               element={<CampaignDashboard />}
             />
-            <Route path='/monsters' element={<MonsterList />} />
-            <Route path='/location-hub' element={<LocationHub />} />
-            <Route path='/' element={<Home />} />
+            <Route path="/monsters" element={<MonsterList />} />
+            <Route path="/monsters/create" element={<MonsterDetails />} />
+            <Route path="/location-hub" element={<LocationHub />} />
+            <Route path="/" element={<Home />} />
           </Route>
           <Route element={<GuestLayout />}>
-            <Route path='/login' element={<Login />} />
+            <Route path="/login" element={<Login />} />
           </Route>
-          <Route path='/npcs' element={<NpcList />} />
-          <Route path='/npcs/:id' element={<NpcDetails />} />
-          <Route path='/monsters/:id' element={<MonsterDetails />} />
+          <Route path="/npcs" element={<NpcList />} />
+          <Route path="/npcs/:id" element={<NpcDetails />} />
+          <Route path="/monsters/:id" element={<MonsterDetails />} />
         </Route>
       </Routes>
     </ThemeProvider>
