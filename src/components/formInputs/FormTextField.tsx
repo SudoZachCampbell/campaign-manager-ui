@@ -9,6 +9,7 @@ interface FormTextFieldProps<T> {
     name: string;
     max?: string;
     min?: string;
+    step?: string;
     errorsLookup?: Record<string, any>;
     label?: string;
     className?: string;
@@ -22,6 +23,7 @@ export const FormTextField = <T, >({
                                        name,
                                        max,
                                        min,
+                                       step,
                                        className,
                                        type = 'text',
                                        label,

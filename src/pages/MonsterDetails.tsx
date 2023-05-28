@@ -8,7 +8,7 @@ import {
     Campaign,
     CampaignType,
     Monster,
-    MonstersClient, Size,
+    MonstersClient, MonsterType, Size,
 } from '../api/Model';
 import {ApiType, useDnDApi} from '../api/dndDb';
 import {FormSelect} from '../components/formInputs/FormSelect';
@@ -46,6 +46,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     } = useForm<Monster>({
         defaultValues: {
             alignment: Alignment.None,
+            monsterType: MonsterType.None,
             strength: 10,
             dexterity: 10,
             constitution: 10,
@@ -81,6 +82,22 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Name"
+                        />
+                    )}
+                />
+                <Controller
+                    name="monsterType"
+                    control={control}
+                    render={({field: {onChange, onBlur, name, value}}) => (
+                        <FormSelect
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            name={name}
+                            value={value}
+                            options={Object.values(MonsterType).map((monsterType) => ({
+                                value: monsterType.toString(),
+                                label: _.startCase(monsterType.toString()),
+                            }))}
                         />
                     )}
                 />
@@ -128,6 +145,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Dexterity"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -145,6 +163,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Constitution"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -162,6 +181,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Intelligence"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -179,6 +199,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Wisdom"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -196,6 +217,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Charisma"
+                            step="1"
                             type="number"
                             max="20"
                             min="0"
@@ -213,6 +235,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Passive Perception"
+                            step="1"
                             type="number"
                             min="0"
                             errorsLookup={errors}
@@ -245,6 +268,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Armor Class"
+                            step="1"
                             type="number"
                             min="0"
                             errorsLookup={errors}
@@ -261,6 +285,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
                             name={name}
                             value={value}
                             label="Hit Points"
+                            step="1"
                             type="number"
                             min="0"
                             errorsLookup={errors}
