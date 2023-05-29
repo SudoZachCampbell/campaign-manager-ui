@@ -25,20 +25,22 @@ export const FormSelect = ({
                                options,
                            }: FormSelectProps) => {
     return (
-        <div className='form__input__group'>
-            <Select
-                onBlur={onBlur}
-                onChange={onChange}
-                value={value}
-                className={`form__input${
-                    errorsLookup?.[name] ? ' invalid ' : ' '
-                }${className ?? ''}`}
-                label={label}
-                options={options}
-            />
-            {errorsLookup && (
-                <div className='form__error'>{errorsLookup[name]?.message}</div>
-            )}
+        <div className='form__input__container'>
+            <div className='form__input__group'>
+                <Select
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    value={value}
+                    className={`form__input${
+                        errorsLookup?.[name] ? ' invalid ' : ' '
+                    }${className ?? ''}`}
+                    label={label}
+                    options={options}
+                />
+                {errorsLookup && (
+                    <div className='form__error'>{errorsLookup[name]?.message}</div>
+                )}
+            </div>
         </div>
     );
 };

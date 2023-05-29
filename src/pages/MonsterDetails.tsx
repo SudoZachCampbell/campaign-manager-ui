@@ -1,357 +1,125 @@
-import {Typography} from '@mui/material';
-import _ from 'lodash';
-import {useEffect} from 'react';
-import {Controller, useForm} from 'react-hook-form';
-import {useNavigate, useParams} from 'react-router-dom';
-import {
-    Alignment,
-    Campaign,
-    CampaignType,
-    Monster,
-    MonstersClient, MonsterType, Size,
-} from '../api/Model';
-import {ApiType, useDnDApi} from '../api/dndDb';
-import {FormSelect} from '../components/formInputs/FormSelect';
-import {FormTextField} from '../components/formInputs/FormTextField';
-import {useAuth} from '../hooks/useAuth';
-import Details from '../layouts/Details';
+import { useEffect, useState, useMemo, FC } from 'react';
+import { useForm, UseFormReturn } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Alignment, Monster, MonstersClient, MonsterType } from '../api/Model';
+import { useDnDApi } from '../api/dndDb';
+import { useAuth } from '../hooks/useAuth';
+import './MonsterDetails.styles.scss';
+import { MonsterDetailsForm } from '../sections/monsterDetails/MonsterDetailsForm';
+import { Link } from '../components/Link';
 
-interface MonsterDetailsProps {
-}
+interface MonsterDetailsProps {}
 
 const client = new MonstersClient();
 
+type MonsterDetailsTab =
+  | 'details'
+  | 'speed'
+  | 'actions'
+  | 'reactions'
+  | 'legendaryActions'
+  | 'specialAbilities';
+
+const tabs: Record<MonsterDetailsTab, FC<{ form: UseFormReturn<Monster> }>> = {
+  details: MonsterDetailsForm,
+  speed: MonsterDetailsForm,
+  actions: MonsterDetailsForm,
+  reactions: MonsterDetailsForm,
+  legendaryActions: MonsterDetailsForm,
+  specialAbilities: MonsterDetailsForm,
+};
+
 export const MonsterDetails = ({}: MonsterDetailsProps) => {
-    const {id: monsterId} = useParams<{ id: string }>();
-    const navigate = useNavigate();
+  const [currentTabName, setCurrentTabName] =
+    useState<MonsterDetailsTab>('details');
+  const { id: monsterId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-    client.setAuthToken(useAuth().token);
+  client.setAuthToken(useAuth().token);
 
-    const {
-        loading,
-        invoke,
-        response: monster,
-    } = useDnDApi((id: string) => client.getMonsterById(id, null, ''));
+  const {
+    loading,
+    invoke,
+    response: monster,
+  } = useDnDApi((id: string) => client.getMonsterById(id, null, ''));
 
-    useEffect(() => {
-        if (monsterId) {
-            invoke();
-        }
-    }, [monsterId]);
+  useEffect(() => {
+    if (monsterId) {
+      invoke();
+    }
+  }, [monsterId]);
 
-    const {
-        handleSubmit,
-        control,
-        formState: {errors},
-    } = useForm<Monster>({
-        defaultValues: {
-            alignment: Alignment.None,
-            monsterType: MonsterType.None,
-            strength: 10,
-            dexterity: 10,
-            constitution: 10,
-            intelligence: 10,
-            wisdom: 10,
-            charisma: 10,
-            armorClass: 0,
-            hitPoints: 0
-        }, mode: 'onBlur'
-    });
+  const form = useForm<Monster>({
+    defaultValues: {
+      alignment: Alignment.None,
+      monsterType: MonsterType.None,
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10,
+      armorClass: 0,
+      hitPoints: 0,
+    },
+    mode: 'onBlur',
+  });
 
-    const updateMonster = async (payload: Monster) => {
-        if (monsterId) {
-        } else {
-            await client.createMonster(payload);
-            navigate(`/monsters`);
-        }
-    };
+  const updateMonster = async (payload: Monster) => {
+    if (monsterId) {
+    } else {
+      await client.createMonster(payload);
+      navigate(`/monsters`);
+    }
+  };
 
-    return (
-        <div>
-            <div>
-                <h1>{monster?.name ?? 'Create Monster'}</h1>
-            </div>
-            <form onSubmit={handleSubmit(updateMonster)}>
-                <Controller
-                    name="name"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Name"
-                        />
-                    )}
-                />
-                <Controller
-                    name="monsterType"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormSelect
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            options={Object.values(MonsterType).map((monsterType) => ({
-                                value: monsterType.toString(),
-                                label: _.startCase(monsterType.toString()),
-                            }))}
-                        />
-                    )}
-                />
-                <Controller
-                    name="alignment"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormSelect
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            options={Object.values(Alignment).map((alignment) => ({
-                                value: alignment.toString(),
-                                label: _.startCase(alignment.toString()),
-                            }))}
-                        />
-                    )}
-                />
-                <Controller
-                    name="strength"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Strength"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="dexterity"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Dexterity"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="constitution"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Constitution"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="intelligence"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Intelligence"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="wisdom"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Wisdom"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="charisma"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Charisma"
-                            step="1"
-                            type="number"
-                            max="20"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="passivePerception"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Passive Perception"
-                            step="1"
-                            type="number"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="challengeRating"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Challenge Rating"
-                            type="number"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="armorClass"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Armor Class"
-                            step="1"
-                            type="number"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="hitPoints"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Hit Points"
-                            step="1"
-                            type="number"
-                            min="0"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="hitDice"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Hit Dice"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="size"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormSelect
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            options={Object.values(Size).map((size) => ({
-                                value: size.toString(),
-                                label: _.startCase(size.toString()),
-                            }))}
-                        />
-                    )}
-                />
-                <Controller
-                    name="languages"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Languages"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <Controller
-                    name="proficiencies"
-                    control={control}
-                    render={({field: {onChange, onBlur, name, value}}) => (
-                        <FormTextField
-                            onChange={onChange}
-                            onBlur={onBlur}
-                            name={name}
-                            value={value}
-                            label="Proficiencies"
-                            errorsLookup={errors}
-                        />
-                    )}
-                />
-                <input value="Create" type="submit"/>
-            </form>
+  return (
+    <>
+      <div>
+        <h1>{monster?.name ?? 'Create Monster'}</h1>
+      </div>
+      <div className="monsterdetails__container">
+        <div className="monsterdetails__tabs">
+          <div
+            className={`${currentTabName === 'details' ? 'current-tab' : ''}`}
+          >
+            <Link>Details</Link>
+          </div>
+          <div className={`${currentTabName === 'speed' ? 'current-tab' : ''}`}>
+            <Link>Speed</Link>
+          </div>
+          <div
+            className={`${currentTabName === 'actions' ? 'current-tab' : ''}`}
+          >
+            <Link>Actions</Link>
+          </div>
+          <div
+            className={`${currentTabName === 'reactions' ? 'current-tab' : ''}`}
+          >
+            <Link>Reactions</Link>
+          </div>
+          <div
+            className={`${
+              currentTabName === 'legendaryActions' ? 'current-tab' : ''
+            }`}
+          >
+            <Link>Legendary Actions</Link>
+          </div>
+          <div
+            className={`${
+              currentTabName === 'specialAbilities' ? 'current-tab' : ''
+            }`}
+          >
+            <Link>Special Abilities</Link>
+          </div>
         </div>
-    );
+        <div className="monsterdetails__form__container">
+          <form onSubmit={form.handleSubmit(updateMonster)}>
+            <MonsterDetailsForm form={form} />
+            <input value="Create" type="submit" />
+          </form>
+        </div>
+      </div>
+    </>
+  );
 };

@@ -1,29 +1,62 @@
-.form__input {
-    height: 2rem;
-    border: none;
-    border: solid 1px #000;
-    border-radius: 4px;
-    width: 100%;
-    padding-left: 3%;
+.form__input__container {
+  width: 75%;
+  margin-bottom: 2%;
 
-    &::placeholder {
-        font-size: 1rem;
-    }
-
-    &.invalid {
-        border: 2px solid red
-    }
-}
-
-
-.form__input__group    {
-    width: 75%;
-}
-
-.form__error {
+  .form__error {
     color: red;
     font-size: 0.75rem;
     margin: 0.4rem 0 0 0.5rem;
     width: 100%;
     word-wrap: break-word;
+  }
 }
+
+.form__input__group {
+  border: none;
+  border: solid 1px #000;
+  border-radius: 4px;
+  padding-left: 2%;
+
+  &:focus-within {
+    border-width: 2px;
+  }
+
+
+  .form__input {
+    height: 2rem;
+    border: none;
+    width: 100%;
+    background-color: transparent;
+    padding-bottom: 0;
+
+    &:focus {
+      outline-width: 0;
+    }
+
+    &::placeholder {
+      font-size: 1rem;
+    }
+
+    &.invalid {
+      @at-root {
+        .form__input__group {
+          border: 2px solid red;
+        }
+      }
+    }
+  }
+
+  .form__input__label {
+    width: fit-content;
+    color: #636c72;
+    background-color: white;
+    font-size: 0.75rem;
+    position: relative;
+    top: 9px;
+    margin-left: 2%;
+    padding: 0% 1%;
+  }
+}
+
+
+

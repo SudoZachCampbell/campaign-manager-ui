@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDnDApi } from '../api/dndDb';
-import { AccountsClient, CreateAttempt } from '../api/Model';
-import { LoginAttempt } from '../api/Model';
+import { AccountsClient, CreateAttempt, LoginAttempt } from '../api/Model';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../hooks/useAuth';
 import jwtDecode from 'jwt-decode';
 import { JwtPayload } from 'jsonwebtoken';
-import { Link } from 'react-router-dom';
 
 import './Login.styles.scss';
 import colours from '../style/constants/_colours.scss';
 import { Controller, useForm } from 'react-hook-form';
 import { FormTextField } from '../components/formInputs/FormTextField';
-import { TextField } from '../components/inputs/TextField';
+import { Link } from '../components/Link';
 
 const accountsClient = new AccountsClient();
 
@@ -88,16 +86,16 @@ export default function Login() {
   return loading ? (
     <PuffLoader color={colours.primaryColour} />
   ) : (
-    <div className='login__container'>
-      <form onSubmit={handleSubmit(attemptLogin)} className='login__form'>
-        <div className='login__toggles'>
+    <div className="login__container">
+      <form onSubmit={handleSubmit(attemptLogin)} className="login__form">
+        <div className="login__toggles">
           <a
             className={`toggle ${creating || 'selected'}`}
             onClick={() => setCreating(false)}
           >
             Login
           </a>
-          <div className='spacer' />
+          <div className="spacer" />
           <a
             className={`toggle ${creating && 'selected'}`}
             onClick={() => setCreating(true)}
@@ -106,7 +104,7 @@ export default function Login() {
           </a>
         </div>
         <Controller
-          name='username'
+          name="username"
           control={control}
           rules={{
             required: 'Username is required',
@@ -130,12 +128,13 @@ export default function Login() {
               name={name}
               value={value}
               errorsLookup={errors}
-              label='Username'
+              label="Username"
+              adaptiveLabel={creating}
             />
           )}
         />
         <Controller
-          name='password'
+          name="password"
           control={control}
           rules={{
             required: 'Password is required',
@@ -154,15 +153,16 @@ export default function Login() {
               name={name}
               value={value}
               errorsLookup={errors}
-              label='Password'
-              type='password'
+              label="Password"
+              type="password"
+              adaptiveLabel={creating}
             />
           )}
         />
         {creating && (
           <>
             <Controller
-              name='confirmPassword'
+              name="confirmPassword"
               control={control}
               rules={{
                 required: creating && 'Password Confirmation is required',
@@ -176,13 +176,14 @@ export default function Login() {
                   name={name}
                   value={value}
                   errorsLookup={errors}
-                  label='Confirm Password'
-                  type='password'
+                  label="Confirm Password"
+                  type="password"
+                  adaptiveLabel={creating}
                 />
               )}
             />
             <Controller
-              name='email'
+              name="email"
               control={control}
               rules={{
                 required: creating && 'Email is required',
@@ -210,21 +211,22 @@ export default function Login() {
                   name={name}
                   value={value}
                   errorsLookup={errors}
-                  label='Email'
-                  type='email'
+                  label="Email"
+                  type="email"
+                  adaptiveLabel={creating}
                 />
               )}
             />
           </>
         )}
         {creating || (
-          <Link className='login__forgot' to=''>
+          <Link className="login__forgot" to="" removeDefaultFormatting>
             Forgot Password
           </Link>
         )}
         <input
-          className='login__button'
-          type='submit'
+          className="login__button"
+          type="submit"
           value={creating ? 'Create' : 'Login'}
         />
         {apiError && <p>{apiError.response}</p>}
