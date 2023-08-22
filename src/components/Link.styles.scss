@@ -1,5 +1,14 @@
 .remove-formatting {
-  font-size: 0.75rem;
   color: gray;
   text-decoration: none;
+}
+
+.unselected {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.selected {
+  color: black;
 }

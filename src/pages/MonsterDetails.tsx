@@ -7,6 +7,8 @@ import { useAuth } from '../hooks/useAuth';
 import './MonsterDetails.styles.scss';
 import { MonsterDetailsForm } from '../sections/monsterDetails/MonsterDetailsForm';
 import { Link } from '../components/Link';
+import _ from 'lodash';
+import { MonsterActionsForm } from '../sections/monsterDetails/MonsterActionsForm';
 
 interface MonsterDetailsProps {}
 
@@ -23,7 +25,7 @@ type MonsterDetailsTab =
 const tabs: Record<MonsterDetailsTab, FC<{ form: UseFormReturn<Monster> }>> = {
   details: MonsterDetailsForm,
   speed: MonsterDetailsForm,
-  actions: MonsterDetailsForm,
+  actions: MonsterActionsForm,
   reactions: MonsterDetailsForm,
   legendaryActions: MonsterDetailsForm,
   specialAbilities: MonsterDetailsForm,
@@ -73,6 +75,8 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     }
   };
 
+  const ActiveTab = tabs[currentTabName];
+
   return (
     <>
       <div>
@@ -80,42 +84,20 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
       </div>
       <div className="monsterdetails__container">
         <div className="monsterdetails__tabs">
-          <div
-            className={`${currentTabName === 'details' ? 'current-tab' : ''}`}
-          >
-            <Link>Details</Link>
-          </div>
-          <div className={`${currentTabName === 'speed' ? 'current-tab' : ''}`}>
-            <Link>Speed</Link>
-          </div>
-          <div
-            className={`${currentTabName === 'actions' ? 'current-tab' : ''}`}
-          >
-            <Link>Actions</Link>
-          </div>
-          <div
-            className={`${currentTabName === 'reactions' ? 'current-tab' : ''}`}
-          >
-            <Link>Reactions</Link>
-          </div>
-          <div
-            className={`${
-              currentTabName === 'legendaryActions' ? 'current-tab' : ''
-            }`}
-          >
-            <Link>Legendary Actions</Link>
-          </div>
-          <div
-            className={`${
-              currentTabName === 'specialAbilities' ? 'current-tab' : ''
-            }`}
-          >
-            <Link>Special Abilities</Link>
-          </div>
+          {Object.keys(tabs).map((tab) => (
+            <Link
+              className={`remove-formatting${
+                currentTabName === tab ? ' selected' : ' unselected'
+              }`}
+              onClick={() => setCurrentTabName(tab as MonsterDetailsTab)}
+            >
+              {_.startCase(tab)}
+            </Link>
+          ))}
         </div>
         <div className="monsterdetails__form__container">
           <form onSubmit={form.handleSubmit(updateMonster)}>
-            <MonsterDetailsForm form={form} />
+            <ActiveTab form={form} />
             <input value="Create" type="submit" />
           </form>
         </div>

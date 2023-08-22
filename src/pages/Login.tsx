@@ -42,12 +42,8 @@ export default function Login() {
     apiError,
   } = useDnDApi((login: string, pass: string, email?: string) =>
     creating
-      ? accountsClient.createAccount(
-          new CreateAttempt({ username: login, password: pass, email }),
-        )
-      : accountsClient.login(
-          new LoginAttempt({ username: login, password: pass }),
-        ),
+      ? accountsClient.createAccount({ username: login, password: pass, email })
+      : accountsClient.login({ username: login, password: pass }),
   );
 
   const attemptLogin = ({ username, password, email }: FormObject) => {
@@ -89,19 +85,23 @@ export default function Login() {
     <div className="login__container">
       <form onSubmit={handleSubmit(attemptLogin)} className="login__form">
         <div className="login__toggles">
-          <a
-            className={`toggle ${creating || 'selected'}`}
+          <Link
+            className={`remove-formatting ${
+              !creating ? 'selected' : 'unselected'
+            }`}
             onClick={() => setCreating(false)}
           >
             Login
-          </a>
+          </Link>
           <div className="spacer" />
-          <a
-            className={`toggle ${creating && 'selected'}`}
+          <Link
+            className={`remove-formatting ${
+              creating ? 'selected' : 'unselected'
+            }`}
             onClick={() => setCreating(true)}
           >
             Create
-          </a>
+          </Link>
         </div>
         <Controller
           name="username"

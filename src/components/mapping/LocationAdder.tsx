@@ -18,7 +18,6 @@ import {
   BuildingsClient,
   Continent,
   ContinentsClient,
-  ILocale,
   Locale,
   LocalesClient,
   Region,
@@ -188,7 +187,7 @@ export default function LocationAdder({
       <Grid container spacing={1}>
         <Grid container>
           <Grid item xs={8}>
-            <Typography variant='h4'>Choose a Location: </Typography>
+            <Typography variant="h4">Choose a Location: </Typography>
           </Grid>
           <Grid item xs={4}>
             {location.building && <Button onClick={saveLocation}>Save</Button>}
@@ -197,7 +196,7 @@ export default function LocationAdder({
         {location.continents && location.continents.length !== 0 && (
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
-              <InputLabel id='continent-select'>Continent</InputLabel>
+              <InputLabel id="continent-select">Continent</InputLabel>
               <Select
                 value={location.continent?.id}
                 onChange={(event) => setContinent(event.target.value as string)}
@@ -214,7 +213,7 @@ export default function LocationAdder({
         {location.regions && location.regions?.length !== 0 ? (
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
-              <InputLabel id='region-select'>Region</InputLabel>
+              <InputLabel id="region-select">Region</InputLabel>
               <Select
                 value={location.region?.id}
                 onChange={(event) => setRegion(event.target.value as string)}
@@ -227,13 +226,13 @@ export default function LocationAdder({
           </Grid>
         ) : (
           location.regions?.length === 0 && (
-            <Typography variant='subtitle2'>No Regions Found</Typography>
+            <Typography variant="subtitle2">No Regions Found</Typography>
           )
         )}
         {location.locales && location.locales?.length !== 0 ? (
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
-              <InputLabel id='locale-select'>Locale</InputLabel>
+              <InputLabel id="locale-select">Locale</InputLabel>
               <Select
                 value={location.locale?.id}
                 onChange={(event) => setLocale(event.target.value as string)}
@@ -246,13 +245,13 @@ export default function LocationAdder({
           </Grid>
         ) : (
           location.locales?.length === 0 && (
-            <Typography variant='subtitle2'>No Locales Found</Typography>
+            <Typography variant="subtitle2">No Locales Found</Typography>
           )
         )}
         {location.buildings && location.buildings?.length !== 0 ? (
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
-              <InputLabel id='building-select'>Building</InputLabel>
+              <InputLabel id="building-select">Building</InputLabel>
               <Select
                 value={location.building?.id}
                 onChange={(event) => setBuilding(event.target.value as string)}
@@ -267,7 +266,7 @@ export default function LocationAdder({
           </Grid>
         ) : (
           location.buildings?.length === 0 && (
-            <Typography variant='h5'>No Buildings Found</Typography>
+            <Typography variant="h5">No Buildings Found</Typography>
           )
         )}
       </Grid>

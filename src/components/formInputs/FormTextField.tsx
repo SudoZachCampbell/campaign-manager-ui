@@ -34,16 +34,18 @@ export const FormTextField = <T,>({
   console.log(value);
   return (
     <div className="form__input__container">
-      <div className="form__input__group">
+      <div
+        className={`form__input__group${
+          errorsLookup?.[name] ? ' invalid' : ' '
+        }`}
+      >
         <TextField
           onBlur={onBlur}
           onChange={onChange}
           value={value}
           max={max}
           min={min}
-          className={`form__input ${errorsLookup?.[name] ? 'invalid' : ' '}${
-            className ?? ''
-          }`}
+          className={`form__input ${className ?? ''}`}
           type={type}
           label={label}
         />

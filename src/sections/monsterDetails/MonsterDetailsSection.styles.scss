@@ -1,0 +1,15 @@
+.monsteractions__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .monsteractions__actioneditor {
+    width: 50%;
+  }
+}
+
+.divider {
+  border: grey 1px solid;
+  width: 25%;
+  margin: 2% 0% 4% 0%;
+}

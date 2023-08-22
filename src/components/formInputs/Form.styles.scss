@@ -1,5 +1,5 @@
 .form__input__container {
-  width: 75%;
+  width: 100%;
   margin-bottom: 2%;
 
   .form__error {
@@ -16,6 +16,11 @@
   border: solid 1px #000;
   border-radius: 4px;
   padding-left: 2%;
+  background: white;
+
+  &.invalid {
+    border: 2px solid red;
+  }
 
   &:focus-within {
     border-width: 2px;
@@ -37,13 +42,6 @@
       font-size: 1rem;
     }
 
-    &.invalid {
-      @at-root {
-        .form__input__group {
-          border: 2px solid red;
-        }
-      }
-    }
   }
 
   .form__input__label {
