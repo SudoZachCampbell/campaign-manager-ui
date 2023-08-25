@@ -1,7 +1,8 @@
 ﻿import * as React from 'react';
 import { Box, Button, Grid } from '@mui/material';
-import { Npc, NpcsClient } from '../api/Model';
 import { useDnDApi } from '../api/dndDb';
+import { NpcsClient } from '../api/client/npcsClient';
+import { Npc } from '../api/model/npc';
 
 const npcClient = new NpcsClient();
 
@@ -20,11 +21,11 @@ export default ({ id }: NpcSummaryProps) => {
     <Box p={3}>
       <Grid container>
         <Grid item xs={4}>
-          <h1 className='display-4'>{npc.name}</h1>
+          <h1 className="display-4">{npc.name}</h1>
           <div>{npc.monster ? npc.monster.name : 'None'}</div>
           <Button
-            variant='contained'
-            color='secondary'
+            variant="contained"
+            color="secondary"
             href={`/npc-details/${npc.id}`}
           >
             Details
@@ -34,7 +35,7 @@ export default ({ id }: NpcSummaryProps) => {
           <Grid item xs={4}>
             <img
               height={'40%'}
-              alt=''
+              alt=""
               src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/npc/${npc.picture}`}
             />
           </Grid>

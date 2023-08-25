@@ -3,10 +3,10 @@ import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
 import { Box } from '@mui/material';
 import _ from 'lodash';
 import MonsterSummary from '../components/MonsterSummary';
-import { MonstersClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { MonstersClient } from '../api/client/monstersClient';
 
 const client = new MonstersClient();
 

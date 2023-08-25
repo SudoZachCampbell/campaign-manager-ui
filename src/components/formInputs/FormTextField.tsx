@@ -31,7 +31,6 @@ export const FormTextField = <T,>({
   errorsLookup,
   adaptiveLabel = true,
 }: FormTextFieldProps<T>) => {
-  console.log(value);
   return (
     <div className="form__input__container">
       <div

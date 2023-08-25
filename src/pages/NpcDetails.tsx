@@ -10,8 +10,9 @@ import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
 import LocationAdder from '../components/mapping/LocationAdder';
-import { Npc, NpcsClient } from '../api/Model';
-import { OperationType } from '../api/Model';
+import { OperationType } from '../api/model/model';
+import { NpcsClient } from '../api/client/npcsClient';
+import { Npc } from '../api/model/npc';
 
 const multiline: string[] = ['background'];
 
@@ -88,7 +89,7 @@ export default function NpcDetails() {
           {npc.building.maps[0].map && (
             <LocationMap
               map={npc.building.maps[0].map}
-              iconName='arrow'
+              iconName="arrow"
               npcs={[npc]}
             />
           )}

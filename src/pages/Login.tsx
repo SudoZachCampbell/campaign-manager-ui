@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDnDApi } from '../api/dndDb';
-import { AccountsClient, CreateAttempt, LoginAttempt } from '../api/Model';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../hooks/useAuth';
 import jwtDecode from 'jwt-decode';
@@ -11,6 +10,9 @@ import colours from '../style/constants/_colours.scss';
 import { Controller, useForm } from 'react-hook-form';
 import { FormTextField } from '../components/formInputs/FormTextField';
 import { Link } from '../components/Link';
+import { AccountsClient } from '../api/client/accountsClient';
+import { LoginAttempt } from '../api/model/loginAttempt';
+import { CreateAttempt } from '../api/model/createAttempt';
 
 const accountsClient = new AccountsClient();
 

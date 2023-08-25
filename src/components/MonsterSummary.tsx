@@ -7,10 +7,10 @@ import TogglingTextField from '../components/toggling/TogglingTextField';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingSelect';
-import TogglingObjectsField from '../components/toggling/TogglingObjectsField';
 import { ClipLoader } from 'react-spinners';
-import { Monster, MonstersClient } from '../api/Model';
 import { ApiType, useDnDApi } from '../api/dndDb';
+import { MonstersClient } from '../api/client/monstersClient';
+import { Monster } from '../api/model/monster';
 
 interface MonsterSummaryProps {
   monsterId: string;
@@ -108,7 +108,7 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
       <Box>
         <Grid container>
           <Grid item xs={12}>
-            <Box marginBottom='3' display='flex' justifyContent='center'>
+            <Box marginBottom="3" display="flex" justifyContent="center">
               <Typography variant={'h4'}>{monster?.name}</Typography>
             </Box>
           </Grid>
@@ -186,8 +186,8 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
           </Grid>
           <Grid item xs={10}>
             <Button
-              variant='contained'
-              color='secondary'
+              variant="contained"
+              color="secondary"
               href={`/monsters/${monster?.id}`}
             >
               Details
@@ -197,8 +197,8 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
             <Grid item xs={2}>
               <Box width={1}>
                 <img
-                  width='100%'
-                  alt=''
+                  width="100%"
+                  alt=""
                   src={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/monster/${monster.picture}`}
                 />
               </Box>

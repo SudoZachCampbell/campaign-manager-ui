@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
-import { CampaignsClient } from '../api/Model';
 import { useDndCollectionApi } from '../api/dndDb';
 import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
 import { useAuth } from '../hooks/useAuth';
+import { CampaignsClient } from '../api/client/campaignsClient';
 
 const client = new CampaignsClient();
 

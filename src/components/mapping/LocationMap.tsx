@@ -16,7 +16,9 @@ import PeopleIcon from '../../assets/icons/people.svg';
 import ArrowIcon from '../../assets/icons/arrow.svg';
 import { Box } from '@mui/material';
 import LocationMarker from './LocationMarker';
-import { Map, Monster, Npc } from '../../api/Model';
+import { Monster } from '../../api/model/monster';
+import { Npc } from '../../api/model/npc';
+import { Map } from '../../api/model/map';
 
 const personIcon = new L.Icon({
   iconUrl: PersonIcon,
@@ -151,11 +153,11 @@ export default function LocationMap({
 
   return bounds ? (
     <Box
-      display='flex'
-      justifyContent='center'
-      height='100%'
-      width='100%'
-      overflow='hidden'
+      display="flex"
+      justifyContent="center"
+      height="100%"
+      width="100%"
+      overflow="hidden"
     >
       <MapContainer
         crs={L.CRS.Simple}

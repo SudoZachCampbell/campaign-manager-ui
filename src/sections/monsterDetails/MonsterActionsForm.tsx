@@ -5,9 +5,8 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 import { FormTextField } from '../../components/formInputs/FormTextField';
-import { Damage, Monster } from '../../api/Model';
 import './MonsterDetailsSection.styles.scss';
-import { generateForm } from '../../components/formInputs/form.utils';
+import { Monster } from '../../api/model/monster';
 
 interface MonsterActionsFormProps {
   form: UseFormReturn<Monster>;
@@ -19,7 +18,10 @@ export const MonsterActionsForm = ({
     formState: { errors },
   },
 }: MonsterActionsFormProps) => {
-  const { fields, append } = useFieldArray({ control, name: 'actions' });
+  const { fields, append } = useFieldArray({
+    control,
+    name: 'action',
+  });
   return (
     <div className="monsteractions__container">
       {fields.map(({ id }, index) => (
@@ -122,7 +124,7 @@ interface DamageFieldProps {
 }
 
 const DamageField = ({ control, index }: DamageFieldProps) => {
-  const { fields, remove, append } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: `actions.${index}.damage`,
   });
@@ -147,15 +149,9 @@ const DamageField = ({ control, index }: DamageFieldProps) => {
   );
 };
 
-const thingies = [
-  {
-    name: (index: number) => ``,
-  },
-];
-
 const DamageEditor = ({ index, control }: ActionEditorProps) => (
   <div className="monsteractions__actioneditor">
-    {generateForm()}
+    {/*{generateForm()}*/}
     <Controller
       render={({ field: { onBlur, onChange, name, value } }) => (
         <FormTextField

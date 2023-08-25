@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo, FC } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alignment, Monster, MonstersClient, MonsterType } from '../api/Model';
 import { useDnDApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
 import './MonsterDetails.styles.scss';
@@ -9,6 +8,10 @@ import { MonsterDetailsForm } from '../sections/monsterDetails/MonsterDetailsFor
 import { Link } from '../components/Link';
 import _ from 'lodash';
 import { MonsterActionsForm } from '../sections/monsterDetails/MonsterActionsForm';
+import { MonstersClient } from '../api/client/monstersClient';
+import { Monster } from '../api/model/monster';
+import { MonsterType } from '../api/model/monsterType';
+import { Alignment } from '../api/model/alignment';
 
 interface MonsterDetailsProps {}
 

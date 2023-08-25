@@ -4,9 +4,10 @@ import { Box, Grid, Theme, Typography } from '@mui/material';
 import LocationMap from '../components/mapping/LocationMap';
 import { useDnDApi } from '../api/dndDb';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { LocalesClient, Map } from '../api/Model';
 import { NavMenu } from '../layouts/NavMenu/NavMenu';
 import './LocationHub.styles.scss';
+import { LocalesClient } from '../api/client/localesClient';
+import { Map } from '../api/model/map';
 
 const PREFIX = 'LocationHub';
 
@@ -53,8 +54,8 @@ export default function LocationHub() {
       <em>Loading...</em>
     </p>
   ) : (
-    <div className='locationhub__container'>
-      <div className='locationhub__map'>
+    <div className="locationhub__container">
+      <div className="locationhub__map">
         {maps && <LocationMap map={maps[currentMapIndex]} iconName={view} />}
       </div>
       <NavMenu />

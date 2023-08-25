@@ -1,6 +1,6 @@
 import React from 'react';
-import { Base } from '../api/Model';
 import { FieldType, ToggleType } from './Lookups';
+import { Base } from '../api/model/base';
 
 export interface ITableList<T> {
   headers: string[];
@@ -10,6 +10,7 @@ export interface ITableList<T> {
 export interface ITableRows<T> {
   [id: number]: T;
 }
+
 //#endregion
 
 //#region WAMS Metadata

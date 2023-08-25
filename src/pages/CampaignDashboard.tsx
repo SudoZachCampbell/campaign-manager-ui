@@ -1,5 +1,5 @@
 import { Controller, useForm } from 'react-hook-form';
-import { Campaign, CampaignsClient, CampaignType } from '../api/Model';
+import { Campaign, CampaignType } from '../api/model/model';
 import { useAuth } from '../hooks/useAuth';
 import { useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { FormTextField } from '../components/formInputs/FormTextField';
 import _ from 'lodash';
 import { FormSelect } from '../components/formInputs/FormSelect';
+import { CampaignsClient } from '../api/client/campaignsClient';
 
 interface CampaignDashboardProps {}
 
@@ -27,18 +28,18 @@ export const CampaignDashboard = ({}: CampaignDashboardProps) => {
 
   client.setAuthToken(useAuth().token);
   return (
-    <div className='campaigndash__container'>
-      <div className='campaigndash__top'>
-        <div className='campaigndash__monster_container'>
+    <div className="campaigndash__container">
+      <div className="campaigndash__top">
+        <div className="campaigndash__monster_container">
           <table>
             <thead></thead>
             <tbody>{}</tbody>
           </table>
         </div>
-        <div className='campaigndash__location__container'></div>
+        <div className="campaigndash__location__container"></div>
       </div>
-      <div className='campaigndash__bottom'>
-        <div className='campaigndash__player__container'></div>
+      <div className="campaigndash__bottom">
+        <div className="campaigndash__player__container"></div>
       </div>
     </div>
   );

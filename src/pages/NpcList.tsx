@@ -4,7 +4,8 @@ import { Box } from '@mui/material';
 import { useDndCollectionApi } from '../api/dndDb';
 import _ from 'lodash';
 import NpcSummary from '../components/NpcSummary';
-import { NpcsClient } from '../api/Model';
+
+import { NpcsClient } from '../api/client/npcsClient';
 
 const npcClient = new NpcsClient();
 

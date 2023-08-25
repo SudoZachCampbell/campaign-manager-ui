@@ -11,7 +11,8 @@ import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingSelect';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
-import { Base } from '../api/Model';
+
+import { Base } from '../api/model/base';
 
 interface Props<T extends Base> {
   entity: T;

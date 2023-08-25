@@ -1,19 +1,15 @@
 import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { ITableList, ITableRows } from '../interfaces/Models';
 import { Patch } from '../interfaces/Requests';
-import {
-  ApiException,
-  Base,
-  BuildingsClient,
-  ContinentsClient,
-  LocalesClient,
-  Monster,
-  MonstersClient,
-  NpcsClient,
-  RegionsClient,
-} from './Model';
+import { ApiException } from './model/model';
 import { useState } from 'react';
+import { BuildingsClient } from './client/buildingsClient';
+import { ContinentsClient } from './client/continentsClient';
+import { LocalesClient } from './client/localesClient';
+import { MonstersClient } from './client/monstersClient';
+import { NpcsClient } from './client/npcsClient';
+import { Base } from './model/base';
+import { Monster } from './model/monster';
 
 export enum PatchType {
   Add = 'add',
@@ -105,6 +101,6 @@ export const ApiClients = {
   [ApiType.NPC]: new NpcsClient(),
   [ApiType.BUILDING]: new BuildingsClient(),
   [ApiType.LOCALE]: new LocalesClient(),
-  [ApiType.REGION]: new RegionsClient(),
+  [ApiType.REGION]: new Model(),
   [ApiType.CONTINENT]: new ContinentsClient(),
 };

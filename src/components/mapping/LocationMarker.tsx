@@ -4,7 +4,8 @@ import { Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import { Typography } from '@mui/material';
-import { Base } from '../../api/Model';
+
+import { Base } from '../../api/model/base';
 
 export default function LocationMarker({
   position,
@@ -23,7 +24,7 @@ export default function LocationMarker({
     >
       <Popup>
         {entities.map((entity) => (
-          <Typography key={entity.id} variant='subtitle2'>
+          <Typography key={entity.id} variant="subtitle2">
             {/* {entity.name} */}
           </Typography>
         ))}
