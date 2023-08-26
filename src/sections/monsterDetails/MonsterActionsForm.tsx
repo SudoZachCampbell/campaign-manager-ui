@@ -6,7 +6,8 @@ import {
 } from 'react-hook-form';
 import { FormTextField } from '../../components/formInputs/FormTextField';
 import './MonsterDetailsSection.styles.scss';
-import { Monster } from '../../api/model/monster';
+import { Monster } from '../../api/model/Monster';
+import { CreatureAction } from '../../api/model/CreatureAction';
 
 interface MonsterActionsFormProps {
   form: UseFormReturn<Monster>;
@@ -20,7 +21,7 @@ export const MonsterActionsForm = ({
 }: MonsterActionsFormProps) => {
   const { fields, append } = useFieldArray({
     control,
-    name: 'action',
+    name: 'actions',
   });
   return (
     <div className="monsteractions__container">

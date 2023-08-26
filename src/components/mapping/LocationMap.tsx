@@ -16,9 +16,9 @@ import PeopleIcon from '../../assets/icons/people.svg';
 import ArrowIcon from '../../assets/icons/arrow.svg';
 import { Box } from '@mui/material';
 import LocationMarker from './LocationMarker';
-import { Monster } from '../../api/model/monster';
-import { Npc } from '../../api/model/npc';
-import { Map } from '../../api/model/map';
+import { Monster } from '../../api/model/Monster';
+import { Npc } from '../../api/model/Npc';
+import { Map } from '../../api/model/Map';
 
 const personIcon = new L.Icon({
   iconUrl: PersonIcon,

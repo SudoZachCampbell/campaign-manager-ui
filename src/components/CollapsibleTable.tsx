@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import NpcSummary from './NpcSummary';
 import MonsterSummary from './MonsterSummary';
 
-import { Base } from '../api/model/base';
+import { Base } from '../api/model/Base';
 
 //#region TableData
 export interface CollapsibleTableProps<T> {

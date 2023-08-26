@@ -6,8 +6,8 @@ import { useDnDApi } from '../api/dndDb';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { NavMenu } from '../layouts/NavMenu/NavMenu';
 import './LocationHub.styles.scss';
-import { LocalesClient } from '../api/client/localesClient';
-import { Map } from '../api/model/map';
+import { LocalesClient } from '../api/client/LocalesClient';
+import { Map } from '../api/model/Map';
 
 const PREFIX = 'LocationHub';
 

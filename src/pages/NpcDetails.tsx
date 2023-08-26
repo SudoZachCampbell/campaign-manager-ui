@@ -10,9 +10,8 @@ import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
 import LocationAdder from '../components/mapping/LocationAdder';
-import { OperationType } from '../api/model/model';
-import { NpcsClient } from '../api/client/npcsClient';
-import { Npc } from '../api/model/npc';
+import { NpcsClient } from '../api/client/NpcsClient';
+import { Npc } from '../api/model/Npc';
 
 const multiline: string[] = ['background'];
 

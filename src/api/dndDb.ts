@@ -1,15 +1,15 @@
 import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
 import { Patch } from '../interfaces/Requests';
-import { ApiException } from './model/model';
+import { ApiException } from './client/Model';
 import { useState } from 'react';
-import { BuildingsClient } from './client/buildingsClient';
-import { ContinentsClient } from './client/continentsClient';
-import { LocalesClient } from './client/localesClient';
-import { MonstersClient } from './client/monstersClient';
-import { NpcsClient } from './client/npcsClient';
-import { Base } from './model/base';
-import { Monster } from './model/monster';
+import { BuildingsClient } from './client/BuildingsClient';
+import { ContinentsClient } from './client/ContinentsClient';
+import { LocalesClient } from './client/LocalesClient';
+import { MonstersClient } from './client/MonstersClient';
+import { NpcsClient } from './client/NpcsClient';
+import { Base } from './model/Base';
+import { RegionsClient } from './client/RegionsClient';
 
 export enum PatchType {
   Add = 'add',
@@ -101,6 +101,6 @@ export const ApiClients = {
   [ApiType.NPC]: new NpcsClient(),
   [ApiType.BUILDING]: new BuildingsClient(),
   [ApiType.LOCALE]: new LocalesClient(),
-  [ApiType.REGION]: new Model(),
+  [ApiType.REGION]: new RegionsClient(),
   [ApiType.CONTINENT]: new ContinentsClient(),
 };

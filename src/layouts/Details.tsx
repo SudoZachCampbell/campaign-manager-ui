@@ -12,7 +12,7 @@ import TogglingEnumField from '../components/toggling/TogglingSelect';
 import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
 
-import { Base } from '../api/model/base';
+import { Base } from '../api/model/Base';
 
 interface Props<T extends Base> {
   entity: T;

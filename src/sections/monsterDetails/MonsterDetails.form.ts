@@ -1,11 +1,9 @@
 import { FormInput } from '../../components/formInputs/Form.model';
 import _ from 'lodash';
-import { Controller } from 'react-hook-form';
-import { FormTextField } from '../../components/formInputs/FormTextField';
-import { Monster } from '../../api/model/monster';
-import { MonsterType } from '../../api/model/monsterType';
-import { Size } from '../../api/model/size';
-import { Alignment } from '../../api/model/alignment';
+import { Monster } from '../../api/model/Monster';
+import { MonsterType } from '../../api/model/MonsterType';
+import { Size } from '../../api/model/Size';
+import { Alignment } from '../../api/model/Alignment';
 
 export const monsterForm: FormInput<Monster>[] = [
   {
@@ -139,8 +137,19 @@ export const monsterForm: FormInput<Monster>[] = [
       },
       {
         type: 'text',
+        name: '',
         label: 'Type',
-        name: 'type',
+      },
+      {
+        type: 'fieldArray',
+        name: 'damage',
+        fields: [
+          {
+            type: 'text',
+            name: 'damageadType',
+            label: 'Damage Type',
+          },
+        ],
       },
     ],
   },

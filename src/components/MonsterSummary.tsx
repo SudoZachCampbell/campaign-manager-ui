@@ -9,8 +9,8 @@ import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingSelect';
 import { ClipLoader } from 'react-spinners';
 import { ApiType, useDnDApi } from '../api/dndDb';
-import { MonstersClient } from '../api/client/monstersClient';
-import { Monster } from '../api/model/monster';
+import { MonstersClient } from '../api/client/MonstersClient';
+import { Monster } from '../api/model/Monster';
 
 interface MonsterSummaryProps {
   monsterId: string;

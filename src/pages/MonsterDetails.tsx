@@ -8,10 +8,10 @@ import { MonsterDetailsForm } from '../sections/monsterDetails/MonsterDetailsFor
 import { Link } from '../components/Link';
 import _ from 'lodash';
 import { MonsterActionsForm } from '../sections/monsterDetails/MonsterActionsForm';
-import { MonstersClient } from '../api/client/monstersClient';
-import { Monster } from '../api/model/monster';
-import { MonsterType } from '../api/model/monsterType';
-import { Alignment } from '../api/model/alignment';
+import { MonstersClient } from '../api/client/MonstersClient';
+import { Monster } from '../api/model/Monster';
+import { MonsterType } from '../api/model/MonsterType';
+import { Alignment } from '../api/model/Alignment';
 
 interface MonsterDetailsProps {}
 
