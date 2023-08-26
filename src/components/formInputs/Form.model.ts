@@ -28,14 +28,17 @@ interface FormInputSelect<T> extends FormInputBase {
   options: FormSelectOption[];
 }
 
-interface FormFieldArray<T extends any[]> extends FormInputBase {
-  type: 'fieldArray';
-  name: ArrayPath<T>;
-  fields: FormInput<ValueOf<T>>[];
-}
+type FormFieldArray<T> = FormInputBase &
+  {
+    [K in keyof T]: {
+      type: 'fieldArray';
+      name: K;
+      fields: FormInput<T[K]>[];
+    };
+  }[keyof T];
 
-type ValueOf<T extends any[]> = T[number];
-
-export type FormInput<T> = T[keyof T] extends any[]
-  ? FormFieldArray<T[keyof T]>
-  : FormInputText<T> | FormInputNumber<T> | FormInputSelect<T>;
+export type FormInput<T> =
+  | FormInputText<T>
+  | FormInputNumber<T>
+  | FormInputSelect<T>
+  | FormFieldArray<T>;
