@@ -8,7 +8,7 @@ export interface CreatureAction {
   desc: string;
   count?: number | undefined;
   attackBonus?: number | undefined;
-  damage?: Damage[] | undefined;
+  damage: Damage[];
   usage?: Usage | undefined;
   actions?: CreatureAction[] | undefined;
   dc?: DC | undefined;

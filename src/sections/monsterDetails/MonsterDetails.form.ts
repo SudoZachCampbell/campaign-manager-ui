@@ -145,6 +145,17 @@ export const monsterForm: FormInput<Monster>[] = [
         name: 'count',
         label: 'Count',
       },
+      {
+        type: 'fieldArray',
+        name: 'damage',
+        fields: [
+          {
+            name: 'damageDice',
+            label: 'Damage Dice',
+            type: 'text',
+          },
+        ],
+      },
     ],
   },
 ];

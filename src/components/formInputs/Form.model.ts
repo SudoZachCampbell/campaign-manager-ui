@@ -33,7 +33,7 @@ export type FormFieldArray<T extends FieldValues> = FormInputBase &
     [K in keyof T]: {
       type: 'fieldArray';
       name: K;
-      fields: FormInput<T[K]>[];
+      fields: FormInput<T[K][number]>[];
     };
   }[keyof T];
 

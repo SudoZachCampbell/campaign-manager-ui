@@ -10,7 +10,7 @@ export interface Monster extends Creature {
   xp: number;
   passivePerception: number;
   monsterType: MonsterType;
-  actions?: CreatureAction[] | undefined;
+  actions: CreatureAction[];
   legendaryActions?: CreatureAction[] | undefined;
   specialAbilities?: CreatureAction[] | undefined;
   senses?: { [key: string]: string } | undefined;

@@ -32,7 +32,7 @@ export const MonsterActionsForm = ({
         </>
       ))}
       <button
-        onClick={() => append({ name: '', desc: '', type: '' })}
+        // onClick={() => append({ name: '', desc: '', type: '' })}
         type="button"
       >
         Add New Action
