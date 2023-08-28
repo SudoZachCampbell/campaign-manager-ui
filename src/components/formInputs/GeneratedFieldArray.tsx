@@ -11,11 +11,11 @@ import { FormFieldArray, FormInput } from './Form.model';
 import { GeneratedForm } from './GeneratedForm';
 
 interface GeneratedFieldArrayProps<T extends FieldValues> {
-  formBuilder: FormFieldArray<T>[];
+  formBuilder: FormInput<T[keyof T]>[];
   control: Control<T>;
   errors: FieldErrors<T>;
   path: ArrayPath<T>;
-  name: ArrayPath<T>;
+  name: keyof T;
 }
 
 export const GeneratedFieldArray = <T extends FieldValues>({
@@ -27,9 +27,8 @@ export const GeneratedFieldArray = <T extends FieldValues>({
 }: GeneratedFieldArrayProps<T>) => {
   const { fields, append } = useFieldArray({
     control,
-    name: name,
+    name: name as ArrayPath<T>,
   });
-  console.log(`GeneratedFieldArray.tsx:31 hit`);
 
   return (
     <div className="monsteractions__container">
@@ -41,14 +40,24 @@ export const GeneratedFieldArray = <T extends FieldValues>({
               key={id}
               index={index}
               errors={errors}
-              formBuilder={formBuilder}
+              formBuilder={formBuilder as FormInput<T>[]}
               control={control}
               path={path}
             />
           </>
         );
       })}
-      <button onClick={() => append({ name: '' })} type="button">
+      <button
+        onClick={() =>
+          append(
+            formBuilder.reduce<Record<string, ''>>((acc, { name }) => {
+              acc[String(name)] = '';
+              return acc;
+            }, {}) as FieldArray<T, ArrayPath<T>>,
+          )
+        }
+        type="button"
+      >
         Append {String(name)}
       </button>
     </div>

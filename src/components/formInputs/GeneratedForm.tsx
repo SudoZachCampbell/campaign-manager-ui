@@ -34,13 +34,16 @@ export const GeneratedForm = <T extends FieldValues>({
       {formBuilder.map((input) => {
         switch (input.type) {
           case 'fieldArray':
-            let fullPath = input.name + `.${index}.` + 'test';
+            let fullPath = `${path}.${index}.${String(
+              input.name,
+            )}` as ArrayPath<T>;
             return (
               <GeneratedFieldArray
                 control={control}
                 errors={errors}
                 formBuilder={input.fields}
                 name={input.name}
+                path={fullPath}
               />
             );
 
@@ -87,7 +90,7 @@ export const GeneratedForm = <T extends FieldValues>({
                   }
                 }}
                 control={control}
-                name={input.name}
+                name={input.name as Path<T>}
                 key={input.name}
               />
             );
