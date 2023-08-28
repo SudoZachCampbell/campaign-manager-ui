@@ -1,4 +1,4 @@
-import { ArrayPath, FieldValues, Path } from 'react-hook-form';
+import { FieldValues, Path } from 'react-hook-form';
 
 export interface FormSelectOption {
   label: string;
@@ -9,26 +9,26 @@ interface FormInputBase {
   label?: string;
 }
 
-interface FormInputText<T> extends FormInputBase {
-  name: Path<T>;
+export type FormInputText<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
   type: 'text';
-}
+};
 
-interface FormInputNumber<T> extends FormInputBase {
-  name: Path<T>;
+export type FormInputNumber<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
   type: 'number';
   step?: string;
   min?: string;
   max?: string;
-}
+};
 
-interface FormInputSelect<T> extends FormInputBase {
-  name: Path<T>;
+export type FormInputSelect<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
   type: 'select';
   options: FormSelectOption[];
-}
+};
 
-type FormFieldArray<T> = FormInputBase &
+export type FormFieldArray<T extends FieldValues> = FormInputBase &
   {
     [K in keyof T]: {
       type: 'fieldArray';
@@ -37,7 +37,7 @@ type FormFieldArray<T> = FormInputBase &
     };
   }[keyof T];
 
-export type FormInput<T> =
+export type FormInput<T extends FieldValues> =
   | FormInputText<T>
   | FormInputNumber<T>
   | FormInputSelect<T>

@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
-import { GeneratedForm } from '../../components/formInputs/Form.utils';
 import { monsterForm } from './MonsterDetails.form';
 import { Monster } from '../../api/model/Monster';
+import { GeneratedForm } from '../../components/formInputs/GeneratedForm';
 
 interface MonsterDetailsFormProps {
   form: UseFormReturn<Monster>;
@@ -10,7 +10,11 @@ interface MonsterDetailsFormProps {
 export const MonsterDetailsForm = ({ form }: MonsterDetailsFormProps) => {
   return (
     <div>
-      <GeneratedForm formBuilder={monsterForm} form={form} />
+      <GeneratedForm
+        formBuilder={monsterForm}
+        control={form.control}
+        errors={form.formState.errors}
+      />
     </div>
   );
 };

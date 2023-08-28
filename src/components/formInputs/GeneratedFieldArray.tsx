@@ -1,16 +1,17 @@
 import {
   ArrayPath,
   Control,
+  FieldArray,
   FieldErrors,
   FieldValues,
   useFieldArray,
   UseFormReturn,
 } from 'react-hook-form';
-import { FormInput } from './Form.model';
+import { FormFieldArray, FormInput } from './Form.model';
 import { GeneratedForm } from './GeneratedForm';
 
 interface GeneratedFieldArrayProps<T extends FieldValues> {
-  formBuilder: FormInput<T>[];
+  formBuilder: FormFieldArray<T>[];
   control: Control<T>;
   errors: FieldErrors<T>;
   path: ArrayPath<T>;
@@ -28,6 +29,7 @@ export const GeneratedFieldArray = <T extends FieldValues>({
     control,
     name: name,
   });
+  console.log(`GeneratedFieldArray.tsx:31 hit`);
 
   return (
     <div className="monsteractions__container">
@@ -46,10 +48,7 @@ export const GeneratedFieldArray = <T extends FieldValues>({
           </>
         );
       })}
-      <button
-        onClick={() => append(formBuilder.map(({ name }) => ({ [name]: '' })))}
-        type="button"
-      >
+      <button onClick={() => append({ name: '' })} type="button">
         Append {String(name)}
       </button>
     </div>
