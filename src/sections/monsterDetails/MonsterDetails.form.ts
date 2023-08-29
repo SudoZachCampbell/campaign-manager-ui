@@ -1,11 +1,11 @@
-import { FormInput } from '../../components/formInputs/Form.model';
+import { FormInput } from '../../components/form/Form.model';
 import _ from 'lodash';
 import { Monster } from '../../api/model/Monster';
 import { MonsterType } from '../../api/model/MonsterType';
 import { Size } from '../../api/model/Size';
 import { Alignment } from '../../api/model/Alignment';
 
-export const monsterForm: FormInput<Monster>[] = [
+export const monsterForm: FormInput<Required<Monster>>[] = [
   {
     name: 'name',
     label: 'Name',
@@ -129,6 +129,7 @@ export const monsterForm: FormInput<Monster>[] = [
   {
     name: 'actions',
     type: 'fieldArray',
+    tabbed: true,
     fields: [
       {
         type: 'text',

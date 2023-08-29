@@ -5,9 +5,9 @@ import { useAuth } from '../hooks/useAuth';
 import { useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
 import { useEffect } from 'react';
-import { FormTextField } from '../components/formInputs/FormTextField';
+import { FormTextField } from '../components/form/FormTextField';
 import _ from 'lodash';
-import { FormSelect } from '../components/formInputs/FormSelect';
+import { FormSelect } from '../components/form/FormSelect';
 import { CampaignsClient } from '../api/client/CampaignsClient';
 
 interface CampaignDashboardProps {}

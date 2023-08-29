@@ -5,8 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CampaignType } from '../api/model/CampaignType';
 import { Campaign } from '../api/model/Campaign';
 import { useDnDApi } from '../api/dndDb';
-import { FormSelect } from '../components/formInputs/FormSelect';
-import { FormTextField } from '../components/formInputs/FormTextField';
+import { FormSelect } from '../components/form/FormSelect';
+import { FormTextField } from '../components/form/FormTextField';
 import { useAuth } from '../hooks/useAuth';
 import { CampaignsClient } from '../api/client/CampaignsClient';
 

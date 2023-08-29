@@ -25,14 +25,14 @@ type MonsterDetailsTab =
   | 'legendaryActions'
   | 'specialAbilities';
 
-const tabs: Record<MonsterDetailsTab, FC<{ form: UseFormReturn<Monster> }>> = {
-  details: MonsterDetailsForm,
-  speed: MonsterDetailsForm,
-  actions: MonsterActionsForm,
-  reactions: MonsterDetailsForm,
-  legendaryActions: MonsterDetailsForm,
-  specialAbilities: MonsterDetailsForm,
-};
+// const tabs: Record<MonsterDetailsTab, FC<{ form: UseFormReturn<Monster> }>> = {
+//   details: MonsterDetailsForm,
+//   speed: MonsterDetailsForm,
+//   actions: MonsterActionsForm,
+//   reactions: MonsterDetailsForm,
+//   legendaryActions: MonsterDetailsForm,
+//   specialAbilities: MonsterDetailsForm,
+// };
 
 export const MonsterDetails = ({}: MonsterDetailsProps) => {
   const [currentTabName, setCurrentTabName] =
@@ -78,33 +78,17 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     }
   };
 
-  const ActiveTab = tabs[currentTabName];
+  // const ActiveTab = tabs[currentTabName];
 
   return (
     <>
       <div>
         <h1>{monster?.name ?? 'Create Monster'}</h1>
       </div>
-      <div className="monsterdetails__container">
-        <div className="monsterdetails__tabs">
-          {Object.keys(tabs).map((tab) => (
-            <Link
-              className={`remove-formatting${
-                currentTabName === tab ? ' selected' : ' unselected'
-              }`}
-              onClick={() => setCurrentTabName(tab as MonsterDetailsTab)}
-            >
-              {_.startCase(tab)}
-            </Link>
-          ))}
-        </div>
-        <div className="monsterdetails__form__container">
-          <form onSubmit={form.handleSubmit(updateMonster)}>
-            <ActiveTab form={form} />
-            <input value="Create" type="submit" />
-          </form>
-        </div>
-      </div>
+      <form onSubmit={form.handleSubmit(updateMonster)}>
+        <MonsterDetailsForm form={form} />
+        <input value="Create" type="submit" />
+      </form>
     </>
   );
 };

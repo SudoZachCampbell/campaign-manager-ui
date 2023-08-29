@@ -4,7 +4,7 @@ import {
   useFieldArray,
   UseFormReturn,
 } from 'react-hook-form';
-import { FormTextField } from '../../components/formInputs/FormTextField';
+import { FormTextField } from '../../components/form/FormTextField';
 import './MonsterDetailsSection.styles.scss';
 import { Monster } from '../../api/model/Monster';
 import { CreatureAction } from '../../api/model/CreatureAction';

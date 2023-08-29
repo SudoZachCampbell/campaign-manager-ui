@@ -7,6 +7,7 @@ export interface FormSelectOption {
 
 interface FormInputBase {
   label?: string;
+  tabbed?: boolean;
 }
 
 export type FormInputText<T extends FieldValues> = FormInputBase & {
@@ -30,12 +31,12 @@ export type FormInputSelect<T extends FieldValues> = FormInputBase & {
 
 export type FormFieldArray<T extends FieldValues> = FormInputBase &
   {
-    [K in keyof T]: {
+    [K in Extract<keyof T, string>]: {
       type: 'fieldArray';
       name: K;
-      fields: FormInput<T[K][number]>[];
+      fields: FormInput<Required<T[K][number]>>[];
     };
-  }[keyof T];
+  }[Extract<keyof T, string>];
 
 export type FormInput<T extends FieldValues> =
   | FormInputText<T>
