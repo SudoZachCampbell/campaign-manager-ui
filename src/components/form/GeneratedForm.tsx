@@ -40,92 +40,96 @@ export const GeneratedForm = <T extends FieldValues>({
     },
     { tabbedFields: [], nonTabbedFields: [] },
   );
-  const [currentTabName, setCurrentTabName] = useState<string>(
-    tabbedFields[0].name,
-  );
+  const [currentTabName, setCurrentTabName] = useState<string>('details');
 
-  console.log(`GeneratedForm.tsx:47 tabbedFields`, tabbedFields);
-
-  const buildFields = (inputs: FormInput<T>[]) => {
-    return inputs.map((input) => {
-      switch (input.type) {
-        case 'fieldArray':
-          let fullPath = `${path}.${index}.${String(
-            input.name,
-          )}` as ArrayPath<T>;
-          return (
-            <GeneratedFieldArray
-              control={control}
-              errors={errors}
-              formBuilder={input.fields}
-              name={input.name}
-              path={fullPath}
-            />
-          );
-        default:
-          return (
-            <Controller
-              render={({ field: { onBlur, onChange, name, value } }) => {
-                switch (input.type) {
-                  case 'text':
-                    return (
-                      <FormTextField
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                        name={name}
-                        label={input.label}
-                      />
-                    );
-                  case 'number':
-                    return (
-                      <FormTextField
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        name={name}
-                        value={value}
-                        label={input.label}
-                        step={input.step}
-                        type="number"
-                        max={input.max}
-                        min={input.min}
-                        errorsLookup={errors}
-                      />
-                    );
-                  case 'select':
-                    return (
-                      <FormSelect
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        name={name}
-                        value={value}
-                        options={input.options}
-                      />
-                    );
-                }
-              }}
-              control={control}
-              name={input.name as Path<T>}
-              key={input.name}
-            />
-          );
-      }
-    });
+  const buildField = (input: FormInput<T>) => {
+    switch (input.type) {
+      case 'fieldArray':
+        let fullPath = `${path}.${index}.${String(input.name)}` as ArrayPath<T>;
+        return (
+          <GeneratedFieldArray
+            control={control}
+            errors={errors}
+            formBuilder={input.fields}
+            name={input.name}
+            path={fullPath}
+          />
+        );
+      default:
+        return (
+          <Controller
+            render={({ field: { onBlur, onChange, name, value } }) => {
+              switch (input.type) {
+                case 'text':
+                  return (
+                    <FormTextField
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      name={name}
+                      label={input.label}
+                    />
+                  );
+                case 'number':
+                  return (
+                    <FormTextField
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      value={value}
+                      label={input.label}
+                      step={input.step}
+                      type="number"
+                      max={input.max}
+                      min={input.min}
+                      errorsLookup={errors}
+                    />
+                  );
+                case 'select':
+                  return (
+                    <FormSelect
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      name={name}
+                      value={value}
+                      options={input.options}
+                    />
+                  );
+              }
+            }}
+            control={control}
+            name={input.name as Path<T>}
+            key={input.name}
+          />
+        );
+    }
   };
 
-  const nonTabbedFormInputs = buildFields(nonTabbedFields);
+  const nonTabbedFormInputs = nonTabbedFields.map(buildField);
+  const tabbedFormInputs = tabbedFields.reduce<Record<string, JSX.Element[]>>(
+    (acc, field) => {
+      acc[field.name] = [buildField(field)];
+      return acc;
+    },
+    {},
+  );
 
-  // let tabs = buildFields(tabbedFields);
-  // tabs = [...buildFields(nonTabbedFields), ...tabs];
+  const tabs: Record<string, JSX.Element[]> = {
+    details: nonTabbedFormInputs,
+    ...tabbedFormInputs,
+  };
 
-  // const ActiveTab = tabs[0];
+  const activeTab = tabs[currentTabName];
+
+  console.log(`GeneratedForm.tsx:126 activeTab`, activeTab);
 
   return (
     <>
       <div className="form__container">
         <div className="form__tabs">
-          {tabbedFields.map((tab) => (
+          {[{ name: 'details' }, ...tabbedFields].map((tab) => (
             <Link
+              key={tab.name}
               className={`remove-formatting${
                 currentTabName === tab.name ? ' selected' : ' unselected'
               }`}
@@ -136,7 +140,9 @@ export const GeneratedForm = <T extends FieldValues>({
           ))}
         </div>
         <div className="form__details_container">
-          {nonTabbedFormInputs.map((input) => input)}
+          {activeTab.map((formInput, index) => (
+            <div key={`tab_container_${index}`}>{formInput}</div>
+          ))}
         </div>
       </div>
     </>

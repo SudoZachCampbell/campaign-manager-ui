@@ -70,6 +70,8 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     mode: 'onBlur',
   });
 
+  console.log(`MonsterDetails.tsx:73 form.formState`, form.getValues());
+
   const updateMonster = async (payload: Monster) => {
     if (monsterId) {
     } else {

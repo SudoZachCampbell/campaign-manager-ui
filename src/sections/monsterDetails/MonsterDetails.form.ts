@@ -159,4 +159,37 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
       },
     ],
   },
+  {
+    name: 'legendaryActions',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      {
+        type: 'text',
+        label: 'Name',
+        name: 'name',
+      },
+      {
+        type: 'text',
+        name: 'type',
+        label: 'Type',
+      },
+      {
+        type: 'number',
+        name: 'count',
+        label: 'Count',
+      },
+      {
+        type: 'fieldArray',
+        name: 'damage',
+        fields: [
+          {
+            name: 'damageDice',
+            label: 'Damage Dice',
+            type: 'text',
+          },
+        ],
+      },
+    ],
+  },
 ];
