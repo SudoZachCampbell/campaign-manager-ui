@@ -44,9 +44,11 @@ export const FormTextField = <T,>({
           value={value}
           max={max}
           min={min}
+          step={step}
           className={`form__input ${className ?? ''}`}
           type={type}
           label={label}
+          name={name}
         />
         {adaptiveLabel && value !== undefined && value !== '' && (
           <div className={`form__input__label`}>{label}</div>

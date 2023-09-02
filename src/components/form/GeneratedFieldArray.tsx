@@ -5,17 +5,16 @@ import {
   FieldErrors,
   FieldValues,
   useFieldArray,
-  UseFormReturn,
 } from 'react-hook-form';
-import { FormFieldArray, FormInput } from './Form.model';
+import { FormInput } from './Form.model';
 import { GeneratedForm } from './GeneratedForm';
 
 interface GeneratedFieldArrayProps<T extends FieldValues> {
-  formBuilder: FormInput<T[keyof T]>[];
+  formBuilder: FormInput<Required<T[Extract<keyof T, string>]>>[];
   control: Control<T>;
   errors: FieldErrors<T>;
   path: ArrayPath<T>;
-  name: keyof T;
+  name: Extract<keyof T, string>;
 }
 
 export const GeneratedFieldArray = <T extends FieldValues>({
@@ -25,16 +24,17 @@ export const GeneratedFieldArray = <T extends FieldValues>({
   path,
   name,
 }: GeneratedFieldArrayProps<T>) => {
+  const fullPath = path === name ? path : `${path}.${name}`;
   const { fields, append } = useFieldArray({
     control,
-    name: name as ArrayPath<T>,
+    name: fullPath as ArrayPath<T>,
   });
 
   return (
     <div className="monsteractions__container">
       {fields.map(({ id }, index) => {
         return (
-          <>
+          <div key={id}>
             {index !== 0 && <div className="divider" />}
             <GeneratedForm
               key={id}
@@ -42,9 +42,9 @@ export const GeneratedFieldArray = <T extends FieldValues>({
               errors={errors}
               formBuilder={formBuilder as FormInput<T>[]}
               control={control}
-              path={path}
+              path={fullPath}
             />
-          </>
+          </div>
         );
       })}
       <button

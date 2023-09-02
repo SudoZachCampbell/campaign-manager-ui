@@ -192,4 +192,13 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
       },
     ],
   },
+  {
+    name: 'proficiencies',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      { name: 'name', type: 'text', label: 'Name' },
+      { name: 'value', type: 'number', label: 'Value' },
+    ],
+  },
 ];

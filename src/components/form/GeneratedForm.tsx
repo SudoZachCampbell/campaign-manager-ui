@@ -5,6 +5,7 @@ import {
   FieldErrors,
   FieldValues,
   Path,
+  UseFormReturn,
 } from 'react-hook-form';
 import { JSX, useState } from 'react';
 import { FormTextField } from './FormTextField';
@@ -14,6 +15,7 @@ import { GeneratedFieldArray } from './GeneratedFieldArray';
 import './Form.styles.scss';
 import { Link } from '../Link';
 import _ from 'lodash';
+import { Box, Tab, Tabs } from '@mui/material';
 
 interface GeneratedFormProps<T extends FieldValues> {
   formBuilder: FormInput<T>[];
@@ -30,6 +32,8 @@ export const GeneratedForm = <T extends FieldValues>({
   index,
   path,
 }: GeneratedFormProps<T>): JSX.Element => {
+  const [currentTab, setCurrentTab] = useState<number>(0);
+
   const { tabbedFields, nonTabbedFields } = formBuilder.reduce<{
     tabbedFields: FormInput<T>[];
     nonTabbedFields: FormInput<T>[];
@@ -40,22 +44,37 @@ export const GeneratedForm = <T extends FieldValues>({
     },
     { tabbedFields: [], nonTabbedFields: [] },
   );
-  const [currentTabName, setCurrentTabName] = useState<string>('details');
 
-  const buildField = (input: FormInput<T>) => {
+  const buildField = (input: FormInput<T>, tabPath = '') => {
+    let currentPath;
     switch (input.type) {
       case 'fieldArray':
-        let fullPath = `${path}.${index}.${String(input.name)}` as ArrayPath<T>;
+        if (tabPath !== '') {
+          currentPath = tabPath as ArrayPath<T>;
+        } else if (path && index !== null) {
+          currentPath = `${path}.${index}` as ArrayPath<T>;
+        } else if (path) {
+          currentPath = `${path}` as ArrayPath<T>;
+        } else {
+          currentPath = `` as ArrayPath<T>;
+        }
         return (
           <GeneratedFieldArray
             control={control}
             errors={errors}
             formBuilder={input.fields}
+            path={currentPath}
             name={input.name}
-            path={fullPath}
           />
         );
       default:
+        if (path && index !== null) {
+          currentPath = `${path}.${index}.${input.name}` as ArrayPath<T>;
+        } else if (path) {
+          currentPath = `${path}.${input.name}` as ArrayPath<T>;
+        } else {
+          currentPath = `${input.name}` as ArrayPath<T>;
+        }
         return (
           <Controller
             render={({ field: { onBlur, onChange, name, value } }) => {
@@ -63,6 +82,7 @@ export const GeneratedForm = <T extends FieldValues>({
                 case 'text':
                   return (
                     <FormTextField
+                      key={name}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -98,17 +118,17 @@ export const GeneratedForm = <T extends FieldValues>({
               }
             }}
             control={control}
-            name={input.name as Path<T>}
-            key={input.name}
+            name={currentPath as Path<T>}
+            key={currentPath}
           />
         );
     }
   };
 
-  const nonTabbedFormInputs = nonTabbedFields.map(buildField);
+  const nonTabbedFormInputs = nonTabbedFields.map((field) => buildField(field));
   const tabbedFormInputs = tabbedFields.reduce<Record<string, JSX.Element[]>>(
     (acc, field) => {
-      acc[field.name] = [buildField(field)];
+      acc[field.name] = [buildField(field, field.name)];
       return acc;
     },
     {},
@@ -119,32 +139,50 @@ export const GeneratedForm = <T extends FieldValues>({
     ...tabbedFormInputs,
   };
 
-  const activeTab = tabs[currentTabName];
-
-  console.log(`GeneratedForm.tsx:126 activeTab`, activeTab);
-
   return (
     <>
       <div className="form__container">
-        <div className="form__tabs">
-          {[{ name: 'details' }, ...tabbedFields].map((tab) => (
-            <Link
-              key={tab.name}
-              className={`remove-formatting${
-                currentTabName === tab.name ? ' selected' : ' unselected'
-              }`}
-              onClick={() => setCurrentTabName(tab.name)}
-            >
-              {_.startCase(tab.name)}
-            </Link>
-          ))}
-        </div>
+        {tabbedFields.length > 0 && (
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={currentTab}
+            onChange={(_, newNumber) => setCurrentTab(newNumber)}
+            sx={{ borderRight: 1, borderColor: 'divider' }}
+            className="form__tabs"
+          >
+            {[{ name: 'details' }, ...tabbedFields].map((tab) => (
+              <Tab label={_.startCase(tab.name)} />
+            ))}
+          </Tabs>
+        )}
         <div className="form__details_container">
-          {activeTab.map((formInput, index) => (
-            <div key={`tab_container_${index}`}>{formInput}</div>
+          {Object.values(tabs).map((tab, index) => (
+            <TabPanel value={currentTab} index={index}>
+              {tab}
+            </TabPanel>
           ))}
         </div>
       </div>
     </>
   );
 };
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel({ children, value, index }: TabPanelProps) {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}

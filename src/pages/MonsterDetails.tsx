@@ -1,42 +1,21 @@
-import { useEffect, useState, useMemo, FC } from 'react';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
 import './MonsterDetails.styles.scss';
-import { MonsterDetailsForm } from '../sections/monsterDetails/MonsterDetailsForm';
-import { Link } from '../components/Link';
-import _ from 'lodash';
-import { MonsterActionsForm } from '../sections/monsterDetails/MonsterActionsForm';
 import { MonstersClient } from '../api/client/MonstersClient';
 import { Monster } from '../api/model/Monster';
 import { MonsterType } from '../api/model/MonsterType';
 import { Alignment } from '../api/model/Alignment';
+import { GeneratedForm } from '../components/form/GeneratedForm';
+import { monsterForm } from '../sections/monsterDetails/MonsterDetails.form';
 
 interface MonsterDetailsProps {}
 
 const client = new MonstersClient();
 
-type MonsterDetailsTab =
-  | 'details'
-  | 'speed'
-  | 'actions'
-  | 'reactions'
-  | 'legendaryActions'
-  | 'specialAbilities';
-
-// const tabs: Record<MonsterDetailsTab, FC<{ form: UseFormReturn<Monster> }>> = {
-//   details: MonsterDetailsForm,
-//   speed: MonsterDetailsForm,
-//   actions: MonsterActionsForm,
-//   reactions: MonsterDetailsForm,
-//   legendaryActions: MonsterDetailsForm,
-//   specialAbilities: MonsterDetailsForm,
-// };
-
 export const MonsterDetails = ({}: MonsterDetailsProps) => {
-  const [currentTabName, setCurrentTabName] =
-    useState<MonsterDetailsTab>('details');
   const { id: monsterId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -54,7 +33,7 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     }
   }, [monsterId]);
 
-  const form = useForm<Monster>({
+  const form = useForm<Required<Monster>>({
     defaultValues: {
       alignment: Alignment.None,
       monsterType: MonsterType.None,
@@ -70,8 +49,6 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     mode: 'onBlur',
   });
 
-  console.log(`MonsterDetails.tsx:73 form.formState`, form.getValues());
-
   const updateMonster = async (payload: Monster) => {
     if (monsterId) {
     } else {
@@ -80,15 +57,19 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     }
   };
 
-  // const ActiveTab = tabs[currentTabName];
-
   return (
     <>
       <div>
         <h1>{monster?.name ?? 'Create Monster'}</h1>
       </div>
       <form onSubmit={form.handleSubmit(updateMonster)}>
-        <MonsterDetailsForm form={form} />
+        <div>
+          <GeneratedForm
+            formBuilder={monsterForm}
+            control={form.control}
+            errors={form.formState.errors}
+          />
+        </div>
         <input value="Create" type="submit" />
       </form>
     </>
