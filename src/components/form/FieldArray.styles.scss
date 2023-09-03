@@ -1,0 +1,19 @@
+.divider {
+    border: grey 1px solid;
+    width: 25%;
+  }
+  
+.fieldarray__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.fieldarray__form__container {
+    width: 75%;
+}
+
+.fieldarray_append-button {
+    height: 25px;
+    width: 125px;
+}

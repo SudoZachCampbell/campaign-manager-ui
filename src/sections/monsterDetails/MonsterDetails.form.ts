@@ -15,25 +15,27 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     name: 'monsterType',
     label: 'Monster Type',
     type: 'select',
-    options: Object.values(MonsterType).map((monsterType) => ({
-      value: monsterType.toString(),
-      label: _.startCase(monsterType.toString()),
+    options: Object.values(MonsterType).map((value) => ({
+      value: value.toString(),
+      label: _.startCase(value.toString()),
     })),
   },
   {
     name: 'alignment',
+    label: 'Alignment',
     type: 'select',
-    options: Object.values(Alignment).map((monsterType) => ({
-      value: monsterType.toString(),
-      label: _.startCase(monsterType.toString()),
+    options: Object.values(Alignment).map((value) => ({
+      value: value.toString(),
+      label: _.startCase(value.toString()),
     })),
   },
   {
     name: 'size',
+    label: 'Size',
     type: 'select',
-    options: Object.values(Size).map((monsterType) => ({
-      value: monsterType.toString(),
-      label: _.startCase(monsterType.toString()),
+    options: Object.values(Size).map((value) => ({
+      value: value.toString(),
+      label: _.startCase(value.toString()),
     })),
   },
   {
@@ -122,12 +124,50 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     type: 'text',
   },
   {
-    name: 'proficiencies',
-    label: 'Proficiencies',
-    type: 'text',
+    name: 'senses',
+    label: 'Senses',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      {
+        type: 'text',
+        label: 'Name',
+        name: 'name',
+      },
+      {
+        type: 'text',
+        name: 'value',
+        label: 'Value',
+      },
+    ],
+  },
+  {
+    name: 'speed',
+    label: 'Speed',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      {
+        type: 'text',
+        label: 'Name',
+        name: 'name',
+      },
+      {
+        type: 'number',
+        name: 'value',
+        label: 'Value',
+        step: '1',
+      },
+      {
+        type: 'text',
+        name: 'measurement',
+        label: 'Value',
+      },
+    ],
   },
   {
     name: 'actions',
+    label: 'Actions',
     type: 'fieldArray',
     tabbed: true,
     fields: [
@@ -147,13 +187,94 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
         label: 'Count',
       },
       {
-        type: 'fieldArray',
         name: 'damage',
+        label: 'Damage',
+        type: 'fieldArray',
         fields: [
           {
             name: 'damageDice',
             label: 'Damage Dice',
             type: 'text',
+          },
+        ],
+      },
+      {
+        name: 'actions',
+        label: 'Sub Actions',
+        type: 'fieldArray',
+        fields: [
+          {
+            name: 'name',
+            label: 'Name',
+            type: 'text',
+          },
+          {
+            name: 'type',
+            label: 'Type',
+            type: 'text',
+          },
+          {
+            name: 'count',
+            label: 'Count',
+            type: 'number',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'reactions',
+    label: 'Reactions',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      {
+        name: 'name',
+        label: 'Name',
+        type: 'text',
+      },
+      {
+        name: 'desc',
+        label: 'Description',
+        type: 'text',
+      },
+    ],
+  },
+  {
+    name: 'specialAbilities',
+    label: 'Special Abilities',
+    type: 'fieldArray',
+    tabbed: true,
+    fields: [
+      {
+        type: 'text',
+        label: 'Name',
+        name: 'name',
+      },
+      {
+        type: 'text',
+        name: 'desc',
+        label: 'Description',
+      },
+      {
+        type: 'subForm',
+        name: 'usage',
+        label: 'Usage',
+        fields: [
+          {
+            name: 'type',
+            label: 'Type',
+            type: 'text',
+          },
+          {
+            name: 'times',
+            label: 'Times',
+            type: 'number',
+          },
+          {
+            name: 'minValue',
+            label: 'Min Value',
+            type: 'number',
           },
         ],
       },
@@ -161,6 +282,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
   },
   {
     name: 'legendaryActions',
+    label: 'Legendary Actions',
     type: 'fieldArray',
     tabbed: true,
     fields: [
@@ -181,6 +303,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
       },
       {
         type: 'fieldArray',
+        label: 'Damage',
         name: 'damage',
         fields: [
           {
@@ -194,6 +317,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
   },
   {
     name: 'proficiencies',
+    label: 'Proficiencies',
     type: 'fieldArray',
     tabbed: true,
     fields: [

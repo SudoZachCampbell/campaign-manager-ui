@@ -10,6 +10,7 @@ import { MonsterType } from '../api/model/MonsterType';
 import { Alignment } from '../api/model/Alignment';
 import { GeneratedForm } from '../components/form/GeneratedForm';
 import { monsterForm } from '../sections/monsterDetails/MonsterDetails.form';
+import { ClipLoader } from 'react-spinners';
 
 interface MonsterDetailsProps {}
 
@@ -25,7 +26,9 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi((id: string) => client.getMonsterById(id, null, ''));
+  } = useDnDApi((id: string) =>
+    client.getMonsterById(monsterId ?? '', null, ''),
+  );
 
   useEffect(() => {
     if (monsterId) {
@@ -33,7 +36,9 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     }
   }, [monsterId]);
 
-  const form = useForm<Required<Monster>>({
+  const { control, formState, handleSubmit, reset } = useForm<
+    Required<Monster>
+  >({
     defaultValues: {
       alignment: Alignment.None,
       monsterType: MonsterType.None,
@@ -49,29 +54,40 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
     mode: 'onBlur',
   });
 
-  const updateMonster = async (payload: Monster) => {
-    if (monsterId) {
-    } else {
-      await client.createMonster(payload);
-      navigate(`/monsters`);
+  useEffect(() => {
+    if (monster) {
+      reset(monster);
+      console.log(`MonsterDetails.tsx:60 hit`);
     }
+  }, [monster]);
+
+  const updateMonster = async (payload: Monster) => {
+    console.log(`MonsterDetails.tsx:53 payload`, payload);
+    // if (monsterId) {
+    // } else {
+    //   await client.createMonster(payload);
+    //   navigate(`/monsters`);
+    // }
   };
 
-  return (
+  return !loading ? (
     <>
-      <div>
-        <h1>{monster?.name ?? 'Create Monster'}</h1>
-      </div>
-      <form onSubmit={form.handleSubmit(updateMonster)}>
+      <form
+        onSubmit={handleSubmit(updateMonster)}
+        className="form__main-container"
+      >
         <div>
-          <GeneratedForm
-            formBuilder={monsterForm}
-            control={form.control}
-            errors={form.formState.errors}
-          />
+          <h1>{monster?.name ?? 'Create Monster'}</h1>
         </div>
+        <GeneratedForm
+          formBuilder={monsterForm}
+          control={control}
+          errors={formState.errors}
+        />
         <input value="Create" type="submit" />
       </form>
     </>
+  ) : (
+    <ClipLoader />
   );
 };

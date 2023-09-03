@@ -13,8 +13,13 @@ export interface Monster extends Creature {
   actions?: CreatureAction[];
   legendaryActions?: CreatureAction[] | undefined;
   specialAbilities?: CreatureAction[] | undefined;
-  senses?: { [key: string]: string } | undefined;
+  senses?: Sense[] | undefined;
   npcs?: Npc[] | undefined;
   locales?: MonsterLocale[] | undefined;
   buildings?: MonsterBuilding[] | undefined;
+}
+
+export interface Sense {
+  name: string;
+  value: string;
 }

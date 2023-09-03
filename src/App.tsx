@@ -51,6 +51,7 @@ export default function App() {
             />
             <Route path="/monsters" element={<MonsterList />} />
             <Route path="/monsters/create" element={<MonsterDetails />} />
+            <Route path="/monsters/update/:id" element={<MonsterDetails />} />
             <Route path="/location-hub" element={<LocationHub />} />
             <Route path="/" element={<Home />} />
           </Route>

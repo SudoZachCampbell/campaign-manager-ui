@@ -30,33 +30,29 @@ export const FormTextField = <T,>({
   label,
   errorsLookup,
   adaptiveLabel = true,
-}: FormTextFieldProps<T>) => {
-  return (
-    <div className="form__input__container">
-      <div
-        className={`form__input__group${
-          errorsLookup?.[name] ? ' invalid' : ' '
-        }`}
-      >
-        <TextField
-          onBlur={onBlur}
-          onChange={onChange}
-          value={value}
-          max={max}
-          min={min}
-          step={step}
-          className={`form__input ${className ?? ''}`}
-          type={type}
-          label={label}
-          name={name}
-        />
-        {adaptiveLabel && value !== undefined && value !== '' && (
-          <div className={`form__input__label`}>{label}</div>
-        )}
-      </div>
-      {errorsLookup && (
-        <div className="form__error">{errorsLookup[name]?.message}</div>
+}: FormTextFieldProps<T>) => (
+  <div className="form__input__container">
+    <div
+      className={`form__input__group${errorsLookup?.[name] ? ' invalid' : ' '}`}
+    >
+      <TextField
+        onBlur={onBlur}
+        onChange={onChange}
+        value={value}
+        max={max}
+        min={min}
+        step={step}
+        className={`form__input ${className ?? ''}`}
+        type={type}
+        label={label}
+        name={name}
+      />
+      {adaptiveLabel && value !== undefined && value !== '' && (
+        <div className={`form__input__label`}>{label}</div>
       )}
     </div>
-  );
-};
+    {errorsLookup && (
+      <div className="form__error">{errorsLookup[name]?.message}</div>
+    )}
+  </div>
+);

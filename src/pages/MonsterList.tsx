@@ -14,7 +14,11 @@ export default function MonsterList() {
   const navigate = useNavigate();
 
   const columns: TableColumn[] = [
-    { name: 'name', header: 'Name' },
+    {
+      name: 'name',
+      header: 'Name',
+      link: (instance) => `/monsters/update/${instance.id}`,
+    },
     { name: 'passivePerception', header: 'Passive Perception' },
     { name: 'alignment', header: 'Alignment' },
   ];

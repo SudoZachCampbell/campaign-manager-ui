@@ -56,12 +56,11 @@
   }
 }
 
-
-
 .form__container {
   display: flex;
   flex-direction: row;
   width: 100%;
+  height: 100%;
 }
 
 .form__tabs {
@@ -77,5 +76,5 @@
 
 .form__details_container {
   width: 75%;
-  padding: 0% 10%;
+  max-height: 100%;
 }

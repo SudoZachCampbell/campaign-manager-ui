@@ -5,15 +5,13 @@ import {
   FieldErrors,
   FieldValues,
   Path,
-  UseFormReturn,
 } from 'react-hook-form';
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { FormTextField } from './FormTextField';
 import { FormSelect } from './FormSelect';
 import { FormInput } from './Form.model';
 import { GeneratedFieldArray } from './GeneratedFieldArray';
 import './Form.styles.scss';
-import { Link } from '../Link';
 import _ from 'lodash';
 import { Box, Tab, Tabs } from '@mui/material';
 
@@ -60,6 +58,8 @@ export const GeneratedForm = <T extends FieldValues>({
         }
         return (
           <GeneratedFieldArray
+            key={`fieldArray_${currentPath}_${input.name}`}
+            label={input.label}
             control={control}
             errors={errors}
             formBuilder={input.fields}
@@ -68,7 +68,7 @@ export const GeneratedForm = <T extends FieldValues>({
           />
         );
       default:
-        if (path && index !== null) {
+        if (path && index !== null && index !== undefined) {
           currentPath = `${path}.${index}.${input.name}` as ArrayPath<T>;
         } else if (path) {
           currentPath = `${path}.${input.name}` as ArrayPath<T>;
@@ -88,6 +88,7 @@ export const GeneratedForm = <T extends FieldValues>({
                       value={value}
                       name={name}
                       label={input.label}
+                      errorsLookup={errors}
                     />
                   );
                 case 'number':
@@ -113,10 +114,24 @@ export const GeneratedForm = <T extends FieldValues>({
                       name={name}
                       value={value}
                       options={input.options}
+                      errorsLookup={errors}
                     />
+                  );
+                case 'subForm':
+                  return (
+                    <div>
+                      <h2>{input.label}</h2>
+                      <GeneratedForm
+                        formBuilder={input.fields as FormInput<T>[]}
+                        control={control}
+                        errors={errors}
+                        path={name}
+                      />
+                    </div>
                   );
               }
             }}
+            rules={{ required: input.required && `This field is required` }}
             control={control}
             name={currentPath as Path<T>}
             key={currentPath}
@@ -151,14 +166,18 @@ export const GeneratedForm = <T extends FieldValues>({
             sx={{ borderRight: 1, borderColor: 'divider' }}
             className="form__tabs"
           >
-            {[{ name: 'details' }, ...tabbedFields].map((tab) => (
-              <Tab label={_.startCase(tab.name)} />
+            {[{ label: 'details' }, ...tabbedFields].map((tab, index) => (
+              <Tab key={`${tab.label}_${index}`} label={tab.label} />
             ))}
           </Tabs>
         )}
         <div className="form__details_container">
           {Object.values(tabs).map((tab, index) => (
-            <TabPanel value={currentTab} index={index}>
+            <TabPanel
+              key={`tabPanel_${index}`}
+              value={currentTab}
+              index={index}
+            >
               {tab}
             </TabPanel>
           ))}
@@ -181,8 +200,13 @@ function TabPanel({ children, value, index }: TabPanelProps) {
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
+      style={{ height: '100%' }}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        <Box height="100%" sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
     </div>
   );
 }
