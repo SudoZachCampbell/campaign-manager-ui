@@ -4,23 +4,34 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
 import './MonsterDetails.styles.scss';
-import { MonstersClient } from '../api/client/MonstersClient';
-import { Monster } from '../api/model/Monster';
-import { MonsterType } from '../api/model/MonsterType';
-import { Alignment } from '../api/model/Alignment';
+import { MonstersClient, Monster, MonsterType, Alignment } from '../api/model';
 import { GeneratedForm } from '../components/form/GeneratedForm';
 import { monsterForm } from '../sections/monsterDetails/MonsterDetails.form';
 import { ClipLoader } from 'react-spinners';
+import { Select, SelectOption } from '../components/inputs/Select';
+import { APIReference, FEClient } from '../api/FE/fe.model';
 
 interface MonsterDetailsProps {}
 
 const client = new MonstersClient();
+const feClient = new FEClient();
 
 export const MonsterDetails = ({}: MonsterDetailsProps) => {
+  const [fEMonsters, setFEMonsters] = useState<APIReference[]>();
+
   const { id: monsterId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
+
+  const collectOpenMonsters = async () => {
+    const { results } = await feClient.monsters();
+    setFEMonsters(results);
+  };
+
+  useEffect(() => {
+    collectOpenMonsters();
+  }, []);
 
   const {
     loading,
@@ -41,23 +52,26 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
   >({
     defaultValues: {
       alignment: Alignment.None,
-      monsterType: MonsterType.None,
+      type: MonsterType.None,
       strength: 10,
       dexterity: 10,
       constitution: 10,
       intelligence: 10,
       wisdom: 10,
       charisma: 10,
-      armorClass: 0,
-      hitPoints: 0,
+      armor_class: 0,
+      hit_points: 0,
     },
     mode: 'onBlur',
   });
 
+  const setMonster = (newMonster: Monster) => {
+    reset(newMonster);
+  };
+
   useEffect(() => {
     if (monster) {
-      reset(monster);
-      console.log(`MonsterDetails.tsx:60 hit`);
+      setMonster(monster);
     }
   }, [monster]);
 
@@ -78,6 +92,19 @@ export const MonsterDetails = ({}: MonsterDetailsProps) => {
       >
         <div>
           <h1>{monster?.name ?? 'Create Monster'}</h1>
+          {fEMonsters ? (
+            <Select
+              onChange={(event) => {
+                feClient
+                  .monsters2(event.target.value)
+                  .then((monster) => setMonster(monster as unknown as Monster));
+              }}
+              options={fEMonsters.map<SelectOption>(({ index, name }) => ({
+                value: index ?? '',
+                label: name ?? '',
+              }))}
+            />
+          ) : null}
         </div>
         <GeneratedForm
           formBuilder={monsterForm}

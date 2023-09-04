@@ -1,12 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 // @ts-ignore
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  Popup,
-  ImageOverlay,
-} from 'react-leaflet';
+import { MapContainer, ImageOverlay } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -16,9 +10,7 @@ import PeopleIcon from '../../assets/icons/people.svg';
 import ArrowIcon from '../../assets/icons/arrow.svg';
 import { Box } from '@mui/material';
 import LocationMarker from './LocationMarker';
-import { Monster } from '../../api/model/Monster';
-import { Npc } from '../../api/model/Npc';
-import { Map } from '../../api/model/Map';
+import { Monster, Npc, Map } from '../../api/model';
 
 const personIcon = new L.Icon({
   iconUrl: PersonIcon,
@@ -106,7 +98,7 @@ export default function LocationMap({
 
   useEffect(() => {
     showImage(
-      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.imageUrl}`,
+      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`,
     );
     if (bounds) {
       setCenter([bounds[1][0] / 2, bounds[0][0] / 2]);
@@ -204,7 +196,7 @@ export default function LocationMap({
 
         <ImageOverlay
           bounds={bounds}
-          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.imageUrl}`}
+          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`}
         />
       </MapContainer>
     </Box>

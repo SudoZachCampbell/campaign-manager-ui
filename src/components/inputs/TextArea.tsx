@@ -1,55 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  IconButton,
-  TextField as MuiTextField,
-  Typography,
-} from '@mui/material';
-import { SaveTwoTone as SaveIcon } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import './Field.styles.scss';
 
 interface TextFieldProps {
   value?: string;
   label?: string;
-  field?: string;
-  onSaveField?: Function;
+  className?: string;
+  onChange?: (event: { target: any; type?: any }) => void;
+  onBlur?: (event: { target: any; type?: any }) => void;
+  name?: string;
+  required?: boolean;
+  disabled?: boolean;
 }
 
 export const TextArea = ({
   value = '',
+  className,
   label,
-  field,
-  onSaveField,
+  onChange,
+  onBlur,
+  name,
+  required,
+  disabled,
 }: TextFieldProps) => {
-  const [currentText, setCurrentText] = useState<string>('');
+  const [currentValue, setCurrentValue] = useState<string>(value);
 
-  useEffect(() => {
-    setCurrentText(value?.toString() ?? '');
-  }, [value]);
-
-  const saveField = () => {
-    onSaveField && onSaveField(field, currentText);
+  const _onChange = (event: { target: any; type?: any }) => {
+    setCurrentValue(event.target.value);
+    onChange?.(event);
   };
 
+  useEffect(() => {
+    if (value !== currentValue) {
+      setCurrentValue(value);
+    }
+  }, [value]);
+
   return (
-    <>
-      <Typography
-        variant='subtitle2'
-        style={{ marginRight: '1em' }}
-        gutterBottom
-      >
-        {' '}
-        {label}:
-      </Typography>
-      <Box display='flex'>
-        <MuiTextField
-          fullWidth
-          defaultValue={currentText.replace('|', '\n\n')}
-          multiline={true}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setCurrentText(event.target.value.replace(/\n\n/, '|'))
-          }
-        />
-      </Box>
-    </>
+    <textarea
+      onChange={_onChange}
+      onBlur={onBlur}
+      name={name}
+      required={required}
+      disabled={disabled}
+      className={className}
+      placeholder={label}
+      value={currentValue}
+      rows={7}
+    />
   );
 };

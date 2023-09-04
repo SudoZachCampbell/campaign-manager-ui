@@ -34,6 +34,10 @@
     background-color: transparent;
     padding-bottom: 0;
 
+    &.form__input-multiline {
+    height: auto;
+    }
+
     &:focus {
       outline-width: 0;
     }
@@ -41,7 +45,6 @@
     &::placeholder {
       font-size: 1rem;
     }
-
   }
 
   .form__input__label {

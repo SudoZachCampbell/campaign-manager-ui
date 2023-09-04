@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import { Box, Grid, Theme, Typography } from '@mui/material';
 import LocationMap from '../components/mapping/LocationMap';
 import { useDnDApi } from '../api/dndDb';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { NavMenu } from '../layouts/NavMenu/NavMenu';
 import './LocationHub.styles.scss';
-import { LocalesClient } from '../api/client/LocalesClient';
-import { Map } from '../api/model/Map';
+import { LocalesClient, Map } from '../api/model';
 
 const PREFIX = 'LocationHub';
 

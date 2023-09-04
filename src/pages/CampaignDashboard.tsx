@@ -1,14 +1,9 @@
-import { Controller, useForm } from 'react-hook-form';
-import { Campaign } from '../api/model/Campaign';
-import { CampaignType } from '../api/model/CampaignType';
 import { useAuth } from '../hooks/useAuth';
 import { useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
 import { useEffect } from 'react';
-import { FormTextField } from '../components/form/FormTextField';
 import _ from 'lodash';
-import { FormSelect } from '../components/form/FormSelect';
-import { CampaignsClient } from '../api/client/CampaignsClient';
+import { CampaignsClient } from '../api/model';
 
 interface CampaignDashboardProps {}
 

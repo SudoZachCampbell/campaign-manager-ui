@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Field.styles.scss';
 
 interface TextFieldProps {
@@ -32,14 +32,19 @@ export const TextField = ({
   disabled,
   type = 'text',
 }: TextFieldProps) => {
-  // The rerender issue is here
   const [currentValue, setCurrentValue] = useState<string>(value);
 
   const _onChange = (event: { target: any; type?: any }) => {
-    console.log(`TextField.tsx:38 event.target.value`, event.target.value);
     setCurrentValue(event.target.value);
     onChange?.(event);
   };
+
+  useEffect(() => {
+    if (value !== currentValue) {
+      setCurrentValue(value);
+    }
+  }, [value]);
+
   return (
     <input
       onChange={_onChange}

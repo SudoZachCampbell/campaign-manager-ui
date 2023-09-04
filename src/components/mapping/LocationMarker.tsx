@@ -5,7 +5,7 @@ import { Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
 import L from 'leaflet';
 import { Typography } from '@mui/material';
 
-import { Base } from '../../api/model/Base';
+import { Base } from '../../api/model';
 
 export default function LocationMarker({
   position,

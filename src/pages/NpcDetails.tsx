@@ -10,8 +10,7 @@ import { FieldType } from '../interfaces/Lookups';
 import Details from '../layouts/Details';
 import LocationMap from '../components/mapping/LocationMap';
 import LocationAdder from '../components/mapping/LocationAdder';
-import { NpcsClient } from '../api/client/NpcsClient';
-import { Npc } from '../api/model/Npc';
+import { NpcsClient, Npc } from '../api/model';
 
 const multiline: string[] = ['background'];
 
@@ -29,7 +28,7 @@ const fields: Field<Npc>[] = [
     type: FieldType.String,
   },
   {
-    name: 'noteableEvents',
+    name: 'noteable_events',
     type: FieldType.Array,
   },
   {

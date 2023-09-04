@@ -1,55 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  IconButton,
-  TextField as MuiTextField,
-  Typography,
-} from '@mui/material';
-import { SaveTwoTone as SaveIcon } from '@mui/icons-material';
+import { FieldPathValue, Noop, RefCallBack } from 'react-hook-form';
+import './Form.styles.scss';
+import { TextArea } from '../inputs/TextArea';
 
-interface FormTextAreaProps {
-  value?: string;
+interface FormTextAreaProps<T> {
+  onChange: (...event: any[]) => void;
+  onBlur: Noop;
+  value: FieldPathValue<any, string>;
+  name: string;
+  errorsLookup?: Record<string, any>;
   label?: string;
-  field?: string;
-  onSaveField?: Function;
+  className?: string;
+  adaptiveLabel?: boolean;
 }
 
-export const FormTextArea = ({
-  value = '',
+export const FormTextArea = <T,>({
+  onChange,
+  onBlur,
+  value,
+  name,
+  className,
   label,
-  field,
-  onSaveField,
-}: FormTextAreaProps) => {
-  const [currentText, setCurrentText] = useState<string>('');
-
-  useEffect(() => {
-    setCurrentText(value?.toString() ?? '');
-  }, [value]);
-
-  const saveField = () => {
-    onSaveField && onSaveField(field, currentText);
-  };
-
-  return (
-    <>
-      <Typography
-        variant='subtitle2'
-        style={{ marginRight: '1em' }}
-        gutterBottom
-      >
-        {' '}
-        {label}:
-      </Typography>
-      <Box display='flex'>
-        <MuiTextField
-          fullWidth
-          defaultValue={currentText.replace('|', '\n\n')}
-          multiline={true}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setCurrentText(event.target.value.replace(/\n\n/, '|'))
-          }
-        />
-      </Box>
-    </>
-  );
-};
+  errorsLookup,
+  adaptiveLabel = true,
+}: FormTextAreaProps<T>) => (
+  <div className="form__input__container">
+    <div
+      className={`form__input__group${errorsLookup?.[name] ? ' invalid' : ' '}`}
+    >
+      <TextArea
+        onBlur={onBlur}
+        onChange={onChange}
+        value={value}
+        className={`form__input form__input-multiline ${className ?? ''}`}
+        label={label}
+        name={name}
+      />
+      {adaptiveLabel && value !== undefined && value !== '' && (
+        <div className={`form__input__label`}>{label}</div>
+      )}
+    </div>
+    {errorsLookup && (
+      <div className="form__error">{errorsLookup[name]?.message}</div>
+    )}
+  </div>
+);

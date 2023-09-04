@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { Box, Button, Grid } from '@mui/material';
 import { useDnDApi } from '../api/dndDb';
-import { NpcsClient } from '../api/client/NpcsClient';
+import { NpcsClient } from '../api/model';
 
 const npcClient = new NpcsClient();
 

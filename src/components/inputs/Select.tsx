@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApiType } from '../../api/dndDb';
 import _ from 'lodash';
 
@@ -37,6 +37,14 @@ export const Select = ({
     setCurrentValue(event.target.value);
     onChange?.(event);
   };
+
+  console.log(`Select.tsx:41 currentValue`, currentValue);
+
+  useEffect(() => {
+    if (value !== currentValue) {
+      setCurrentValue(value);
+    }
+  }, [value]);
 
   return (
     <select

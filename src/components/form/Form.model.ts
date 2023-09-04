@@ -16,6 +16,11 @@ export type FormInputText<T extends FieldValues> = FormInputBase & {
   type: 'text';
 };
 
+export type FormInputTextArea<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
+  type: 'textarea';
+};
+
 export type FormInputNumber<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'number';
@@ -50,6 +55,7 @@ export type FormFieldArray<T extends FieldValues> = FormInputBase &
 
 export type FormInput<T extends FieldValues> =
   | FormInputText<T>
+  | FormInputTextArea<T>
   | FormInputNumber<T>
   | FormInputSelect<T>
   | FormSubForm<T>

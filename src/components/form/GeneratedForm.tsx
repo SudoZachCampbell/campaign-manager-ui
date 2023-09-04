@@ -14,6 +14,7 @@ import { GeneratedFieldArray } from './GeneratedFieldArray';
 import './Form.styles.scss';
 import _ from 'lodash';
 import { Box, Tab, Tabs } from '@mui/material';
+import { FormTextArea } from './FormTextArea';
 
 interface GeneratedFormProps<T extends FieldValues> {
   formBuilder: FormInput<T>[];
@@ -82,6 +83,18 @@ export const GeneratedForm = <T extends FieldValues>({
                 case 'text':
                   return (
                     <FormTextField
+                      key={name}
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      name={name}
+                      label={input.label}
+                      errorsLookup={errors}
+                    />
+                  );
+                case 'textarea':
+                  return (
+                    <FormTextArea
                       key={name}
                       onChange={onChange}
                       onBlur={onBlur}

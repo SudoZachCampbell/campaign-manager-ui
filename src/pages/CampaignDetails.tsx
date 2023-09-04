@@ -2,13 +2,11 @@ import _ from 'lodash';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CampaignType } from '../api/model/CampaignType';
-import { Campaign } from '../api/model/Campaign';
+import { CampaignType, Campaign, CampaignsClient } from '../api/model';
 import { useDnDApi } from '../api/dndDb';
 import { FormSelect } from '../components/form/FormSelect';
 import { FormTextField } from '../components/form/FormTextField';
 import { useAuth } from '../hooks/useAuth';
-import { CampaignsClient } from '../api/client/CampaignsClient';
 
 interface CampaignDetailsProps {}
 

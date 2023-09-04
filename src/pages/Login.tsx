@@ -10,7 +10,7 @@ import colours from '../style/constants/_colours.scss';
 import { Controller, useForm } from 'react-hook-form';
 import { FormTextField } from '../components/form/FormTextField';
 import { Link } from '../components/Link';
-import { AccountsClient } from '../api/client/AccountsClient';
+import { AccountsClient } from '../api/model';
 
 const accountsClient = new AccountsClient();
 

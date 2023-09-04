@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { useDndCollectionApi } from '../api/dndDb';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { MonstersClient } from '../api/client/MonstersClient';
+import { MonstersClient } from '../api/model';
 
 const client = new MonstersClient();
 

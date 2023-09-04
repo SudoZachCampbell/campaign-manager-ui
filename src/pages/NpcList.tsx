@@ -5,7 +5,7 @@ import { useDndCollectionApi } from '../api/dndDb';
 import _ from 'lodash';
 import NpcSummary from '../components/NpcSummary';
 
-import { NpcsClient } from '../api/client/NpcsClient';
+import { NpcsClient } from '../api/model';
 
 const npcClient = new NpcsClient();
 

@@ -1,6 +1,5 @@
-import React from 'react';
 import { FieldType, ToggleType } from './Lookups';
-import { Base } from '../api/model/Base';
+import { Base } from '../api/model';
 
 export interface ITableList<T> {
   headers: string[];

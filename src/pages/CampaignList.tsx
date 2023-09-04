@@ -4,7 +4,7 @@ import { PuffLoader } from 'react-spinners';
 import { useDndCollectionApi } from '../api/dndDb';
 import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
 import { useAuth } from '../hooks/useAuth';
-import { CampaignsClient } from '../api/client/CampaignsClient';
+import { CampaignsClient } from '../api/model';
 
 const client = new CampaignsClient();
 

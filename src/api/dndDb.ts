@@ -1,15 +1,17 @@
 import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
 import { Patch } from '../interfaces/Requests';
-import { ApiException } from './client/Model';
 import { useState } from 'react';
-import { BuildingsClient } from './client/BuildingsClient';
-import { ContinentsClient } from './client/ContinentsClient';
-import { LocalesClient } from './client/LocalesClient';
-import { MonstersClient } from './client/MonstersClient';
-import { NpcsClient } from './client/NpcsClient';
-import { Base } from './model/Base';
-import { RegionsClient } from './client/RegionsClient';
+import {
+  BuildingsClient,
+  ContinentsClient,
+  LocalesClient,
+  MonstersClient,
+  NpcsClient,
+  Base,
+  ApiException,
+  RegionsClient,
+} from './model';
 
 export enum PatchType {
   Add = 'add',

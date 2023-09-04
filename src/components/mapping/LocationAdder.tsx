@@ -12,14 +12,16 @@ import {
   Button,
 } from '@mui/material';
 import _ from 'lodash';
-import { BuildingsClient } from '../../api/client/BuildingsClient';
-import { ContinentsClient } from '../../api/client/ContinentsClient';
-import { LocalesClient } from '../../api/client/LocalesClient';
-import { RegionsClient } from '../../api/client/RegionsClient';
-import { Locale } from '../../api/model/Locale';
-import { Region } from '../../api/model/Region';
-import { Continent } from '../../api/model/Continent';
-import { Building } from '../../api/model/Building';
+import {
+  BuildingsClient,
+  ContinentsClient,
+  LocalesClient,
+  RegionsClient,
+  Locale,
+  Region,
+  Continent,
+  Building,
+} from '../../api/model';
 
 const PREFIX = 'LocationAdder';
 

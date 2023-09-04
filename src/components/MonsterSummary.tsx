@@ -9,8 +9,7 @@ import TogglingList from '../components/toggling/TogglingList';
 import TogglingEnumField from '../components/toggling/TogglingSelect';
 import { ClipLoader } from 'react-spinners';
 import { ApiType, useDnDApi } from '../api/dndDb';
-import { MonstersClient } from '../api/client/MonstersClient';
-import { Monster } from '../api/model/Monster';
+import { MonstersClient, Monster } from '../api/model';
 
 interface MonsterSummaryProps {
   monsterId: string;
@@ -35,7 +34,7 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
       type: FieldType.String,
     },
     {
-      name: 'monsterType',
+      name: 'type',
       type: FieldType.Enum,
     },
     {
@@ -67,7 +66,7 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
       type: FieldType.String,
     },
     {
-      name: 'hitDice',
+      name: 'hit_dice',
       type: FieldType.String,
     },
     {
@@ -75,21 +74,17 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
       type: FieldType.String,
     },
     {
-      name: 'challengeRating',
+      name: 'challenge_rating',
       addInfo: monster && ` (${monster['xp']}xp)`,
       type: FieldType.Number,
     },
     {
-      name: 'passivePerception',
-      type: FieldType.Number,
-    },
-    {
-      name: 'armorClass',
+      name: 'armor_class',
       type: FieldType.String,
     },
     {
-      name: 'hitPoints',
-      addField: 'hitDice',
+      name: 'hit_points',
+      addField: 'hit_dice',
       type: FieldType.String,
     },
     {
@@ -97,7 +92,7 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
       type: FieldType.Enum,
     },
     {
-      name: 'specialAbilities',
+      name: 'special_abilities',
       type: FieldType.ArrayOfObjects,
       toggleType: ToggleType.Text,
     },
