@@ -2343,7 +2343,7 @@ export class NpcsClient extends Client {
         : 'http://localhost:5000';
   }
 
-  getAll(
+  getNpcs(
     page?: number | undefined,
     pageSize?: number | undefined,
     filter?: string | undefined,
@@ -2383,11 +2383,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetAll(_response);
+        return this.processGetNpcs(_response);
       });
   }
 
-  protected processGetAll(response: Response): Promise<Npc[]> {
+  protected processGetNpcs(response: Response): Promise<Npc[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2415,7 +2415,60 @@ export class NpcsClient extends Client {
     return Promise.resolve<Npc[]>(null as any);
   }
 
-  get(
+  createNpc(npc: Npc, user?: Account | null | undefined): Promise<string> {
+    let url_ = this.baseUrl + '/Npcs';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(npc);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        Authorization: user !== undefined && user !== null ? '' + user : '',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateNpc(_response);
+      });
+  }
+
+  protected processCreateNpc(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  getNpcById(
     id: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
@@ -2447,11 +2500,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGet(_response);
+        return this.processGetNpcById(_response);
       });
   }
 
-  protected processGet(response: Response): Promise<Npc> {
+  protected processGetNpcById(response: Response): Promise<Npc> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2479,7 +2532,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<Npc>(null as any);
   }
 
-  patch(
+  updateNpcPATCH(
     id: string,
     patchDoc: JsonPatchDocumentOfNpc,
     include?: string | null | undefined,
@@ -2516,11 +2569,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPatch(_response);
+        return this.processUpdateNpcPATCH(_response);
       });
   }
 
-  protected processPatch(response: Response): Promise<Npc> {
+  protected processUpdateNpcPATCH(response: Response): Promise<Npc> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2546,6 +2599,188 @@ export class NpcsClient extends Client {
       });
     }
     return Promise.resolve<Npc>(null as any);
+  }
+
+  updateNpcPUT(id: string, npc: Npc): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/Npcs/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(npc);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateNpcPUT(_response);
+      });
+  }
+
+  protected processUpdateNpcPUT(
+    response: Response,
+  ): Promise<FileResponse | null> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200 || status === 206) {
+      const contentDisposition = response.headers
+        ? response.headers.get('content-disposition')
+        : undefined;
+      let fileNameMatch = contentDisposition
+        ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(
+            contentDisposition,
+          )
+        : undefined;
+      let fileName =
+        fileNameMatch && fileNameMatch.length > 1
+          ? fileNameMatch[3] || fileNameMatch[2]
+          : undefined;
+      if (fileName) {
+        fileName = decodeURIComponent(fileName);
+      } else {
+        fileNameMatch = contentDisposition
+          ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition)
+          : undefined;
+        fileName =
+          fileNameMatch && fileNameMatch.length > 1
+            ? fileNameMatch[1]
+            : undefined;
+      }
+      return response.blob().then((blob) => {
+        return {
+          fileName: fileName,
+          data: blob,
+          status: status,
+          headers: _headers,
+        };
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<FileResponse | null>(null as any);
+  }
+
+  deleteNpc(id: string): Promise<Npc> {
+    let url_ = this.baseUrl + '/Npcs/{id}';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteNpc(_response);
+      });
+  }
+
+  protected processDeleteNpc(response: Response): Promise<Npc> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Npc);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Npc>(null as any);
+  }
+
+  getEnum(name: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/Npcs/GetEnum/{name}';
+    if (name === undefined || name === null)
+      throw new Error("The parameter 'name' must be defined.");
+    url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
+  }
+
+  protected processGetEnum(response: Response): Promise<string[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string[]>(null as any);
   }
 }
 
@@ -3135,12 +3370,14 @@ export interface Sense {
   value: string;
 }
 
-export interface Npc extends Creature {
+export interface Npc extends Owned {
+  name: string;
   background: string;
   noteable_events?: any[] | undefined;
   beliefs?: any[] | undefined;
   passions?: any[] | undefined;
   flaws?: any[] | undefined;
+  picture: string;
   monster_id?: string | undefined;
   monster?: Monster | undefined;
   locale_id?: string | undefined;

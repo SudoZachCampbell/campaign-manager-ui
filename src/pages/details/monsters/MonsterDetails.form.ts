@@ -1,6 +1,6 @@
-import { FormInput } from '../../components/form/Form.model';
+import { FormInput } from '../../../components/form/Form.model';
 import _ from 'lodash';
-import { MonsterType, Size, Alignment, Monster } from '../../api/model';
+import { MonsterType, Size, Alignment, Monster } from '../../../api/model';
 
 export const monsterForm: FormInput<Required<Monster>>[] = [
   {
@@ -25,6 +25,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
       value: value.toString(),
       label: _.startCase(value.toString()),
     })),
+    defaultValue: Alignment.None,
   },
   {
     name: 'size',
@@ -34,6 +35,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
       value: value.toString(),
       label: _.startCase(value.toString()),
     })),
+    defaultValue: Size.Tiny,
   },
   {
     name: 'strength',
@@ -42,6 +44,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'dexterity',
@@ -50,6 +53,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'constitution',
@@ -58,6 +62,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'intelligence',
@@ -66,6 +71,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'wisdom',
@@ -74,6 +80,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'charisma',
@@ -82,12 +89,14 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     step: '1',
     max: '30',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'challenge_rating',
     label: 'Challenge Rating',
     type: 'number',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'armor_class',
@@ -95,6 +104,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     type: 'number',
     step: '1',
     min: '0',
+    defaultValue: 10,
   },
   {
     name: 'hit_points',
@@ -102,6 +112,7 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     type: 'number',
     step: '1',
     min: '0',
+    defaultValue: 0,
   },
   {
     name: 'hit_dice',

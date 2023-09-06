@@ -1,11 +1,15 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { CollapsibleTable, TableColumn } from '../components/CollapsibleTable';
+import {
+  CollapsibleTable,
+  TableColumn,
+} from '../../components/CollapsibleTable';
 import { Box } from '@mui/material';
 import _ from 'lodash';
-import { useDndCollectionApi } from '../api/dndDb';
-import { useAuth } from '../hooks/useAuth';
+import { useDndCollectionApi } from '../../api/dndDb';
+import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { MonstersClient } from '../api/model';
+import { MonstersClient } from '../../api/model';
+import { Button } from '../../components/Button/Button';
 
 const client = new MonstersClient();
 
@@ -40,7 +44,7 @@ export default function MonsterList() {
   ) : monsters ? (
     <>
       <CollapsibleTable dataSet={monsters} columns={columns} />
-      <button onClick={() => navigate('/monsters/create')}>New Monster</button>
+      <Button onClick={() => navigate('/monsters/create')} text="Create" />
     </>
   ) : (
     <p>

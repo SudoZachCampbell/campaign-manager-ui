@@ -9,6 +9,7 @@ import {
 import { FormInput } from './Form.model';
 import { GeneratedForm } from './GeneratedForm';
 import './FieldArray.styles.scss';
+import { Button } from '../Button/Button';
 
 interface GeneratedFieldArrayProps<T extends FieldValues> {
   formBuilder: FormInput<Required<T[Extract<keyof T, string>]>>[];
@@ -56,7 +57,7 @@ export const GeneratedFieldArray = <T extends FieldValues>({
           </div>
         );
       })}
-      <button
+      <Button
         onClick={() =>
           append(
             formBuilder.reduce<Record<string, ''>>((acc, { name }) => {
@@ -65,11 +66,8 @@ export const GeneratedFieldArray = <T extends FieldValues>({
             }, {}) as FieldArray<T, ArrayPath<T>>,
           )
         }
-        type="button"
-        className="fieldarray_append-button"
-      >
-        Add {label}
-      </button>
+        text={`Add ${label}`}
+      />
     </div>
   );
 };

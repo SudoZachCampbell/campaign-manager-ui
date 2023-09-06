@@ -14,7 +14,7 @@ export default ({ id }: NpcSummaryProps) => {
     loading,
     invoke,
     response: npc,
-  } = useDnDApi((id: string) => npcClient.get(id));
+  } = useDnDApi((id: string) => npcClient.getNpcById(id));
 
   return npc ? (
     <Box p={3}>

@@ -1,9 +1,10 @@
-$primary-colour: #DDAC79;
-$secondary-colour: #AC79DD;
-$tertiary-colour: #79DDAC;
+$primary-colour: #C8E4B2;
+$secondary-colour: #ADC4CE;
+$tertiary-colour: #F1F0E8;
+$base-grey: #D8D9DA;
 
 :export {
     primaryColour: $primary-colour;
-    secondaryColour: secondary-colour;
-    tertiaryColour: tertiary-colour;
+    secondaryColour: $secondary-colour;
+    tertiaryColour: $tertiary-colour;
 }

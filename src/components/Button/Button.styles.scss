@@ -1,0 +1,15 @@
+@import '../../style/constants/colours';
+
+.button {
+    border: 1px solid $base-grey;
+    border-radius: 5px;
+    min-width: 7.5em;
+    min-height: 2.5em;
+
+    &.submit {
+        background-color: $primary-colour;
+    }
+    &.info {
+        background-color: $secondary-colour;
+    }
+}

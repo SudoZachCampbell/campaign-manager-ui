@@ -5,6 +5,7 @@ import {
   FieldErrors,
   FieldValues,
   Path,
+  PathValue,
 } from 'react-hook-form';
 import { JSX, useEffect, useState } from 'react';
 import { FormTextField } from './FormTextField';
@@ -148,6 +149,7 @@ export const GeneratedForm = <T extends FieldValues>({
             control={control}
             name={currentPath as Path<T>}
             key={currentPath}
+            defaultValue={input.defaultValue as PathValue<T, Path<T>>}
           />
         );
     }

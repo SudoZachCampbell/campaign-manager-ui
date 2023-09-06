@@ -14,11 +14,13 @@ interface FormInputBase {
 export type FormInputText<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'text';
+  defaultValue?: string;
 };
 
 export type FormInputTextArea<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'textarea';
+  defaultValue?: string;
 };
 
 export type FormInputNumber<T extends FieldValues> = FormInputBase & {
@@ -27,12 +29,14 @@ export type FormInputNumber<T extends FieldValues> = FormInputBase & {
   step?: string;
   min?: string;
   max?: string;
+  defaultValue?: number;
 };
 
 export type FormInputSelect<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'select';
   options: FormSelectOption[];
+  defaultValue?: string;
 };
 
 export type FormSubForm<T extends FieldValues> = FormInputBase &
@@ -41,6 +45,7 @@ export type FormSubForm<T extends FieldValues> = FormInputBase &
       type: 'subForm';
       name: K;
       fields: FormInput<T[K]>[];
+      defaultValue?: K;
     };
   }[Extract<keyof T, string>];
 
