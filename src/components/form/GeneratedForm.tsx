@@ -1,3 +1,5 @@
+import { Box, Tab, Tabs } from '@mui/material';
+import { JSX, useState } from 'react';
 import {
   ArrayPath,
   Control,
@@ -7,15 +9,13 @@ import {
   Path,
   PathValue,
 } from 'react-hook-form';
-import { JSX, useEffect, useState } from 'react';
-import { FormTextField } from './FormTextField';
-import { FormSelect } from './FormSelect';
 import { FormInput } from './Form.model';
-import { GeneratedFieldArray } from './GeneratedFieldArray';
 import './Form.styles.scss';
-import _ from 'lodash';
-import { Box, Tab, Tabs } from '@mui/material';
+import { FormCheckBox } from './FormCheckbox';
+import { FormSelect } from './FormSelect';
 import { FormTextArea } from './FormTextArea';
+import { FormTextField } from './FormTextField';
+import { GeneratedFieldArray } from './GeneratedFieldArray';
 
 interface GeneratedFormProps<T extends FieldValues> {
   formBuilder: FormInput<T>[];
@@ -117,6 +117,16 @@ export const GeneratedForm = <T extends FieldValues>({
                       type="number"
                       max={input.max}
                       min={input.min}
+                      errorsLookup={errors}
+                    />
+                  );
+                case 'boolean':
+                  return (
+                    <FormCheckBox
+                      onChange={onChange}
+                      name={name}
+                      value={value}
+                      label={input.label}
                       errorsLookup={errors}
                     />
                   );

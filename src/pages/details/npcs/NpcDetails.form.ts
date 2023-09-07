@@ -12,24 +12,24 @@ export const npcForm: FormInput<Required<Npc>>[] = [
     label: 'Background',
     type: 'text',
   },
-  //   {
-  //     name: 'noteable_events',
-  //     label: 'Noteable Events',
-  //     type: FieldType.Array,
-  //   },
-  //   {
-  //     name: 'beliefs',
-  //     label: 'Beliefs',
-  //     type: FieldType.Array,
-  //   },
-  //   {
-  //     name: 'passions',
-  //     label: 'Passions',
-  //     type: FieldType.Array,
-  //   },
-  //   {
-  //     name: 'flaws',
-  //     label: 'Flaws',
-  //     type: FieldType.Array,
-  //   },
+  {
+    name: 'noteable_events',
+    label: 'Noteable Events',
+    type: 'textarea',
+  },
+  {
+    name: 'beliefs',
+    label: 'Beliefs',
+    type: 'textarea',
+  },
+  {
+    name: 'passions',
+    label: 'Passions',
+    type: 'textarea',
+  },
+  {
+    name: 'flaws',
+    label: 'Flaws',
+    type: 'textarea',
+  },
 ];

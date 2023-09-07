@@ -1,3 +1,31 @@
+@import '../../style/constants/colours';
+
+.form__container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+
+  .form__tabs {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    a {
+      padding: 2%;
+    }
+  }
+  
+  .form__details_container {
+    width: 75%;
+    max-height: 100%;
+    overflow-y: scroll;
+  }
+
+}
+
 .form__input__container {
   width: 100%;
   margin-bottom: 3%;
@@ -59,29 +87,27 @@
   }
 }
 
-.form__container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 100%;
+.form__checkbox{
+  border-left: solid 1px;
+  border-top: solid 1px;
+  border-right: solid 2px;
+  border-bottom: solid 2px;
+  border-color: $secondary-colour;
+  border-radius: 4px;
+  width: fit-content;
+  padding: 1%;
+  margin: 1%;
 
-
-  .form__tabs {
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-    a {
-      padding: 2%;
-    }
-  }
-  
-  .form__details_container {
-    width: 75%;
-    max-height: 100%;
-    overflow-y: scroll;
-  }
-
+  &.checked {
+    border-left: solid 2px;
+    border-top: solid 2px;
+    border-right: solid 1px;
+    border-bottom: solid 1px;
+    border-color: $primary-colour;
 }
 
+  .form__input__label {
+    background-color: white;
+    margin-right: 0.5%
+  }
+}

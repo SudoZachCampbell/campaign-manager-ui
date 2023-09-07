@@ -32,6 +32,12 @@ export type FormInputNumber<T extends FieldValues> = FormInputBase & {
   defaultValue?: number;
 };
 
+export type FormInputBoolean<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
+  type: 'boolean';
+  defaultValue: boolean;
+};
+
 export type FormInputSelect<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'select';
@@ -62,6 +68,7 @@ export type FormInput<T extends FieldValues> =
   | FormInputText<T>
   | FormInputTextArea<T>
   | FormInputNumber<T>
+  | FormInputBoolean<T>
   | FormInputSelect<T>
   | FormSubForm<T>
   | FormFieldArray<T>;

@@ -2,26 +2,24 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDndCollectionApi } from '../../api/dndDb';
-import { NpcsClient } from '../../api/model';
+import { PlayersClient } from '../../api/model';
 import { Button } from '../../components/Button/Button';
 import {
   CollapsibleTable,
   TableColumn,
 } from '../../components/CollapsibleTable';
-import NpcSummary from '../../components/NpcSummary';
 import { useAuth } from '../../hooks/useAuth';
 
-const client = new NpcsClient();
+const client = new PlayersClient();
 
-interface NpcListProps {}
+interface PlayerListProps {}
 
-const NpcList = () => {
+const PlayerList = () => {
   client.setAuthToken(useAuth().token);
   const navigate = useNavigate();
 
   const columns: TableColumn[] = [
     { name: 'name', header: 'Name' },
-    { name: 'monster.name', header: 'Monster Name' },
     { name: 'location', header: 'Location' },
   ];
 
@@ -29,7 +27,7 @@ const NpcList = () => {
     loading,
     invoke,
     response: npcs,
-  } = useDndCollectionApi(() => client.getNpcs());
+  } = useDndCollectionApi(() => client.getPlayers());
 
   useEffect(() => {
     invoke();
@@ -41,12 +39,8 @@ const NpcList = () => {
     </p>
   ) : npcs ? (
     <>
-      <CollapsibleTable
-        dataSet={npcs}
-        Component={NpcSummary}
-        columns={columns}
-      />
-      <Button onClick={() => navigate('/npcs/create')} text="Create" />
+      <CollapsibleTable dataSet={npcs} columns={columns} />
+      <Button onClick={() => navigate('/players/create')} text="Create" />
     </>
   ) : (
     <p>Fecked</p>
@@ -59,4 +53,4 @@ const NpcList = () => {
   );
 };
 
-export default NpcList;
+export default PlayerList;
