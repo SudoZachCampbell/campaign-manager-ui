@@ -1,8 +1,4 @@
-﻿import { useState } from 'react';
-import * as React from 'react';
-import * as _ from 'lodash';
-import NpcSummary from './NpcSummary';
-import MonsterSummary from './MonsterSummary';
+﻿import * as React from 'react';
 
 import { Base } from '../api/model';
 
@@ -36,8 +32,6 @@ export const CollapsibleTable = <T extends TableData>({
     },
     {},
   );
-
-  console.log(`CollapsibleTable.tsx:39 columnLookup`, columnLookup);
 
   return (
     <div className="table__container">

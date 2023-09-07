@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDndCollectionApi } from '../../api/dndDb';
-import { PlayersClient } from '../../api/model';
+import { PcsClient } from '../../api/model';
 import { Button } from '../../components/Button/Button';
 import {
   CollapsibleTable,
@@ -10,7 +10,7 @@ import {
 } from '../../components/CollapsibleTable';
 import { useAuth } from '../../hooks/useAuth';
 
-const client = new PlayersClient();
+const client = new PcsClient();
 
 interface PlayerListProps {}
 
@@ -19,15 +19,19 @@ const PlayerList = () => {
   const navigate = useNavigate();
 
   const columns: TableColumn[] = [
-    { name: 'name', header: 'Name' },
+    {
+      name: 'name',
+      header: 'Name',
+      link: (instance) => `/players/update/${instance.id}`,
+    },
     { name: 'location', header: 'Location' },
   ];
 
   const {
     loading,
     invoke,
-    response: npcs,
-  } = useDndCollectionApi(() => client.getPlayers());
+    response: pcs,
+  } = useDndCollectionApi(() => client.getPcs());
 
   useEffect(() => {
     invoke();
@@ -37,9 +41,9 @@ const PlayerList = () => {
     <p>
       <em>Loading...</em>
     </p>
-  ) : npcs ? (
+  ) : pcs ? (
     <>
-      <CollapsibleTable dataSet={npcs} columns={columns} />
+      <CollapsibleTable dataSet={pcs} columns={columns} />
       <Button onClick={() => navigate('/players/create')} text="Create" />
     </>
   ) : (

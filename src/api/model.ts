@@ -2784,7 +2784,7 @@ export class NpcsClient extends Client {
   }
 }
 
-export class PlayersClient extends Client {
+export class PcsClient extends Client {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -2804,15 +2804,15 @@ export class PlayersClient extends Client {
         : 'http://localhost:5000';
   }
 
-  getPlayers(
+  getPcs(
     page?: number | undefined,
     pageSize?: number | undefined,
     filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
-  ): Promise<Player[]> {
-    let url_ = this.baseUrl + '/Players?';
+  ): Promise<Pc[]> {
+    let url_ = this.baseUrl + '/Pcs?';
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -2844,11 +2844,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetPlayers(_response);
+        return this.processGetPcs(_response);
       });
   }
 
-  protected processGetPlayers(response: Response): Promise<Player[]> {
+  protected processGetPcs(response: Response): Promise<Pc[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2860,7 +2860,7 @@ export class PlayersClient extends Client {
         result200 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Player[]);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Pc[]);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -2873,17 +2873,14 @@ export class PlayersClient extends Client {
         );
       });
     }
-    return Promise.resolve<Player[]>(null as any);
+    return Promise.resolve<Pc[]>(null as any);
   }
 
-  createPlayer(
-    player: Player,
-    user?: Account | null | undefined,
-  ): Promise<string> {
-    let url_ = this.baseUrl + '/Players';
+  createPc(pc: Pc, user?: Account | null | undefined): Promise<string> {
+    let url_ = this.baseUrl + '/Pcs';
     url_ = url_.replace(/[?&]$/, '');
 
-    const content_ = JSON.stringify(player);
+    const content_ = JSON.stringify(pc);
 
     let options_: RequestInit = {
       body: content_,
@@ -2900,11 +2897,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreatePlayer(_response);
+        return this.processCreatePc(_response);
       });
   }
 
-  protected processCreatePlayer(response: Response): Promise<string> {
+  protected processCreatePc(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2932,13 +2929,13 @@ export class PlayersClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getPlayerById(
+  getPcById(
     id: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
-  ): Promise<Player> {
-    let url_ = this.baseUrl + '/Players/{id}?';
+  ): Promise<Pc> {
+    let url_ = this.baseUrl + '/Pcs/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
@@ -2964,11 +2961,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetPlayerById(_response);
+        return this.processGetPcById(_response);
       });
   }
 
-  protected processGetPlayerById(response: Response): Promise<Player> {
+  protected processGetPcById(response: Response): Promise<Pc> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2980,7 +2977,7 @@ export class PlayersClient extends Client {
         result200 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Player);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Pc);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -2993,17 +2990,17 @@ export class PlayersClient extends Client {
         );
       });
     }
-    return Promise.resolve<Player>(null as any);
+    return Promise.resolve<Pc>(null as any);
   }
 
-  updatePlayerPATCH(
+  updatePcPATCH(
     id: string,
-    patchDoc: JsonPatchDocumentOfPlayer,
+    patchDoc: JsonPatchDocumentOfPc,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
-  ): Promise<Player> {
-    let url_ = this.baseUrl + '/Players/{id}?';
+  ): Promise<Pc> {
+    let url_ = this.baseUrl + '/Pcs/{id}?';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
@@ -3033,11 +3030,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdatePlayerPATCH(_response);
+        return this.processUpdatePcPATCH(_response);
       });
   }
 
-  protected processUpdatePlayerPATCH(response: Response): Promise<Player> {
+  protected processUpdatePcPATCH(response: Response): Promise<Pc> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3049,7 +3046,7 @@ export class PlayersClient extends Client {
         result200 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Player);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Pc);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -3062,17 +3059,17 @@ export class PlayersClient extends Client {
         );
       });
     }
-    return Promise.resolve<Player>(null as any);
+    return Promise.resolve<Pc>(null as any);
   }
 
-  updatePlayerPUT(id: string, player: Player): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Players/{id}';
+  updatePcPUT(id: string, pc: Pc): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/Pcs/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
     url_ = url_.replace(/[?&]$/, '');
 
-    const content_ = JSON.stringify(player);
+    const content_ = JSON.stringify(pc);
 
     let options_: RequestInit = {
       body: content_,
@@ -3088,11 +3085,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdatePlayerPUT(_response);
+        return this.processUpdatePcPUT(_response);
       });
   }
 
-  protected processUpdatePlayerPUT(
+  protected processUpdatePcPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -3145,8 +3142,8 @@ export class PlayersClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deletePlayer(id: string): Promise<Player> {
-    let url_ = this.baseUrl + '/Players/{id}';
+  deletePc(id: string): Promise<Pc> {
+    let url_ = this.baseUrl + '/Pcs/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
     url_ = url_.replace('{id}', encodeURIComponent('' + id));
@@ -3164,11 +3161,11 @@ export class PlayersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeletePlayer(_response);
+        return this.processDeletePc(_response);
       });
   }
 
-  protected processDeletePlayer(response: Response): Promise<Player> {
+  protected processDeletePc(response: Response): Promise<Pc> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3180,7 +3177,7 @@ export class PlayersClient extends Client {
         result200 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Player);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Pc);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -3193,11 +3190,11 @@ export class PlayersClient extends Client {
         );
       });
     }
-    return Promise.resolve<Player>(null as any);
+    return Promise.resolve<Pc>(null as any);
   }
 
   getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Players/GetEnum/{name}';
+    let url_ = this.baseUrl + '/Pcs/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
@@ -3856,7 +3853,7 @@ export interface Locale extends Owned {
   region?: Region | undefined;
   buildings?: Building[] | undefined;
   dungeons?: Dungeon[] | undefined;
-  players?: Player[] | undefined;
+  pcs?: Pc[] | undefined;
   npcs?: Npc[] | undefined;
   monsters?: MonsterLocale[] | undefined;
   maps?: Map[] | undefined;
@@ -3883,7 +3880,7 @@ export interface Building extends Owned {
   map: string;
   npcs?: Npc[] | undefined;
   monsters?: MonsterBuilding[] | undefined;
-  players?: Player[] | undefined;
+  pcs?: Pc[] | undefined;
   maps?: BuildingMap[] | undefined;
 }
 
@@ -3894,12 +3891,11 @@ export interface MonsterBuilding {
   building?: Building | undefined;
 }
 
-export interface Player extends Creature {
+export interface Pc extends Creature {
   level: number;
   xp: number;
   inspiration: boolean;
-  character_name: string;
-  player_name: string;
+  pc_name: string;
   background: string;
   faction: string;
   race: string;
@@ -4052,12 +4048,12 @@ export interface JsonPatchDocumentOfNpc {
 
 export interface OperationOfNpc extends Operation {}
 
-export interface JsonPatchDocumentOfPlayer {
-  operations?: OperationOfPlayer[] | undefined;
+export interface JsonPatchDocumentOfPc {
+  operations?: OperationOfPc[] | undefined;
   contract_resolver?: IContractResolver | undefined;
 }
 
-export interface OperationOfPlayer extends Operation {}
+export interface OperationOfPc extends Operation {}
 
 export interface JsonPatchDocumentOfRegion {
   operations?: OperationOfRegion[] | undefined;

@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useAuth } from '../hooks/useAuth';
 
 interface HomeProps {}
@@ -8,33 +7,32 @@ interface HomeProps {}
 export default function Home() {
   const { token } = useAuth();
 
-  console.log(`Home.tsx:11 token`, token);
   return (
     <Box>
-      <Typography variant='h1' component='h2' gutterBottom>
+      <Typography variant="h1" component="h2" gutterBottom>
         Hello, world!
       </Typography>
-      <Typography variant='body1' gutterBottom>
+      <Typography variant="body1" gutterBottom>
         Welcome to your new single-page application, built with:
       </Typography>
       <ul>
         <li>
-          <a href='https://get.asp.net/'>ASP.NET Core</a> and{' '}
-          <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>
+          <a href="https://get.asp.net/">ASP.NET Core</a> and{' '}
+          <a href="https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx">
             C#
           </a>{' '}
           for cross-platform server-side code
         </li>
         <li>
-          <a href='https://facebook.github.io/react/'>React</a> for client-side
+          <a href="https://facebook.github.io/react/">React</a> for client-side
           code
         </li>
         <li>
-          <a href='http://getbootstrap.com/'>Bootstrap</a> for layout and
+          <a href="http://getbootstrap.com/">Bootstrap</a> for layout and
           styling
         </li>
       </ul>
-      <Typography variant='body1' gutterBottom>
+      <Typography variant="body1" gutterBottom>
         To help you get started, we have also set up:
       </Typography>
       <ul>
@@ -56,7 +54,7 @@ export default function Home() {
           efficiently bundled JavaScript files.
         </li>
       </ul>
-      <Typography variant='body1' gutterBottom>
+      <Typography variant="body1" gutterBottom>
         The <code>ClientApp</code> subdirectory is a standard React application
         based on the <code>create-react-app</code> template. If you open a
         command prompt in that directory, you can run <code>npm</code> commands

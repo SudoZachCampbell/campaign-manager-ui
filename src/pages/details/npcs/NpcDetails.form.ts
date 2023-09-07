@@ -6,11 +6,13 @@ export const npcForm: FormInput<Required<Npc>>[] = [
     name: 'name',
     label: 'Name',
     type: 'text',
+    required: true,
   },
   {
     name: 'background',
     label: 'Background',
     type: 'text',
+    required: true,
   },
   {
     name: 'noteable_events',

@@ -42,7 +42,7 @@ export type FormInputSelect<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'select';
   options: FormSelectOption[];
-  defaultValue?: string;
+  defaultValue: string;
 };
 
 export type FormSubForm<T extends FieldValues> = FormInputBase &

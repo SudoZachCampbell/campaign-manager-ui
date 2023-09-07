@@ -1,6 +1,6 @@
+import { Alignment, Monster, MonsterType, Size } from '../../../api/model';
 import { FormInput } from '../../../components/form/Form.model';
-import _ from 'lodash';
-import { MonsterType, Size, Alignment, Monster } from '../../../api/model';
+import { generateOptionsFromEnum } from '../../../components/form/Form.utils';
 
 export const monsterForm: FormInput<Required<Monster>>[] = [
   {
@@ -12,29 +12,21 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     name: 'type',
     label: 'Monster Type',
     type: 'select',
-    options: Object.values(MonsterType).map((value) => ({
-      value: value.toString(),
-      label: _.startCase(value.toString()),
-    })),
+    options: generateOptionsFromEnum(MonsterType),
+    defaultValue: MonsterType.None,
   },
   {
     name: 'alignment',
     label: 'Alignment',
     type: 'select',
-    options: Object.values(Alignment).map((value) => ({
-      value: value.toString(),
-      label: _.startCase(value.toString()),
-    })),
+    options: generateOptionsFromEnum(Alignment),
     defaultValue: Alignment.None,
   },
   {
     name: 'size',
     label: 'Size',
     type: 'select',
-    options: Object.values(Size).map((value) => ({
-      value: value.toString(),
-      label: _.startCase(value.toString()),
-    })),
+    options: generateOptionsFromEnum(Size),
     defaultValue: Size.Tiny,
   },
   {

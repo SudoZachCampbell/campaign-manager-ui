@@ -28,8 +28,6 @@ export const FormCheckBox: FC<FormCheckBoxProps> = ({
     }
   }, [value]);
 
-  console.log(`FormCheckbox.tsx:33 checked`, checked);
-
   return (
     <div>
       <div

@@ -3,16 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../api/dndDb';
-import { Player, PlayersClient } from '../../../api/model';
+import { Pc, PcsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
 import { playerForm } from './PlayerDetails.form';
 
-const client = new PlayersClient();
+const client = new PcsClient();
 
 export const PlayerDetails = () => {
-  const { id: playerId } = useParams<{ id: string }>();
+  const { id: pcId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
@@ -20,38 +20,42 @@ export const PlayerDetails = () => {
   const {
     loading,
     invoke,
-    response: monster,
-  } = useDnDApi((id: string) => client.getPlayerById(playerId ?? '', null, ''));
+    response: pc,
+  } = useDnDApi(() => client.getPcById(pcId ?? '', null, ''));
 
   useEffect(() => {
-    if (playerId) {
+    if (pcId) {
       invoke();
     }
-  }, [playerId]);
+  }, [pcId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<Player>>(
-    {
-      mode: 'onBlur',
-    },
-  );
+  const { control, formState, handleSubmit, reset } = useForm<Required<Pc>>({
+    mode: 'onBlur',
+  });
 
-  const updateMonster = async (payload: Player) => {
-    console.log(`PlayerDetails.tsx:39 payload`, payload);
-    // if (monsterId) {
-    // } else {
-    //   await client.createMonster(payload);
-    //   navigate(`/monsters`);
-    // }
+  useEffect(() => {
+    if (pc) {
+      reset(pc);
+    }
+  }, [pc]);
+
+  const updatePlayer = async (payload: Pc) => {
+    if (pcId) {
+      await client.updatePcPUT(pcId, payload);
+    } else {
+      await client.createPc(payload);
+    }
+    navigate('/players');
   };
 
   return !loading ? (
     <>
       <form
-        onSubmit={handleSubmit(updateMonster)}
+        onSubmit={handleSubmit(updatePlayer)}
         className="monsterform__main-container"
       >
         <div className="monsterform__header">
-          <h1>{monster?.name ?? 'Create Player'}</h1>
+          <h1>{pc?.name ?? 'Create Player'}</h1>
           <div>
             <Button text="Create" submit type="submit" />
           </div>

@@ -20,7 +20,11 @@ const NpcList = () => {
   const navigate = useNavigate();
 
   const columns: TableColumn[] = [
-    { name: 'name', header: 'Name' },
+    {
+      name: 'name',
+      header: 'Name',
+      link: (instance) => `/npcs/update/${instance.id}`,
+    },
     { name: 'monster.name', header: 'Monster Name' },
     { name: 'location', header: 'Location' },
   ];

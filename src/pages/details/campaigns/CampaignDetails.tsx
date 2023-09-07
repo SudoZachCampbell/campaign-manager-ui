@@ -3,16 +3,18 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../api/dndDb';
-import { Npc, NpcsClient } from '../../../api/model';
+import { Campaign, CampaignsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
-import { npcForm } from './NpcDetails.form';
+import { campaignForm } from './CampaignDetails.form';
 
-const client = new NpcsClient();
+interface CampaignDetailsProps {}
 
-export const NpcDetails = () => {
-  const { id: npcId } = useParams<{ id: string }>();
+const client = new CampaignsClient();
+
+export const CampaignDetails = ({}: CampaignDetailsProps) => {
+  const { id: campaignId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
@@ -20,42 +22,44 @@ export const NpcDetails = () => {
   const {
     loading,
     invoke,
-    response: npc,
-  } = useDnDApi(() => client.getNpcById(npcId ?? '', null, ''));
+    response: campaign,
+  } = useDnDApi(() => client.getCampaignById(campaignId ?? '', null, ''));
 
   useEffect(() => {
-    if (npcId) {
+    if (campaignId) {
       invoke();
     }
-  }, [npcId]);
+  }, [campaignId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<Npc>>({
+  const { control, formState, handleSubmit, reset } = useForm<
+    Required<Campaign>
+  >({
     mode: 'onBlur',
   });
 
   useEffect(() => {
-    if (npc) {
-      reset(npc);
+    if (campaign) {
+      reset(campaign);
     }
-  }, [npc]);
+  }, [campaign]);
 
-  const updateNpc = async (payload: Npc) => {
-    if (npcId) {
-      await client.updateNpcPUT(npcId, payload);
+  const updateCampaign = async (payload: Campaign) => {
+    if (campaignId) {
+      await client.updateCampaignPUT(campaignId, payload);
     } else {
-      await client.createNpc(payload);
-      navigate(`/npcs`);
+      await client.createCampaign(payload);
+      navigate(`/campaigns`);
     }
   };
 
   return !loading ? (
     <>
       <form
-        onSubmit={handleSubmit(updateNpc)}
+        onSubmit={handleSubmit(updateCampaign)}
         className="monsterform__main-container"
       >
         <div className="monsterform__header">
-          <h1>{npc?.name ?? 'Create Npc'}</h1>
+          <h1>{campaign?.name ?? 'Create Campaign'}</h1>
           <div>
             <Button text="Create" submit type="submit" />
           </div>
@@ -63,7 +67,7 @@ export const NpcDetails = () => {
 
         <div className="monsterform__content">
           <GeneratedForm
-            formBuilder={npcForm}
+            formBuilder={campaignForm}
             control={control}
             errors={formState.errors}
           />

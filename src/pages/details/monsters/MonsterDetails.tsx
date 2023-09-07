@@ -1,22 +1,17 @@
+import { Modal } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDnDApi } from '../../../api/dndDb';
-import { useAuth } from '../../../hooks/useAuth';
-import './MonsterDetails.styles.scss';
-import {
-  MonstersClient,
-  Monster,
-  MonsterType,
-  Alignment,
-} from '../../../api/model';
-import { GeneratedForm } from '../../../components/form/GeneratedForm';
-import { monsterForm } from './MonsterDetails.form';
 import { ClipLoader } from 'react-spinners';
 import { APIReference, FEClient } from '../../../api/FE/fe.model';
+import { useDnDApi } from '../../../api/dndDb';
+import { Monster, MonstersClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
-import { Modal } from '@mui/material';
+import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { Select, SelectOption } from '../../../components/inputs/Select';
+import { useAuth } from '../../../hooks/useAuth';
+import { monsterForm } from './MonsterDetails.form';
+import './MonsterDetails.styles.scss';
 
 interface MonsterDetailsProps {}
 
@@ -35,9 +30,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi((id: string) =>
-    client.getMonsterById(monsterId ?? '', null, ''),
-  );
+  } = useDnDApi(() => client.getMonsterById(monsterId ?? '', null, ''));
 
   useEffect(() => {
     if (monsterId) {
@@ -51,23 +44,19 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     mode: 'onBlur',
   });
 
-  const setMonster = (newMonster: Monster) => {
-    reset(newMonster);
-  };
-
   useEffect(() => {
     if (monster) {
-      setMonster(monster);
+      reset(monster);
     }
   }, [monster]);
 
   const updateMonster = async (payload: Monster) => {
-    console.log(`MonsterDetails.tsx:53 payload`, payload);
-    // if (monsterId) {
-    // } else {
-    //   await client.createMonster(payload);
-    //   navigate(`/monsters`);
-    // }
+    if (monsterId) {
+      await client.updateMonsterPUT(monsterId, payload);
+    } else {
+      await client.createMonster(payload);
+      navigate(`/monsters`);
+    }
   };
 
   return !loading ? (
@@ -76,7 +65,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
         open={selectingMonster}
         onClose={(monster?: Monster) => {
           if (monster) {
-            setMonster(monster);
+            reset(monster);
           }
           setSelectingMonster(false);
         }}
