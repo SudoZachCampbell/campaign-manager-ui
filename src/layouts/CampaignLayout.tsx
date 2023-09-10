@@ -3,7 +3,7 @@ import { useNavigate, useOutlet } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../hooks/useAuth';
 import { CampaignMenu } from './NavMenu/CampaignMenu';
-import './layout.scss';
+import './layout.styles.scss';
 
 export const CampaignLayout = () => {
   const outlet = useOutlet();

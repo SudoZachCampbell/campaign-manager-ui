@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router';
-import './custom.css';
 import { CampaignLayout } from './layouts/CampaignLayout';
 import { CampaignDashboard } from './pages/CampaignDashboard';
 import LocationHub from './pages/LocationHub';

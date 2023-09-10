@@ -1,3 +1,5 @@
+@import './style/constants/colors';
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -15,4 +17,14 @@ code {
 
 body {
   margin: 0;
+  background-color: $background-color;
+  color: $text-color;
+}
+
+.app__body {
+  height: 95vh;
+}
+
+.app__footer {
+ height: 5vh;
 }

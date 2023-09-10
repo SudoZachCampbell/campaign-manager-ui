@@ -1,0 +1,82 @@
+@import '../style/constants/colors';
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap');
+
+.homepage__container {
+    font-family: Nunito, Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+}
+
+.homepage__header {
+    display: flex;
+    justify-content: center;
+    height: 10%;
+
+    h1 {
+        font-size: 3rem
+    }
+}
+
+.homepage__content {
+    width: 100%;
+    height: 90%;
+
+
+    .homepage__dial {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        > * {
+            display: flex;
+            height: 25%;
+            width: 25%;
+
+            > * {
+                background-color: $secondary-color;
+                height: 100%;
+                width: 100%;
+                font-size: 2rem;
+
+                p {
+                    padding: 2%;
+                }
+                
+                &:hover {
+                    background-color: $primary-color;
+                }
+            }
+
+            .left {
+                display: flex;
+                justify-content: end;
+            }
+        }
+
+        .top {
+            * {
+                display: flex;
+                align-items: flex-end;
+            }
+            .left {
+                border-top-left-radius: 100%;
+            }
+
+            .right {
+                border-top-right-radius: 100%;
+            }
+        }
+
+        .bottom {
+
+            .left {
+                border-bottom-left-radius: 100%;
+                
+            }
+
+            .right {
+                border-bottom-right-radius: 100%;
+            }
+        }
+    }
+}

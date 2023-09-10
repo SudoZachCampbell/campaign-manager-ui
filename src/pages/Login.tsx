@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useDnDApi } from '../api/dndDb';
-import { PuffLoader } from 'react-spinners';
-import { useAuth } from '../hooks/useAuth';
-import jwtDecode from 'jwt-decode';
 import { JwtPayload } from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
+import { useEffect, useState } from 'react';
+import { PuffLoader } from 'react-spinners';
+import { useDnDApi } from '../api/dndDb';
+import { useAuth } from '../hooks/useAuth';
 
-import './Login.styles.scss';
-import colours from '../style/constants/_colours.scss';
 import { Controller, useForm } from 'react-hook-form';
-import { FormTextField } from '../components/form/FormTextField';
-import { Link } from '../components/Link';
 import { AccountsClient } from '../api/model';
+import { Link } from '../components/Link';
+import { FormTextField } from '../components/form/FormTextField';
+import colors from '../style/constants/_colors.scss';
+import './Login.styles.scss';
 
 const accountsClient = new AccountsClient();
 
@@ -80,7 +80,7 @@ export default function Login() {
   }, [watch('password')]);
 
   return loading ? (
-    <PuffLoader color={colours.primaryColour} />
+    <PuffLoader color={colors.primaryColor} />
   ) : (
     <div className="login__container">
       <form onSubmit={handleSubmit(attemptLogin)} className="login__form">

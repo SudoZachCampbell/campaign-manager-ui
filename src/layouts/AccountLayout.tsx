@@ -1,9 +1,9 @@
-import React, { ReactNode, Suspense, useEffect } from 'react';
-import { NavMenu } from './NavMenu/NavMenu';
-import './layout.scss';
+import { Suspense, useEffect } from 'react';
 import { useNavigate, useOutlet } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import { PuffLoader } from 'react-spinners';
+import { useAuth } from '../hooks/useAuth';
+import { NavMenu } from './NavMenu/NavMenu';
+import './layout.styles.scss';
 
 export const AccountLayout = () => {
   const outlet = useOutlet();
@@ -20,9 +20,9 @@ export const AccountLayout = () => {
   }, []);
 
   return user.token ? (
-    <div className='global__container'>
+    <div className="global__container">
       <NavMenu />
-      <div className='global__content'>
+      <div className="global__content">
         <Suspense fallback={<h1>Loading</h1>}>{outlet}</Suspense>
       </div>
     </div>

@@ -1,4 +1,4 @@
-@import '../../style/constants/colours';
+@import '../../style/constants/colors';
 
 .form__container {
   display: flex;
@@ -92,7 +92,7 @@
   border-top: solid 1px;
   border-right: solid 2px;
   border-bottom: solid 2px;
-  border-color: $secondary-colour;
+  border-color: $secondary-color;
   border-radius: 4px;
   width: fit-content;
   padding: 1%;
@@ -103,7 +103,7 @@
     border-top: solid 2px;
     border-right: solid 1px;
     border-bottom: solid 1px;
-    border-color: $primary-colour;
+    border-color: $primary-color;
 }
 
   .form__input__label {

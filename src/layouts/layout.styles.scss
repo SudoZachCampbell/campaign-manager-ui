@@ -1,11 +1,11 @@
 .global__container {
     display: flex;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    height: calc(100vh);
+    height: 100%
 }
 
 .global__content {
     width: 100%;
-    height: calc(100vh - 6vh);
+    height: 100%;
     padding: 2vh;
 }

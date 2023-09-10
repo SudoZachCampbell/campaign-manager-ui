@@ -1,0 +1,33 @@
+:root[data-theme="theme-light"] {
+    --primary-color: #C8E4B2;
+    --secondary-color: #ADC4CE;
+    --tertiary-color: #F1F0E8;
+    --text-color: #000000;
+    --base-grey: #D8D9DA;
+    --background-color: #FFFFFF;
+}
+
+:root[data-theme="theme-dark"] {
+    --primary-color: #C8E4B2;
+    --secondary-color: #7fb6ce;
+    --tertiary-color: #F1F0E8;
+    --text-color: #FFFFFF;
+    --base-grey: #D8D9DA;
+    --background-color: #525252;
+}
+
+$primary-color: var(--primary-color);
+$secondary-color: var(--secondary-color);
+$tertiary-color: var(--tertiary-color);
+$text-color: var(--text-color);
+$base-grey: var(--base-color);
+$background-color: var(--background-color);
+
+:export {
+    primaryColor: $primary-color;
+    secondaryColor: $secondary-color;
+    tertiaryColor: $tertiary-color;
+    textColor: $text-color;
+    baseGrey: $base-grey;
+    backgroundColor: $background-color;
+}

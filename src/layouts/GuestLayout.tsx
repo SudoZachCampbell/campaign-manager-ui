@@ -1,8 +1,7 @@
-import React, { ReactNode, Suspense } from 'react';
-import { NavMenu } from './NavMenu/NavMenu';
-import './layout.scss';
+import { Suspense } from 'react';
 import { useNavigate, useOutlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import './layout.styles.scss';
 
 export const GuestLayout = () => {
   const outlet = useOutlet();
@@ -14,7 +13,7 @@ export const GuestLayout = () => {
   }
 
   return (
-    <div className='global__container'>
+    <div className="global__container">
       <Suspense fallback={<h1>Loading</h1>}>{outlet}</Suspense>
     </div>
   );
