@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
-import { MapContainer, ImageOverlay } from 'react-leaflet';
+import { ImageOverlay, MapContainer } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import PersonIcon from '../../assets/icons/person.svg';
+import { Map, Monster, Npc } from '../../api/model';
+import ArrowIcon from '../../assets/icons/arrow.svg';
 import BuildingIcon from '../../assets/icons/building.svg';
 import PeopleIcon from '../../assets/icons/people.svg';
-import ArrowIcon from '../../assets/icons/arrow.svg';
-import { Box } from '@mui/material';
+import PersonIcon from '../../assets/icons/person.svg';
 import LocationMarker from './LocationMarker';
-import { Monster, Npc, Map } from '../../api/model';
 
 const personIcon = new L.Icon({
   iconUrl: PersonIcon,
@@ -62,7 +61,7 @@ export default function LocationMap({
 
   const mapRef = useRef();
   const style = {
-    height: '80vh',
+    height: '100%',
     width: '100%',
   };
 
@@ -144,12 +143,14 @@ export default function LocationMap({
   }, [npcs, bounds]);
 
   return bounds ? (
-    <Box
-      display="flex"
-      justifyContent="center"
-      height="100%"
-      width="100%"
-      overflow="hidden"
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+      }}
     >
       <MapContainer
         crs={L.CRS.Simple}
@@ -159,6 +160,7 @@ export default function LocationMap({
         maxBounds={bounds}
         style={style}
         ref={mapRef.current}
+        zoomSnap={0.01}
       >
         {monsters || npcs
           ? dataPlacements
@@ -199,6 +201,6 @@ export default function LocationMap({
           url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`}
         />
       </MapContainer>
-    </Box>
+    </div>
   ) : null;
 }

@@ -3903,6 +3903,8 @@ export interface Pc extends Creature {
   locale?: Locale | undefined;
   building_id?: string | undefined;
   building?: Building | undefined;
+  player_id?: string | undefined;
+  player?: Account | undefined;
 }
 
 export interface Proficiencies {

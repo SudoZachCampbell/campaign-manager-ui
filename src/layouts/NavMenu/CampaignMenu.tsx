@@ -8,14 +8,20 @@ import {
   GiTreasureMap,
 } from 'react-icons/gi';
 import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { Button } from '../../components/Button/Button';
 import { Link } from '../../components/Link';
 import { useAuth } from '../../hooks/useAuth';
+import { themeState } from '../../recoil/theme';
 import './NavMenu.styles.scss';
 
 export const CampaignMenu = () => {
-  const { logout } = useAuth();
+  const [dark, toggleDarkTheme] = useRecoilState(themeState);
+
+  console.log(`CampaignMenu.tsx:21 dark`, dark);
 
   const { campaignId } = useParams<{ campaignId: string }>();
+  const { logout } = useAuth();
 
   return (
     <div className="navbar__container">
@@ -28,9 +34,9 @@ export const CampaignMenu = () => {
           <GiSpellBook />
           <p>Campaigns</p>
         </Link>
-        <Link className="navbar__link" to={`campaigns/${campaignId}/players`}>
+        <Link className="navbar__link" to={`campaigns/${campaignId}/pcs`}>
           <GiPikeman />
-          <p>Players</p>
+          <p>Player Characters</p>
         </Link>
         <Link className="navbar__link" to={`campaigns/${campaignId}/npcs`}>
           <GiBlackKnightHelm />
@@ -51,6 +57,11 @@ export const CampaignMenu = () => {
           <GiExitDoor />
         </Link>
       </div>
+      <Button
+        onClick={() => toggleDarkTheme((theme) => !theme)}
+        text={dark ? 'Light' : 'Dark'}
+        type="info"
+      />
     </div>
   );
 };

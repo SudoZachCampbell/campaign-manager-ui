@@ -1,28 +1,26 @@
 ﻿import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDndCollectionApi } from '../../api/dndDb';
 import { PcsClient } from '../../api/model';
 import { Button } from '../../components/Button/Button';
-import {
-  CollapsibleTable,
-  TableColumn,
-} from '../../components/CollapsibleTable';
+import { Table, TableColumn } from '../../components/Table/Table';
 import { useAuth } from '../../hooks/useAuth';
 
 const client = new PcsClient();
 
-interface PlayerListProps {}
+interface PcListProps {}
 
-const PlayerList = () => {
+const PcList = () => {
   client.setAuthToken(useAuth().token);
   const navigate = useNavigate();
+  const { campaignId } = useParams<{ campaignId: string }>();
 
   const columns: TableColumn[] = [
     {
       name: 'name',
       header: 'Name',
-      link: (instance) => `/players/update/${instance.id}`,
+      link: (instance) => `/campaigns/${campaignId}/pcs/update/${instance.id}`,
     },
     { name: 'location', header: 'Location' },
   ];
@@ -43,8 +41,11 @@ const PlayerList = () => {
     </p>
   ) : pcs ? (
     <>
-      <CollapsibleTable dataSet={pcs} columns={columns} />
-      <Button onClick={() => navigate('/players/create')} text="Create" />
+      <Table dataSet={pcs} columns={columns} />
+      <Button
+        onClick={() => navigate('/campaigns/${campaignId}/pcs/create')}
+        text="Create"
+      />
     </>
   ) : (
     <p>Fecked</p>
@@ -57,4 +58,4 @@ const PlayerList = () => {
   );
 };
 
-export default PlayerList;
+export default PcList;

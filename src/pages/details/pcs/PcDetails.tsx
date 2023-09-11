@@ -7,11 +7,11 @@ import { Pc, PcsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
-import { playerForm } from './PlayerDetails.form';
+import { pcForm } from './PcDetails.form';
 
 const client = new PcsClient();
 
-export const PlayerDetails = () => {
+export const PcDetails = () => {
   const { id: pcId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -39,23 +39,23 @@ export const PlayerDetails = () => {
     }
   }, [pc]);
 
-  const updatePlayer = async (payload: Pc) => {
+  const updatePc = async (payload: Pc) => {
     if (pcId) {
       await client.updatePcPUT(pcId, payload);
     } else {
       await client.createPc(payload);
     }
-    navigate('/players');
+    navigate('/pcs');
   };
 
   return !loading ? (
     <>
       <form
-        onSubmit={handleSubmit(updatePlayer)}
+        onSubmit={handleSubmit(updatePc)}
         className="monsterform__main-container"
       >
         <div className="monsterform__header">
-          <h1>{pc?.name ?? 'Create Player'}</h1>
+          <h1>{pc?.name ?? 'Create Player Character'}</h1>
           <div>
             <Button text="Create" submit type="submit" />
           </div>
@@ -63,7 +63,7 @@ export const PlayerDetails = () => {
 
         <div className="monsterform__content">
           <GeneratedForm
-            formBuilder={playerForm}
+            formBuilder={pcForm}
             control={control}
             errors={formState.errors}
           />

@@ -1,59 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Route } from 'react-router';
 import { Routes } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
-import { CampaignRoute } from './CampaignRoute';
+import { useRecoilValue } from 'recoil';
 import './base.styles.scss';
-import { Button } from './components/Button/Button';
 import { AccountLayout } from './layouts/AccountLayout';
 import { AuthLayout } from './layouts/AuthLayout';
 import { GuestLayout } from './layouts/GuestLayout';
-import { CampaignList } from './pages/CampaignList';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import { CampaignDetails } from './pages/details/campaigns/CampaignDetails';
-import { MonsterDetails } from './pages/details/monsters/MonsterDetails';
-import MonsterList from './pages/listing/MonsterList';
+import { CampaignList } from './pages/listing/CampaignList';
+import { themeState } from './recoil/theme';
+import { CampaignRoute } from './routes/CampaignRoute';
+import { CompendiumRoute } from './routes/CompendiumRoute';
 
 export default function App() {
-  const [darkTheme, toggleDarkTheme] = useState<boolean>(true);
-  const toggleTheme = () => {
-    toggleDarkTheme((currentTheme) => !currentTheme);
-  };
+  const dark = useRecoilValue(themeState);
 
   useEffect(() => {
     let html = document.querySelector('html');
     if (html) {
-      html.dataset.theme = `theme-${darkTheme ? 'dark' : 'light'}`;
+      html.dataset.theme = `theme-${dark ? 'dark' : 'light'}`;
     }
-  }, [darkTheme]);
+  }, [dark]);
 
   return (
-    <RecoilRoot>
-      <div className="app__body">
-        <Routes>
-          <Route element={<AuthLayout />}>
+    <div className="app__body">
+      <Routes>
+        <Route element={<AuthLayout />}>
+          <Route element={<AccountLayout />}>
             <Route
               path="/campaigns/:campaignId/*"
               element={<CampaignRoute />}
             />
-            <Route element={<AccountLayout />}>
-              <Route path="/campaigns" element={<CampaignList />} />
-              <Route path="/campaigns/create" element={<CampaignDetails />} />
-              <Route path="/monsters" element={<MonsterList />} />
-              <Route path="/monsters/create" element={<MonsterDetails />} />
-              <Route path="/monsters/update/:id" element={<MonsterDetails />} />
-            </Route>
-            <Route element={<GuestLayout />}>
-              <Route path="/login" element={<Login />} />
-            </Route>
+            <Route path="/campaigns" element={<CampaignList />} />
+            <Route path="/campaigns/create" element={<CampaignDetails />} />
+            <Route path="/compendium/*" element={<CompendiumRoute />} />
+            <Route path="/" element={<Home />} />
           </Route>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </div>
-      <div className="app__footer">
-        <Button onClick={toggleTheme} text="toggle theme" />
-      </div>
-    </RecoilRoot>
+          <Route element={<GuestLayout />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+        </Route>
+      </Routes>
+    </div>
   );
 }

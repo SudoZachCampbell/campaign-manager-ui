@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import LocationMap from '../components/mapping/LocationMap';
+import { useEffect, useState } from 'react';
 import { useDnDApi } from '../api/dndDb';
-import { NavMenu } from '../layouts/NavMenu/NavMenu';
-import './LocationHub.styles.scss';
 import { LocalesClient, Map } from '../api/model';
+import LocationMap from '../components/mapping/LocationMap';
+import './LocationHub.styles.scss';
 
 const PREFIX = 'LocationHub';
 
@@ -26,7 +25,7 @@ export default function LocationHub() {
     invoke,
     response: locale,
   } = useDnDApi((id: string) =>
-    localeClient.getLocale(id, 'Maps.Buildings.Building.Npcs'),
+    localeClient.getLocale(id, null, 'Maps.Buildings.Building.Npcs'),
   );
 
   useEffect(() => {
@@ -54,7 +53,6 @@ export default function LocationHub() {
       <div className="locationhub__map">
         {maps && <LocationMap map={maps[currentMapIndex]} iconName={view} />}
       </div>
-      <NavMenu />
     </div>
   );
 }

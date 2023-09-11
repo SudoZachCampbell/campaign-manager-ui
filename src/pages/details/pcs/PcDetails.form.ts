@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Alignment, Pc, Size } from '../../../api/model';
 import { FormInput } from '../../../components/form/Form.model';
 
-export const playerForm: FormInput<Required<Pc>>[] = [
+export const pcForm: FormInput<Required<Pc>>[] = [
   {
     name: 'name',
     label: 'Name',

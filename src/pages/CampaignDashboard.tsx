@@ -1,9 +1,8 @@
-import { useAuth } from '../hooks/useAuth';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
-import { useEffect } from 'react';
-import _ from 'lodash';
 import { CampaignsClient } from '../api/model';
+import { useAuth } from '../hooks/useAuth';
 
 interface CampaignDashboardProps {}
 
@@ -35,7 +34,7 @@ export const CampaignDashboard = ({}: CampaignDashboardProps) => {
         <div className="campaigndash__location__container"></div>
       </div>
       <div className="campaigndash__bottom">
-        <div className="campaigndash__player__container"></div>
+        <div className="campaigndash__pc__container"></div>
       </div>
     </div>
   );

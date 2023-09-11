@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 
-import { Base } from '../api/model';
-
+import { Base } from '../../api/model';
+import './Table.styles.scss';
 //#region TableData
 export interface CollapsibleTableProps<T> {
   Component?: React.FC<{ id: string }>;
@@ -20,7 +20,7 @@ interface TableData extends Base {
   name: string;
 }
 
-export const CollapsibleTable = <T extends TableData>({
+export const Table = <T extends TableData>({
   dataSet,
   Component,
   columns,

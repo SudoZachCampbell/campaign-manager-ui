@@ -1,15 +1,11 @@
-﻿import React, { useEffect, useState } from 'react';
-import {
-  CollapsibleTable,
-  TableColumn,
-} from '../../components/CollapsibleTable';
-import { Box } from '@mui/material';
-import _ from 'lodash';
-import { useDndCollectionApi } from '../../api/dndDb';
-import { useAuth } from '../../hooks/useAuth';
+﻿import { Box } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDndCollectionApi } from '../../api/dndDb';
 import { MonstersClient } from '../../api/model';
 import { Button } from '../../components/Button/Button';
+import { Table, TableColumn } from '../../components/Table/Table';
+import { useAuth } from '../../hooks/useAuth';
 
 const client = new MonstersClient();
 
@@ -21,7 +17,7 @@ export default function MonsterList() {
     {
       name: 'name',
       header: 'Name',
-      link: (instance) => `/monsters/update/${instance.id}`,
+      link: (instance) => `/compendium/monsters/update/${instance.id}`,
     },
     { name: 'passivePerception', header: 'Passive Perception' },
     { name: 'alignment', header: 'Alignment' },
@@ -43,8 +39,11 @@ export default function MonsterList() {
     </p>
   ) : monsters ? (
     <>
-      <CollapsibleTable dataSet={monsters} columns={columns} />
-      <Button onClick={() => navigate('/monsters/create')} text="Create" />
+      <Table dataSet={monsters} columns={columns} />
+      <Button
+        onClick={() => navigate('/compendium/monsters/create')}
+        text="Create"
+      />
     </>
   ) : (
     <p>

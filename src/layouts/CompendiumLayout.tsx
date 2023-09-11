@@ -2,9 +2,10 @@ import { Suspense, useEffect } from 'react';
 import { useNavigate, useOutlet } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
 import { useAuth } from '../hooks/useAuth';
+import { CompendiumMenu } from './NavMenu/CompendiumMenu';
 import './layout.styles.scss';
 
-export const AccountLayout = () => {
+export const CompendiumLayout = () => {
   const outlet = useOutlet();
   const user = useAuth();
   const navigate = useNavigate();
@@ -19,13 +20,13 @@ export const AccountLayout = () => {
   }, []);
 
   return user.token ? (
-    // <div className="global__container">
-    // <NavMenu />
-    // <div className="global__content">
-    <Suspense fallback={<h1>Loading</h1>}>{outlet}</Suspense>
+    <div className="global__container">
+      <CompendiumMenu />
+      <div className="global__content">
+        <Suspense fallback={<h1>Loading</h1>}>{outlet}</Suspense>
+      </div>
+    </div>
   ) : (
-    // </div>
-    // </div>
     <PuffLoader />
   );
 };

@@ -1,10 +1,12 @@
-@use '/src/style/constants/colors';
+@import '/src/style/constants/colors';
 
 .navbar__container {
     display: flex;
-    height: 100%;
-    width: 10%;
-    background-color: lightgrey;
+    flex-direction: column;
+    height: 98%;
+    width: 14%;
+    padding: 0.5%;
+    background-color: $menu-background-color;
 }
 
 .navbar__iconlist {
@@ -16,6 +18,10 @@
 
 .navbar__link {
     display: flex;
+    text-decoration: none;
+    color: $text-color;
+    width : 100%;
+    margin-bottom: 5%;
 
     &:hover {
         opacity: 50%;
@@ -26,8 +32,9 @@
     }
 
     * {
-        color: black;
+        margin-left: 5%;
         height:auto;
+        width: 15%;
     }
 }
 

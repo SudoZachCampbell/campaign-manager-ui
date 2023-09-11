@@ -5,6 +5,7 @@
     --text-color: #000000;
     --base-grey: #D8D9DA;
     --background-color: #FFFFFF;
+    --menu-background-color: #a3a3a3;
 }
 
 :root[data-theme="theme-dark"] {
@@ -14,6 +15,7 @@
     --text-color: #FFFFFF;
     --base-grey: #D8D9DA;
     --background-color: #525252;
+    --menu-background-color: #6d6d6d;
 }
 
 $primary-color: var(--primary-color);
@@ -22,6 +24,7 @@ $tertiary-color: var(--tertiary-color);
 $text-color: var(--text-color);
 $base-grey: var(--base-color);
 $background-color: var(--background-color);
+$menu-background-color: var(--menu-background-color);
 
 :export {
     primaryColor: $primary-color;
@@ -30,4 +33,5 @@ $background-color: var(--background-color);
     textColor: $text-color;
     baseGrey: $base-grey;
     backgroundColor: $background-color;
+    menuBackgroundColor: $menu-background-color;
 }
