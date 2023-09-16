@@ -192,7 +192,11 @@ export const GeneratedForm = <T extends FieldValues>({
             className="form__tabs"
           >
             {[{ label: 'details' }, ...tabbedFields].map((tab, index) => (
-              <Tab key={`${tab.label}_${index}`} label={tab.label} />
+              <Tab
+                key={`${tab.label}_${index}`}
+                className="form__tabs-link"
+                label={tab.label}
+              />
             ))}
           </Tabs>
         )}

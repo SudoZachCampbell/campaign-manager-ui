@@ -325,10 +325,10 @@ export class BuildingsClient extends Client {
     localeId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Building[]> {
     let url_ = this.baseUrl + '/Buildings/Locale/{localeId}?';
     if (localeId === undefined || localeId === null)
@@ -341,16 +341,16 @@ export class BuildingsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -791,10 +791,10 @@ export class CampaignsClient extends Client {
     user?: Account | null | undefined,
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Campaign[]> {
     let url_ = this.baseUrl + '/Campaigns?';
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
@@ -804,16 +804,16 @@ export class CampaignsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1259,10 +1259,10 @@ export class ContinentsClient extends Client {
   getContinents(
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Continent[]> {
     let url_ = this.baseUrl + '/Continents?';
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
@@ -1272,16 +1272,16 @@ export class ContinentsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1784,10 +1784,10 @@ export class LocalesClient extends Client {
     regionId: number,
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Locale[]> {
     let url_ = this.baseUrl + '/Locales/Region/{regionId}?';
     if (regionId === undefined || regionId === null)
@@ -1800,16 +1800,16 @@ export class LocalesClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1882,10 +1882,10 @@ export class MonstersClient extends Client {
   getMonsters(
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Monster[]> {
     let url_ = this.baseUrl + '/Monsters?';
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
@@ -1895,16 +1895,16 @@ export class MonstersClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2346,10 +2346,10 @@ export class NpcsClient extends Client {
   getNpcs(
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Npc[]> {
     let url_ = this.baseUrl + '/Npcs?';
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
@@ -2359,16 +2359,16 @@ export class NpcsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2805,14 +2805,18 @@ export class PcsClient extends Client {
   }
 
   getPcs(
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Pc[]> {
-    let url_ = this.baseUrl + '/Pcs?';
+    let url_ = this.baseUrl + '/{campaignId}/Pcs?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -2820,16 +2824,16 @@ export class PcsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2876,8 +2880,15 @@ export class PcsClient extends Client {
     return Promise.resolve<Pc[]>(null as any);
   }
 
-  createPc(pc: Pc, user?: Account | null | undefined): Promise<string> {
-    let url_ = this.baseUrl + '/Pcs';
+  createPc(
+    pc: Pc,
+    campaignId: string,
+    user?: Account | null | undefined,
+  ): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Pcs';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(pc);
@@ -2930,15 +2941,19 @@ export class PcsClient extends Client {
   }
 
   getPcById(
-    id: string,
+    campaignId: string,
+    pcId: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Pc> {
-    let url_ = this.baseUrl + '/Pcs/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Pcs/{pcId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (pcId === undefined || pcId === null)
+      throw new Error("The parameter 'pcId' must be defined.");
+    url_ = url_.replace('{pcId}', encodeURIComponent('' + pcId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -2994,16 +3009,20 @@ export class PcsClient extends Client {
   }
 
   updatePcPATCH(
-    id: string,
+    campaignId: string,
+    pcId: string,
     patchDoc: JsonPatchDocumentOfPc,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Pc> {
-    let url_ = this.baseUrl + '/Pcs/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Pcs/{pcId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (pcId === undefined || pcId === null)
+      throw new Error("The parameter 'pcId' must be defined.");
+    url_ = url_.replace('{pcId}', encodeURIComponent('' + pcId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -3062,11 +3081,18 @@ export class PcsClient extends Client {
     return Promise.resolve<Pc>(null as any);
   }
 
-  updatePcPUT(id: string, pc: Pc): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Pcs/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  updatePcPUT(
+    campaignId: string,
+    pcId: string,
+    pc: Pc,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Pcs/{pcId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (pcId === undefined || pcId === null)
+      throw new Error("The parameter 'pcId' must be defined.");
+    url_ = url_.replace('{pcId}', encodeURIComponent('' + pcId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(pc);
@@ -3142,11 +3168,14 @@ export class PcsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deletePc(id: string): Promise<Pc> {
-    let url_ = this.baseUrl + '/Pcs/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  deletePc(campaignId: string, pcId: string): Promise<Pc> {
+    let url_ = this.baseUrl + '/{campaignId}/Pcs/{pcId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (pcId === undefined || pcId === null)
+      throw new Error("The parameter 'pcId' must be defined.");
+    url_ = url_.replace('{pcId}', encodeURIComponent('' + pcId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -3193,11 +3222,14 @@ export class PcsClient extends Client {
     return Promise.resolve<Pc>(null as any);
   }
 
-  getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Pcs/GetEnum/{name}';
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Pcs/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -3269,10 +3301,10 @@ export class RegionsClient extends Client {
     continentId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
-    filter?: string | undefined,
     orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
+    filter?: string | undefined,
   ): Promise<Region[]> {
     let url_ = this.baseUrl + '/Regions/Continent/{continentId}?';
     if (continentId === undefined || continentId === null)
@@ -3285,16 +3317,16 @@ export class RegionsClient extends Client {
       throw new Error("The parameter 'pageSize' cannot be null.");
     else if (pageSize !== undefined)
       url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
-    if (filter === null)
-      throw new Error("The parameter 'filter' cannot be null.");
-    else if (filter !== undefined)
-      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     if (orderBy !== undefined && orderBy !== null)
       url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
       url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -3899,12 +3931,33 @@ export interface Pc extends Creature {
   background: string;
   faction: string;
   race: string;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
   locale_id?: string | undefined;
   locale?: Locale | undefined;
   building_id?: string | undefined;
   building?: Building | undefined;
   player_id?: string | undefined;
   player?: Account | undefined;
+}
+
+export interface Campaign extends Owned {
+  name: string;
+  type: CampaignType;
+  players?: AccountCampaign[] | undefined;
+}
+
+export enum CampaignType {
+  FiveE = 'FiveE',
+  PathFinderOne = 'PathFinderOne',
+  PathFinderTwo = 'PathFinderTwo',
+}
+
+export interface AccountCampaign {
+  account_id: string;
+  account?: Account | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
 export interface Proficiencies {
@@ -4002,25 +4055,6 @@ export enum OperationType {
 }
 
 export interface IContractResolver {}
-
-export interface Campaign extends Owned {
-  name: string;
-  type: CampaignType;
-  players?: AccountCampaign[] | undefined;
-}
-
-export enum CampaignType {
-  FiveE = 'FiveE',
-  PathFinderOne = 'PathFinderOne',
-  PathFinderTwo = 'PathFinderTwo',
-}
-
-export interface AccountCampaign {
-  account_id: string;
-  account?: Account | undefined;
-  campaign_id: string;
-  campaign?: Campaign | undefined;
-}
 
 export interface JsonPatchDocumentOfCampaign {
   operations?: OperationOfCampaign[] | undefined;

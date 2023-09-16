@@ -12,7 +12,10 @@ import { pcForm } from './PcDetails.form';
 const client = new PcsClient();
 
 export const PcDetails = () => {
-  const { id: pcId } = useParams<{ id: string }>();
+  const { campaignId, pcId } = useParams<{
+    campaignId: string;
+    pcId: string;
+  }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
@@ -21,7 +24,7 @@ export const PcDetails = () => {
     loading,
     invoke,
     response: pc,
-  } = useDnDApi(() => client.getPcById(pcId ?? '', null, ''));
+  } = useDnDApi(() => client.getPcById(campaignId ?? '', pcId ?? '', null, ''));
 
   useEffect(() => {
     if (pcId) {
@@ -40,12 +43,15 @@ export const PcDetails = () => {
   }, [pc]);
 
   const updatePc = async (payload: Pc) => {
-    if (pcId) {
-      await client.updatePcPUT(pcId, payload);
-    } else {
-      await client.createPc(payload);
+    if (campaignId) {
+      payload = { ...payload, campaign_id: campaignId };
+      if (pcId) {
+        await client.updatePcPUT(campaignId, pcId, payload);
+      } else {
+        await client.createPc(payload, campaignId);
+      }
+      navigate('/pcs');
     }
-    navigate('/pcs');
   };
 
   return !loading ? (

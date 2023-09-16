@@ -1,30 +1,51 @@
 :root[data-theme="theme-light"] {
     --primary-color: #C8E4B2;
+    --primary-variant-color: #C8E4B2;
     --secondary-color: #ADC4CE;
     --tertiary-color: #F1F0E8;
     --text-color: #000000;
+    --form-input-color: #FFFFFF;
+    --label-color: #3d3d3d;
+    --form-input-text-color: #000000;
     --base-grey: #D8D9DA;
     --background-color: #FFFFFF;
     --menu-background-color: #a3a3a3;
+    --border-color: #000;
 }
 
 :root[data-theme="theme-dark"] {
-    --primary-color: #C8E4B2;
-    --secondary-color: #7fb6ce;
+    --primary-color: #BB86FC;
+    --primary-variant-color: #3700B3;
+    --secondary-color: #03DAC5;
     --tertiary-color: #F1F0E8;
     --text-color: #FFFFFF;
-    --base-grey: #D8D9DA;
-    --background-color: #525252;
+    --form-input-color: #6d6d6d;
+    --label-color: #b1b1b1;
+    --form-input-text-color: #FFF;
+    --base-grey: #5c5c5c;
+    --background-color: #121212;
     --menu-background-color: #6d6d6d;
+    --border-color: #FFF;
 }
 
+// Main Colours
 $primary-color: var(--primary-color);
 $secondary-color: var(--secondary-color);
 $tertiary-color: var(--tertiary-color);
+
+// Text Colours
 $text-color: var(--text-color);
-$base-grey: var(--base-color);
+
+// Form Colours
+$form-input-color: var(--form-input-color);
+$label-color: var(--label-color);
+$form-input-text-color: var(--form-input-text-color);
+
+// Background Colours
+$base-grey: var(--base-grey);
 $background-color: var(--background-color);
 $menu-background-color: var(--menu-background-color);
+$border-color: var(--border-color);
 
 :export {
     primaryColor: $primary-color;

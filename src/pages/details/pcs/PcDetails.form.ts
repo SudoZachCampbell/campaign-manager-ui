@@ -4,11 +4,6 @@ import { FormInput } from '../../../components/form/Form.model';
 
 export const pcForm: FormInput<Required<Pc>>[] = [
   {
-    name: 'name',
-    label: 'Name',
-    type: 'text',
-  },
-  {
     name: 'pc_name',
     label: 'Character Name',
     type: 'text',

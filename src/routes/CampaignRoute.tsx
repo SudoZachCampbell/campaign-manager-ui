@@ -17,14 +17,17 @@ export const CampaignRoute = () => {
         <Route path="update" element={<CampaignDetails />} />
         <Route path="npcs" element={<NpcList />} />
         <Route path="npcs/create" element={<NpcDetails />} />
-        <Route path="npcs/update/:id" element={<NpcDetails />} />
+        <Route path="npcs/update/:npcId" element={<NpcDetails />} />
         <Route path="pcs" element={<PcList />} />
         <Route path="pcs/create" element={<PcDetails />} />
-        <Route path="pcs/update/:id" element={<PcDetails />} />
+        <Route path="pcs/update/:pcId" element={<PcDetails />} />
         <Route path="location-hub" element={<LocationHub />} />
         <Route path="/monsters" element={<MonsterList />} />
         <Route path="/monsters/create" element={<MonsterDetails />} />
-        <Route path="/monsters/update/:id" element={<MonsterDetails />} />
+        <Route
+          path="/monsters/update/:monsterId"
+          element={<MonsterDetails />}
+        />
         <Route path="" element={<CampaignDashboard />} />
       </Route>
     </Routes>

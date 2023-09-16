@@ -1,10 +1,15 @@
 import { GiExitDoor, GiHound, GiHouse, GiSpellBook } from 'react-icons/gi';
 import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { Button } from '../../components/Button/Button';
 import { Link } from '../../components/Link';
 import { useAuth } from '../../hooks/useAuth';
+import { themeState } from '../../recoil/theme';
 import './NavMenu.styles.scss';
 
 export const CompendiumMenu = () => {
+  const [dark, toggleDarkTheme] = useRecoilState(themeState);
+
   const { logout } = useAuth();
 
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -28,6 +33,11 @@ export const CompendiumMenu = () => {
           <GiExitDoor className="navbar__icon" />
         </Link>
       </div>
+      <Button
+        onClick={() => toggleDarkTheme((theme) => !theme)}
+        text={dark ? 'Light' : 'Dark'}
+        type="info"
+      />
     </div>
   );
 };

@@ -18,7 +18,7 @@ const PcList = () => {
 
   const columns: TableColumn[] = [
     {
-      name: 'name',
+      name: 'pc_name',
       header: 'Name',
       link: (instance) => `/campaigns/${campaignId}/pcs/update/${instance.id}`,
     },
@@ -29,7 +29,7 @@ const PcList = () => {
     loading,
     invoke,
     response: pcs,
-  } = useDndCollectionApi(() => client.getPcs());
+  } = useDndCollectionApi(() => client.getPcs(campaignId ?? ''));
 
   useEffect(() => {
     invoke();
@@ -43,7 +43,7 @@ const PcList = () => {
     <>
       <Table dataSet={pcs} columns={columns} />
       <Button
-        onClick={() => navigate('/campaigns/${campaignId}/pcs/create')}
+        onClick={() => navigate(`/campaigns/${campaignId}/pcs/create`)}
         text="Create"
       />
     </>

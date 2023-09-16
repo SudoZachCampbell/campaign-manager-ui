@@ -21,12 +21,12 @@ export default function Home() {
               <p>Campaigns</p>
             </div>
           </div>
-          <div className="bottom" onClick={() => navigate('')}>
+          <div className="bottom" onClick={() => navigate('/players')}>
             <div className="left">
-              <p>Profile</p>
+              <p>Players</p>
             </div>
-            <div className="right" onClick={() => navigate('')}>
-              <p>Other thing</p>
+            <div className="right" onClick={() => navigate('/account')}>
+              <p>Account</p>
             </div>
           </div>
         </div>

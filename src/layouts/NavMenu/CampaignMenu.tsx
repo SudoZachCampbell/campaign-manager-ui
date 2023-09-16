@@ -18,8 +18,6 @@ import './NavMenu.styles.scss';
 export const CampaignMenu = () => {
   const [dark, toggleDarkTheme] = useRecoilState(themeState);
 
-  console.log(`CampaignMenu.tsx:21 dark`, dark);
-
   const { campaignId } = useParams<{ campaignId: string }>();
   const { logout } = useAuth();
 

@@ -13,8 +13,9 @@
     flex-direction: column;
     align-items: center;
   
-    a {
+    .form__tabs-link {
       padding: 2%;
+      color: $label-color;
     }
   }
   
@@ -41,10 +42,10 @@
 
 .form__input__group {
   border: none;
-  border: solid 1px #000;
+  border: solid 1px $border-color;
   border-radius: 4px;
   padding-left: 2%;
-  background: white;
+  background: $form-input-color;
 
   &.invalid {
     border: 2px solid red;
@@ -58,9 +59,14 @@
   .form__input {
     height: 2rem;
     border: none;
-    width: 100%;
-    background-color: transparent;
+    width: 99%;
+    background-color: $form-input-color;
     padding-bottom: 0;
+    color: $form-input-text-color;
+
+    &::placeholder { 
+      color: $label-color;
+    }
 
     &.form__input-multiline {
     height: auto;
@@ -77,8 +83,8 @@
 
   .form__input__label {
     width: fit-content;
-    color: #636c72;
-    background-color: white;
+    color: $label-color;
+    background-color: $form-input-color;
     font-size: 0.75rem;
     position: relative;
     top: 9px;
@@ -97,6 +103,7 @@
   width: fit-content;
   padding: 1%;
   margin: 1%;
+  background-color: $form-input-color;
 
   &.checked {
     border-left: solid 2px;
@@ -107,7 +114,7 @@
 }
 
   .form__input__label {
-    background-color: white;
+    background-color: $form-input-color;
     margin-right: 0.5%
   }
 }

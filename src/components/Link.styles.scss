@@ -1,5 +1,7 @@
+@import '../style/constants/colors';
+
 .remove-formatting {
-  color: gray;
+  color: $base-grey;
   text-decoration: none;
 }
 
@@ -10,5 +12,5 @@
 }
 
 .selected {
-  color: black;
+  color: $text-color;
 }
