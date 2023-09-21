@@ -17,7 +17,7 @@ export default function MonsterList() {
     {
       name: 'name',
       header: 'Name',
-      link: (instance) => `/compendium/monsters/update/${instance.id}`,
+      link: (instance) => `update/${instance.id}`,
     },
     { name: 'passivePerception', header: 'Passive Perception' },
     { name: 'alignment', header: 'Alignment' },

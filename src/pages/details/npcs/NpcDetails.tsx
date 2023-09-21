@@ -12,7 +12,10 @@ import { npcForm } from './NpcDetails.form';
 const client = new NpcsClient();
 
 export const NpcDetails = () => {
-  const { id: npcId } = useParams<{ id: string }>();
+  const { campaignId, npcId } = useParams<{
+    campaignId: string;
+    npcId: string;
+  }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
@@ -21,7 +24,9 @@ export const NpcDetails = () => {
     loading,
     invoke,
     response: npc,
-  } = useDnDApi(() => client.getNpcById(npcId ?? '', null, ''));
+  } = useDnDApi(() =>
+    client.getNpcById(campaignId ?? '', npcId ?? '', null, ''),
+  );
 
   useEffect(() => {
     if (npcId) {
@@ -41,10 +46,10 @@ export const NpcDetails = () => {
 
   const updateNpc = async (payload: Npc) => {
     if (npcId) {
-      await client.updateNpcPUT(npcId, payload);
+      await client.updateNpcPUT(campaignId ?? '', npcId, payload);
     } else {
-      await client.createNpc(payload);
-      navigate(`/npcs`);
+      await client.createNpc(campaignId ?? '', payload);
+      navigate('../npcs');
     }
   };
 

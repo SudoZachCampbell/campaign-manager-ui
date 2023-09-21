@@ -48,9 +48,9 @@ export const PcDetails = () => {
       if (pcId) {
         await client.updatePcPUT(campaignId, pcId, payload);
       } else {
-        await client.createPc(payload, campaignId);
+        await client.createPc(campaignId, payload);
       }
-      navigate('/pcs');
+      navigate('../pcs');
     }
   };
 

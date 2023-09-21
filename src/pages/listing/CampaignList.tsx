@@ -13,7 +13,7 @@ const columns: TableColumn[] = [
   {
     name: 'id',
     header: 'ID',
-    link: ({ id }) => `/campaigns/${id}`,
+    link: ({ id }) => `${id}`,
   },
   { name: 'name', header: 'Name' },
   { name: 'type', header: 'Type' },

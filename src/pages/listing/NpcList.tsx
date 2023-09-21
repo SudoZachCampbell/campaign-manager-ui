@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDndCollectionApi } from '../../api/dndDb';
 import { NpcsClient } from '../../api/model';
 import { Button } from '../../components/Button/Button';
-import NpcSummary from '../../components/NpcSummary';
 import { Table, TableColumn } from '../../components/Table/Table';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -21,7 +20,7 @@ const NpcList = () => {
     {
       name: 'name',
       header: 'Name',
-      link: (instance) => `/campaigns/${campaignId}/npcs/update/${instance.id}`,
+      link: (instance) => `update/${instance.id}`,
     },
     { name: 'monster.name', header: 'Monster Name' },
     { name: 'location', header: 'Location' },
@@ -31,7 +30,7 @@ const NpcList = () => {
     loading,
     invoke,
     response: npcs,
-  } = useDndCollectionApi(() => client.getNpcs());
+  } = useDndCollectionApi(() => client.getNpcs(campaignId ?? ''));
 
   useEffect(() => {
     invoke();
@@ -43,7 +42,7 @@ const NpcList = () => {
     </p>
   ) : npcs ? (
     <>
-      <Table dataSet={npcs} Component={NpcSummary} columns={columns} />
+      <Table dataSet={npcs} columns={columns} />
       <Button
         onClick={() => navigate('/campaigns/${campaignId}/npcs/create')}
         text="Create"

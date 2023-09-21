@@ -321,8 +321,8 @@ export class BuildingsClient extends Client {
         : 'http://localhost:5000';
   }
 
-  getBuildingsFromLocale(
-    localeId: string,
+  getBuildings(
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -330,10 +330,10 @@ export class BuildingsClient extends Client {
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Building[]> {
-    let url_ = this.baseUrl + '/Buildings/Locale/{localeId}?';
-    if (localeId === undefined || localeId === null)
-      throw new Error("The parameter 'localeId' must be defined.");
-    url_ = url_.replace('{localeId}', encodeURIComponent('' + localeId));
+    let url_ = this.baseUrl + '/{campaignId}/Buildings?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -365,13 +365,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetBuildingsFromLocale(_response);
+        return this.processGetBuildings(_response);
       });
   }
 
-  protected processGetBuildingsFromLocale(
-    response: Response,
-  ): Promise<Building[]> {
+  protected processGetBuildings(response: Response): Promise<Building[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -399,16 +397,75 @@ export class BuildingsClient extends Client {
     return Promise.resolve<Building[]>(null as any);
   }
 
+  createBuilding(campaignId: string, building: Building): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Buildings';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(building);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateBuilding(_response);
+      });
+  }
+
+  protected processCreateBuilding(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
   getBuildingById(
-    id: string,
+    campaignId: string,
+    buildingId: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Building> {
-    let url_ = this.baseUrl + '/Buildings/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Buildings/{buildingId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (buildingId === undefined || buildingId === null)
+      throw new Error("The parameter 'buildingId' must be defined.");
+    url_ = url_.replace('{buildingId}', encodeURIComponent('' + buildingId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -463,17 +520,21 @@ export class BuildingsClient extends Client {
     return Promise.resolve<Building>(null as any);
   }
 
-  patchBuilding(
-    id: string,
+  updateBuildingPATCH(
+    campaignId: string,
+    buildingId: string,
     patchDoc: JsonPatchDocumentOfBuilding,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Building> {
-    let url_ = this.baseUrl + '/Buildings/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Buildings/{buildingId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (buildingId === undefined || buildingId === null)
+      throw new Error("The parameter 'buildingId' must be defined.");
+    url_ = url_.replace('{buildingId}', encodeURIComponent('' + buildingId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -500,11 +561,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPatchBuilding(_response);
+        return this.processUpdateBuildingPATCH(_response);
       });
   }
 
-  protected processPatchBuilding(response: Response): Promise<Building> {
+  protected processUpdateBuildingPATCH(response: Response): Promise<Building> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -532,11 +593,18 @@ export class BuildingsClient extends Client {
     return Promise.resolve<Building>(null as any);
   }
 
-  putBuilding(id: string, building: Building): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Buildings/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  updateBuildingPUT(
+    campaignId: string,
+    buildingId: string,
+    building: Building,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Buildings/{buildingId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (buildingId === undefined || buildingId === null)
+      throw new Error("The parameter 'buildingId' must be defined.");
+    url_ = url_.replace('{buildingId}', encodeURIComponent('' + buildingId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(building);
@@ -555,11 +623,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPutBuilding(_response);
+        return this.processUpdateBuildingPUT(_response);
       });
   }
 
-  protected processPutBuilding(
+  protected processUpdateBuildingPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -612,11 +680,14 @@ export class BuildingsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteBuilding(id: string): Promise<Building> {
-    let url_ = this.baseUrl + '/Buildings/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  deleteBuilding(campaignId: string, buildingId: string): Promise<Building> {
+    let url_ = this.baseUrl + '/{campaignId}/Buildings/{buildingId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (buildingId === undefined || buildingId === null)
+      throw new Error("The parameter 'buildingId' must be defined.");
+    url_ = url_.replace('{buildingId}', encodeURIComponent('' + buildingId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -663,63 +734,14 @@ export class BuildingsClient extends Client {
     return Promise.resolve<Building>(null as any);
   }
 
-  postBuilding(building: Building): Promise<Building> {
-    let url_ = this.baseUrl + '/Buildings';
-    url_ = url_.replace(/[?&]$/, '');
-
-    const content_ = JSON.stringify(building);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processPostBuilding(_response);
-      });
-  }
-
-  protected processPostBuilding(response: Response): Promise<Building> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ''
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Building);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Building>(null as any);
-  }
-
-  getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Buildings/GetEnum/{name}';
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Buildings/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -788,7 +810,6 @@ export class CampaignsClient extends Client {
   }
 
   getCampaigns(
-    user?: Account | null | undefined,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -819,7 +840,6 @@ export class CampaignsClient extends Client {
     let options_: RequestInit = {
       method: 'GET',
       headers: {
-        Authorization: user !== undefined && user !== null ? '' + user : '',
         Accept: 'application/json',
       },
     };
@@ -861,10 +881,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<Campaign[]>(null as any);
   }
 
-  createCampaign(
-    campaign: Campaign,
-    user?: Account | null | undefined,
-  ): Promise<string> {
+  createCampaign(campaign: Campaign): Promise<string> {
     let url_ = this.baseUrl + '/Campaigns';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -874,7 +891,6 @@ export class CampaignsClient extends Client {
       body: content_,
       method: 'POST',
       headers: {
-        Authorization: user !== undefined && user !== null ? '' + user : '',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -1257,6 +1273,7 @@ export class ContinentsClient extends Client {
   }
 
   getContinents(
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -1264,7 +1281,10 @@ export class ContinentsClient extends Client {
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Continent[]> {
-    let url_ = this.baseUrl + '/Continents?';
+    let url_ = this.baseUrl + '/{campaignId}/Continents?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -1328,8 +1348,11 @@ export class ContinentsClient extends Client {
     return Promise.resolve<Continent[]>(null as any);
   }
 
-  postContinent(continent: Continent): Promise<Continent> {
-    let url_ = this.baseUrl + '/Continents';
+  createContinent(campaignId: string, continent: Continent): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Continents';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(continent);
@@ -1348,24 +1371,24 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPostContinent(_response);
+        return this.processCreateContinent(_response);
       });
   }
 
-  protected processPostContinent(response: Response): Promise<Continent> {
+  protected processCreateContinent(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
       response.headers.forEach((v: any, k: any) => (_headers[k] = v));
     }
-    if (status === 200) {
+    if (status === 201) {
       return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
+        let result201: any = null;
+        result201 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Continent);
-        return result200;
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
@@ -1377,19 +1400,23 @@ export class ContinentsClient extends Client {
         );
       });
     }
-    return Promise.resolve<Continent>(null as any);
+    return Promise.resolve<string>(null as any);
   }
 
   getContinentById(
-    id: string,
+    campaignId: string,
+    continentId: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Continent> {
-    let url_ = this.baseUrl + '/Continents/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Continents/{continentId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (continentId === undefined || continentId === null)
+      throw new Error("The parameter 'continentId' must be defined.");
+    url_ = url_.replace('{continentId}', encodeURIComponent('' + continentId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -1444,17 +1471,21 @@ export class ContinentsClient extends Client {
     return Promise.resolve<Continent>(null as any);
   }
 
-  patchContinent(
-    id: string,
+  updateContinentPATCH(
+    campaignId: string,
+    continentId: string,
     patchDoc: JsonPatchDocumentOfContinent,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Continent> {
-    let url_ = this.baseUrl + '/Continents/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Continents/{continentId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (continentId === undefined || continentId === null)
+      throw new Error("The parameter 'continentId' must be defined.");
+    url_ = url_.replace('{continentId}', encodeURIComponent('' + continentId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -1481,11 +1512,13 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPatchContinent(_response);
+        return this.processUpdateContinentPATCH(_response);
       });
   }
 
-  protected processPatchContinent(response: Response): Promise<Continent> {
+  protected processUpdateContinentPATCH(
+    response: Response,
+  ): Promise<Continent> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1513,11 +1546,18 @@ export class ContinentsClient extends Client {
     return Promise.resolve<Continent>(null as any);
   }
 
-  putContinent(id: string, continent: Continent): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Continents/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  updateContinentPUT(
+    campaignId: string,
+    continentId: string,
+    continent: Continent,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Continents/{continentId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (continentId === undefined || continentId === null)
+      throw new Error("The parameter 'continentId' must be defined.");
+    url_ = url_.replace('{continentId}', encodeURIComponent('' + continentId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(continent);
@@ -1536,11 +1576,11 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPutContinent(_response);
+        return this.processUpdateContinentPUT(_response);
       });
   }
 
-  protected processPutContinent(
+  protected processUpdateContinentPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -1593,11 +1633,14 @@ export class ContinentsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteContinent(id: string): Promise<Continent> {
-    let url_ = this.baseUrl + '/Continents/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  deleteContinent(campaignId: string, continentId: string): Promise<Continent> {
+    let url_ = this.baseUrl + '/{campaignId}/Continents/{continentId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (continentId === undefined || continentId === null)
+      throw new Error("The parameter 'continentId' must be defined.");
+    url_ = url_.replace('{continentId}', encodeURIComponent('' + continentId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1644,11 +1687,14 @@ export class ContinentsClient extends Client {
     return Promise.resolve<Continent>(null as any);
   }
 
-  getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Continents/GetEnum/{name}';
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Continents/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -1716,16 +1762,28 @@ export class LocalesClient extends Client {
         : 'http://localhost:5000';
   }
 
-  getLocale(
-    id: string,
+  getLocales(
+    campaignId: string,
+    page?: number | undefined,
+    pageSize?: number | undefined,
+    orderBy?: string | null | undefined,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
-  ): Promise<Locale> {
-    let url_ = this.baseUrl + '/Locales/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  ): Promise<Locale[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'Page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
+    if (orderBy !== undefined && orderBy !== null)
+      url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -1748,11 +1806,134 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetLocale(_response);
+        return this.processGetLocales(_response);
       });
   }
 
-  protected processGetLocale(response: Response): Promise<Locale> {
+  protected processGetLocales(response: Response): Promise<Locale[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Locale[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Locale[]>(null as any);
+  }
+
+  createLocale(campaignId: string, locale: Locale): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(locale);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateLocale(_response);
+      });
+  }
+
+  protected processCreateLocale(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  getLocaleById(
+    campaignId: string,
+    localeId: string,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<Locale> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales/{localeId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (localeId === undefined || localeId === null)
+      throw new Error("The parameter 'localeId' must be defined.");
+    url_ = url_.replace('{localeId}', encodeURIComponent('' + localeId));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetLocaleById(_response);
+      });
+  }
+
+  protected processGetLocaleById(response: Response): Promise<Locale> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1780,8 +1961,277 @@ export class LocalesClient extends Client {
     return Promise.resolve<Locale>(null as any);
   }
 
+  updateLocalePATCH(
+    campaignId: string,
+    localeId: string,
+    patchDoc: JsonPatchDocumentOfLocale,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<Locale> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales/{localeId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (localeId === undefined || localeId === null)
+      throw new Error("The parameter 'localeId' must be defined.");
+    url_ = url_.replace('{localeId}', encodeURIComponent('' + localeId));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(patchDoc);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateLocalePATCH(_response);
+      });
+  }
+
+  protected processUpdateLocalePATCH(response: Response): Promise<Locale> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Locale);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Locale>(null as any);
+  }
+
+  updateLocalePUT(
+    campaignId: string,
+    localeId: string,
+    locale: Locale,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales/{localeId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (localeId === undefined || localeId === null)
+      throw new Error("The parameter 'localeId' must be defined.");
+    url_ = url_.replace('{localeId}', encodeURIComponent('' + localeId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(locale);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateLocalePUT(_response);
+      });
+  }
+
+  protected processUpdateLocalePUT(
+    response: Response,
+  ): Promise<FileResponse | null> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200 || status === 206) {
+      const contentDisposition = response.headers
+        ? response.headers.get('content-disposition')
+        : undefined;
+      let fileNameMatch = contentDisposition
+        ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(
+            contentDisposition,
+          )
+        : undefined;
+      let fileName =
+        fileNameMatch && fileNameMatch.length > 1
+          ? fileNameMatch[3] || fileNameMatch[2]
+          : undefined;
+      if (fileName) {
+        fileName = decodeURIComponent(fileName);
+      } else {
+        fileNameMatch = contentDisposition
+          ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition)
+          : undefined;
+        fileName =
+          fileNameMatch && fileNameMatch.length > 1
+            ? fileNameMatch[1]
+            : undefined;
+      }
+      return response.blob().then((blob) => {
+        return {
+          fileName: fileName,
+          data: blob,
+          status: status,
+          headers: _headers,
+        };
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<FileResponse | null>(null as any);
+  }
+
+  deleteLocale(campaignId: string, localeId: string): Promise<Locale> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales/{localeId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (localeId === undefined || localeId === null)
+      throw new Error("The parameter 'localeId' must be defined.");
+    url_ = url_.replace('{localeId}', encodeURIComponent('' + localeId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteLocale(_response);
+      });
+  }
+
+  protected processDeleteLocale(response: Response): Promise<Locale> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as Locale);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<Locale>(null as any);
+  }
+
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Locales/GetEnum/{name}';
+    if (name === undefined || name === null)
+      throw new Error("The parameter 'name' must be defined.");
+    url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
+  }
+
+  protected processGetEnum(response: Response): Promise<string[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string[]>(null as any);
+  }
+
   getRegionsFromContinent(
     regionId: number,
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -1789,10 +2239,13 @@ export class LocalesClient extends Client {
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Locale[]> {
-    let url_ = this.baseUrl + '/Locales/Region/{regionId}?';
+    let url_ = this.baseUrl + '/{campaignId}/Locales/Region/{regionId}?';
     if (regionId === undefined || regionId === null)
       throw new Error("The parameter 'regionId' must be defined.");
     url_ = url_.replace('{regionId}', encodeURIComponent('' + regionId));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -1951,10 +2404,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<Monster[]>(null as any);
   }
 
-  createMonster(
-    monster: Monster,
-    user?: Account | null | undefined,
-  ): Promise<string> {
+  createMonster(monster: Monster): Promise<string> {
     let url_ = this.baseUrl + '/Monsters';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -1964,7 +2414,6 @@ export class MonstersClient extends Client {
       body: content_,
       method: 'POST',
       headers: {
-        Authorization: user !== undefined && user !== null ? '' + user : '',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -2344,6 +2793,7 @@ export class NpcsClient extends Client {
   }
 
   getNpcs(
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -2351,7 +2801,10 @@ export class NpcsClient extends Client {
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Npc[]> {
-    let url_ = this.baseUrl + '/Npcs?';
+    let url_ = this.baseUrl + '/{campaignId}/Npcs?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -2415,8 +2868,11 @@ export class NpcsClient extends Client {
     return Promise.resolve<Npc[]>(null as any);
   }
 
-  createNpc(npc: Npc, user?: Account | null | undefined): Promise<string> {
-    let url_ = this.baseUrl + '/Npcs';
+  createNpc(campaignId: string, npc: Npc): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Npcs';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(npc);
@@ -2425,7 +2881,6 @@ export class NpcsClient extends Client {
       body: content_,
       method: 'POST',
       headers: {
-        Authorization: user !== undefined && user !== null ? '' + user : '',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -2469,15 +2924,19 @@ export class NpcsClient extends Client {
   }
 
   getNpcById(
-    id: string,
+    campaignId: string,
+    npcId: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Npc> {
-    let url_ = this.baseUrl + '/Npcs/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Npcs/{npcId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (npcId === undefined || npcId === null)
+      throw new Error("The parameter 'npcId' must be defined.");
+    url_ = url_.replace('{npcId}', encodeURIComponent('' + npcId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -2533,16 +2992,20 @@ export class NpcsClient extends Client {
   }
 
   updateNpcPATCH(
-    id: string,
+    campaignId: string,
+    npcId: string,
     patchDoc: JsonPatchDocumentOfNpc,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Npc> {
-    let url_ = this.baseUrl + '/Npcs/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Npcs/{npcId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (npcId === undefined || npcId === null)
+      throw new Error("The parameter 'npcId' must be defined.");
+    url_ = url_.replace('{npcId}', encodeURIComponent('' + npcId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -2601,11 +3064,18 @@ export class NpcsClient extends Client {
     return Promise.resolve<Npc>(null as any);
   }
 
-  updateNpcPUT(id: string, npc: Npc): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Npcs/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  updateNpcPUT(
+    campaignId: string,
+    npcId: string,
+    npc: Npc,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Npcs/{npcId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (npcId === undefined || npcId === null)
+      throw new Error("The parameter 'npcId' must be defined.");
+    url_ = url_.replace('{npcId}', encodeURIComponent('' + npcId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(npc);
@@ -2681,11 +3151,14 @@ export class NpcsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteNpc(id: string): Promise<Npc> {
-    let url_ = this.baseUrl + '/Npcs/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  deleteNpc(campaignId: string, npcId: string): Promise<Npc> {
+    let url_ = this.baseUrl + '/{campaignId}/Npcs/{npcId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (npcId === undefined || npcId === null)
+      throw new Error("The parameter 'npcId' must be defined.");
+    url_ = url_.replace('{npcId}', encodeURIComponent('' + npcId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2732,11 +3205,14 @@ export class NpcsClient extends Client {
     return Promise.resolve<Npc>(null as any);
   }
 
-  getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Npcs/GetEnum/{name}';
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Npcs/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -2880,11 +3356,7 @@ export class PcsClient extends Client {
     return Promise.resolve<Pc[]>(null as any);
   }
 
-  createPc(
-    pc: Pc,
-    campaignId: string,
-    user?: Account | null | undefined,
-  ): Promise<string> {
+  createPc(campaignId: string, pc: Pc): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Pcs';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -2897,7 +3369,6 @@ export class PcsClient extends Client {
       body: content_,
       method: 'POST',
       headers: {
-        Authorization: user !== undefined && user !== null ? '' + user : '',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -3297,8 +3768,8 @@ export class RegionsClient extends Client {
         : 'http://localhost:5000';
   }
 
-  getRegionsFromContinent(
-    continentId: string,
+  getRegions(
+    campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -3306,10 +3777,10 @@ export class RegionsClient extends Client {
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Region[]> {
-    let url_ = this.baseUrl + '/Regions/Continent/{continentId}?';
-    if (continentId === undefined || continentId === null)
-      throw new Error("The parameter 'continentId' must be defined.");
-    url_ = url_.replace('{continentId}', encodeURIComponent('' + continentId));
+    let url_ = this.baseUrl + '/{campaignId}/Regions?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     if (page === null) throw new Error("The parameter 'page' cannot be null.");
     else if (page !== undefined)
       url_ += 'Page=' + encodeURIComponent('' + page) + '&';
@@ -3341,13 +3812,11 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetRegionsFromContinent(_response);
+        return this.processGetRegions(_response);
       });
   }
 
-  protected processGetRegionsFromContinent(
-    response: Response,
-  ): Promise<Region[]> {
+  protected processGetRegions(response: Response): Promise<Region[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3375,16 +3844,75 @@ export class RegionsClient extends Client {
     return Promise.resolve<Region[]>(null as any);
   }
 
+  createRegion(campaignId: string, region: Region): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Regions';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(region);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateRegion(_response);
+      });
+  }
+
+  protected processCreateRegion(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
   getRegionById(
-    id: string,
+    campaignId: string,
+    regionId: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Region> {
-    let url_ = this.baseUrl + '/Regions/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Regions/{regionId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (regionId === undefined || regionId === null)
+      throw new Error("The parameter 'regionId' must be defined.");
+    url_ = url_.replace('{regionId}', encodeURIComponent('' + regionId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -3439,17 +3967,21 @@ export class RegionsClient extends Client {
     return Promise.resolve<Region>(null as any);
   }
 
-  patchRegion(
-    id: string,
+  updateRegionPATCH(
+    campaignId: string,
+    regionId: string,
     patchDoc: JsonPatchDocumentOfRegion,
     include?: string | null | undefined,
     expand?: string | null | undefined,
     filter?: string | undefined,
   ): Promise<Region> {
-    let url_ = this.baseUrl + '/Regions/{id}?';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    let url_ = this.baseUrl + '/{campaignId}/Regions/{regionId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (regionId === undefined || regionId === null)
+      throw new Error("The parameter 'regionId' must be defined.");
+    url_ = url_.replace('{regionId}', encodeURIComponent('' + regionId));
     if (include !== undefined && include !== null)
       url_ += 'Include=' + encodeURIComponent('' + include) + '&';
     if (expand !== undefined && expand !== null)
@@ -3476,11 +4008,11 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPatchRegion(_response);
+        return this.processUpdateRegionPATCH(_response);
       });
   }
 
-  protected processPatchRegion(response: Response): Promise<Region> {
+  protected processUpdateRegionPATCH(response: Response): Promise<Region> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3508,11 +4040,18 @@ export class RegionsClient extends Client {
     return Promise.resolve<Region>(null as any);
   }
 
-  putRegion(id: string, region: Region): Promise<FileResponse | null> {
-    let url_ = this.baseUrl + '/Regions/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  updateRegionPUT(
+    campaignId: string,
+    regionId: string,
+    region: Region,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Regions/{regionId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (regionId === undefined || regionId === null)
+      throw new Error("The parameter 'regionId' must be defined.");
+    url_ = url_.replace('{regionId}', encodeURIComponent('' + regionId));
     url_ = url_.replace(/[?&]$/, '');
 
     const content_ = JSON.stringify(region);
@@ -3531,11 +4070,13 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processPutRegion(_response);
+        return this.processUpdateRegionPUT(_response);
       });
   }
 
-  protected processPutRegion(response: Response): Promise<FileResponse | null> {
+  protected processUpdateRegionPUT(
+    response: Response,
+  ): Promise<FileResponse | null> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3586,11 +4127,14 @@ export class RegionsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteRegion(id: string): Promise<Region> {
-    let url_ = this.baseUrl + '/Regions/{id}';
-    if (id === undefined || id === null)
-      throw new Error("The parameter 'id' must be defined.");
-    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+  deleteRegion(campaignId: string, regionId: string): Promise<Region> {
+    let url_ = this.baseUrl + '/{campaignId}/Regions/{regionId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (regionId === undefined || regionId === null)
+      throw new Error("The parameter 'regionId' must be defined.");
+    url_ = url_.replace('{regionId}', encodeURIComponent('' + regionId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -3637,63 +4181,14 @@ export class RegionsClient extends Client {
     return Promise.resolve<Region>(null as any);
   }
 
-  postRegion(region: Region): Promise<Region> {
-    let url_ = this.baseUrl + '/Regions';
-    url_ = url_.replace(/[?&]$/, '');
-
-    const content_ = JSON.stringify(region);
-
-    let options_: RequestInit = {
-      body: content_,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processPostRegion(_response);
-      });
-  }
-
-  protected processPostRegion(response: Response): Promise<Region> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ''
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as Region);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<Region>(null as any);
-  }
-
-  getEnum(name: string): Promise<string[]> {
-    let url_ = this.baseUrl + '/Regions/GetEnum/{name}';
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Regions/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
     url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -3753,11 +4248,8 @@ export interface CreateAttempt {
   password?: string | undefined;
 }
 
-export interface Base {
+export interface Account {
   id: string;
-}
-
-export interface Account extends Base {
   username: string;
   email: string;
   password?: string | undefined;
@@ -3765,12 +4257,13 @@ export interface Account extends Base {
   monsters?: Monster[] | undefined;
 }
 
-export interface Owned extends Base {
+export interface Base {
+  id: string;
   owner_id: string;
   owner?: Account | undefined;
 }
 
-export interface Creature extends Owned {
+export interface Creature extends Base {
   name: string;
   strength: number;
   dexterity: number;
@@ -3863,7 +4356,7 @@ export interface Sense {
   value: string;
 }
 
-export interface Npc extends Owned {
+export interface Npc extends Base {
   name: string;
   background: string;
   noteable_events?: string | undefined;
@@ -3877,9 +4370,11 @@ export interface Npc extends Owned {
   locale?: Locale | undefined;
   building_id?: string | undefined;
   building?: Building | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
-export interface Locale extends Owned {
+export interface Locale extends Base {
   name: string;
   region_id?: string | undefined;
   region?: Region | undefined;
@@ -3889,23 +4384,48 @@ export interface Locale extends Owned {
   npcs?: Npc[] | undefined;
   monsters?: MonsterLocale[] | undefined;
   maps?: Map[] | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
-export interface Region extends Owned {
+export interface Region extends Base {
   name: string;
   locales?: Locale[] | undefined;
   continent_id?: string | undefined;
   continent?: Continent | undefined;
   map: string;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
-export interface Continent extends Owned {
+export interface Continent extends Base {
   name: string;
   regions?: Region[] | undefined;
   map?: string | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
-export interface Building extends Owned {
+export interface Campaign extends Base {
+  name: string;
+  type: CampaignType;
+  players?: AccountCampaign[] | undefined;
+}
+
+export enum CampaignType {
+  FiveE = 'FiveE',
+  PathFinderOne = 'PathFinderOne',
+  PathFinderTwo = 'PathFinderTwo',
+}
+
+export interface AccountCampaign {
+  account_id: string;
+  account?: Account | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
+}
+
+export interface Building extends Base {
   name: string;
   locale_id?: string | undefined;
   locale?: Locale | undefined;
@@ -3914,6 +4434,8 @@ export interface Building extends Owned {
   monsters?: MonsterBuilding[] | undefined;
   pcs?: Pc[] | undefined;
   maps?: BuildingMap[] | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
 export interface MonsterBuilding {
@@ -3939,25 +4461,6 @@ export interface Pc extends Creature {
   building?: Building | undefined;
   player_id?: string | undefined;
   player?: Account | undefined;
-}
-
-export interface Campaign extends Owned {
-  name: string;
-  type: CampaignType;
-  players?: AccountCampaign[] | undefined;
-}
-
-export enum CampaignType {
-  FiveE = 'FiveE',
-  PathFinderOne = 'PathFinderOne',
-  PathFinderTwo = 'PathFinderTwo',
-}
-
-export interface AccountCampaign {
-  account_id: string;
-  account?: Account | undefined;
-  campaign_id: string;
-  campaign?: Campaign | undefined;
 }
 
 export interface Proficiencies {
@@ -4001,7 +4504,7 @@ export interface BuildingMap {
   coords?: number[] | undefined;
 }
 
-export interface Map extends Owned {
+export interface Map extends Base {
   name: string;
   variation: string;
   image_url: string;
@@ -4009,14 +4512,18 @@ export interface Map extends Owned {
   locale_id: string;
   locale?: Locale | undefined;
   buildings?: BuildingMap[] | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
-export interface Dungeon extends Owned {
+export interface Dungeon extends Base {
   name: string;
   type: string;
   map?: string | undefined;
   building?: Building | undefined;
   locale?: Locale | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
 }
 
 export interface MonsterLocale {
@@ -4069,6 +4576,13 @@ export interface JsonPatchDocumentOfContinent {
 }
 
 export interface OperationOfContinent extends Operation {}
+
+export interface JsonPatchDocumentOfLocale {
+  operations?: OperationOfLocale[] | undefined;
+  contract_resolver?: IContractResolver | undefined;
+}
+
+export interface OperationOfLocale extends Operation {}
 
 export interface JsonPatchDocumentOfMonster {
   operations?: OperationOfMonster[] | undefined;

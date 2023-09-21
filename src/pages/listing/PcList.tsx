@@ -20,7 +20,7 @@ const PcList = () => {
     {
       name: 'pc_name',
       header: 'Name',
-      link: (instance) => `/campaigns/${campaignId}/pcs/update/${instance.id}`,
+      link: (instance) => `update/${instance.id}`,
     },
     { name: 'location', header: 'Location' },
   ];

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
 import { LocalesClient, Map } from '../api/model';
 import LocationMap from '../components/mapping/LocationMap';
@@ -17,6 +18,8 @@ export default function LocationHub() {
   const [view, setView] = useState<string>('buildings');
   const [currentMapIndex, setCurrentMapIndex] = useState(0);
 
+  const { campaignId } = useParams<{ campaignId: string }>();
+
   // TODO replace
   const fixedid: string = '97e40163-3c5c-4f76-b3ce-e6e88ec936ed';
 
@@ -25,7 +28,12 @@ export default function LocationHub() {
     invoke,
     response: locale,
   } = useDnDApi((id: string) =>
-    localeClient.getLocale(id, null, 'Maps.Buildings.Building.Npcs'),
+    localeClient.getLocaleById(
+      campaignId ?? '',
+      id,
+      null,
+      'Maps.Buildings.Building.Npcs',
+    ),
   );
 
   useEffect(() => {

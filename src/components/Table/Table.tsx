@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
 
+import { Link } from 'react-router-dom';
 import { Base } from '../../api/model';
 import './Table.styles.scss';
 //#region TableData
@@ -81,7 +82,7 @@ const Row = <T extends Base>({
             acc.push(
               <td key={key}>
                 {columnEntry.link ? (
-                  <a href={columnEntry.link(instance)}>{instanceData}</a>
+                  <Link to={columnEntry.link(instance)}>{instanceData}</Link>
                 ) : (
                   instanceData
                 )}
