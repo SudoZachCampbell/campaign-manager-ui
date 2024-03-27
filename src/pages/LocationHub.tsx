@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDnDApi } from '../api/dndDb';
-import { LocalesClient, Map } from '../api/model';
-import LocationMap from '../components/mapping/LocationMap';
+import { WorldsClient } from '../api/model';
+import { Button } from '../components/Button/Button';
 import './LocationHub.styles.scss';
 
 const PREFIX = 'LocationHub';
@@ -11,13 +11,10 @@ const classes = {
   root: `${PREFIX}-root`,
 };
 
-const localeClient = new LocalesClient();
+const worldClient = new WorldsClient();
 
 export default function LocationHub() {
-  const [maps, setMaps] = useState<Map[]>();
-  const [view, setView] = useState<string>('buildings');
-  const [currentMapIndex, setCurrentMapIndex] = useState(0);
-
+  const navigate = useNavigate();
   const { campaignId } = useParams<{ campaignId: string }>();
 
   // TODO replace
@@ -26,11 +23,10 @@ export default function LocationHub() {
   const {
     loading,
     invoke,
-    response: locale,
-  } = useDnDApi((id: string) =>
-    localeClient.getLocaleById(
+    response: world,
+  } = useDnDApi(() =>
+    worldClient.getCampaignWorld(
       campaignId ?? '',
-      id,
       null,
       'Maps.Buildings.Building.Npcs',
     ),
@@ -40,27 +36,19 @@ export default function LocationHub() {
     invoke(fixedid);
   }, []);
 
-  useEffect(() => {
-    locale?.maps && setMaps(locale.maps);
-  }, [locale]);
-
-  const setMap = (_: unknown, index: number) => {
-    setCurrentMapIndex(index);
-  };
-
-  const setMapIcons = (_: unknown, nextView: string) => {
-    setView(nextView);
-  };
-
   return loading ? (
     <p>
       <em>Loading...</em>
     </p>
   ) : (
     <div className="locationhub__container">
-      <div className="locationhub__map">
-        {maps && <LocationMap map={maps[currentMapIndex]} iconName={view} />}
-      </div>
+      <Button onClick={() => navigate('/world/create')} text="Create" />
     </div>
   );
+
+  // ) : (
+  //   <div className="locationhub__map">
+  //     {maps && <LocationMap map={maps[currentMapIndex]} iconName={view} />}
+  //   </div>
+  // )}
 }

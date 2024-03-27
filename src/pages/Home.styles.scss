@@ -1,80 +1,77 @@
 @import '../style/constants/colors';
 
 .homepage__container {
-    height: 100%;
+  height: 100%;
 }
 
 .homepage__header {
-    display: flex;
-    justify-content: center;
-    height: 10%;
+  display: flex;
+  justify-content: center;
+  height: 10%;
 
-    h1 {
-        font-size: 3rem
-    }
+  h1 {
+    font-size: 3rem;
+  }
 }
 
 .homepage__content {
-    width: 100%;
-    height: 90%;
+  width: 100%;
+  height: 90%;
 
+  .homepage__dial {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    > * {
+      display: flex;
+      height: 25%;
+      width: 25%;
 
-    .homepage__dial {
+      > * {
+        background-color: $secondary-color;
         height: 100%;
+        width: 100%;
+        font-size: 2rem;
+
+        p {
+          padding: 2%;
+        }
+
+        &:hover {
+          background-color: $primary-color;
+        }
+      }
+
+      .left {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        > * {
-            display: flex;
-            height: 25%;
-            width: 25%;
-
-            > * {
-                background-color: $secondary-color;
-                height: 100%;
-                width: 100%;
-                font-size: 2rem;
-
-                p {
-                    padding: 2%;
-                }
-                
-                &:hover {
-                    background-color: $primary-color;
-                }
-            }
-
-            .left {
-                display: flex;
-                justify-content: end;
-            }
-        }
-
-        .top {
-            * {
-                display: flex;
-                align-items: flex-end;
-            }
-            .left {
-                border-top-left-radius: 100%;
-            }
-
-            .right {
-                border-top-right-radius: 100%;
-            }
-        }
-
-        .bottom {
-
-            .left {
-                border-bottom-left-radius: 100%;
-                
-            }
-
-            .right {
-                border-bottom-right-radius: 100%;
-            }
-        }
+        justify-content: flex-end;
+      }
     }
+
+    .top {
+      * {
+        display: flex;
+        align-items: flex-end;
+      }
+      .left {
+        border-top-left-radius: 100%;
+      }
+
+      .right {
+        border-top-right-radius: 100%;
+      }
+    }
+
+    .bottom {
+      .left {
+        border-bottom-left-radius: 100%;
+      }
+
+      .right {
+        border-bottom-right-radius: 100%;
+      }
+    }
+  }
 }

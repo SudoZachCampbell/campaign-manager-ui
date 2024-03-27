@@ -4236,6 +4236,490 @@ export class RegionsClient extends Client {
   }
 }
 
+export class WorldsClient extends Client {
+  private http: {
+    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
+  };
+  private baseUrl: string;
+  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
+    undefined;
+
+  constructor(
+    baseUrl?: string,
+    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
+  ) {
+    super();
+    this.http = http ? http : (window as any);
+    this.baseUrl =
+      baseUrl !== undefined && baseUrl !== null
+        ? baseUrl
+        : 'http://localhost:5000';
+  }
+
+  getWorlds(
+    campaignId: string,
+    page?: number | undefined,
+    pageSize?: number | undefined,
+    orderBy?: string | null | undefined,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<World[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'Page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
+    if (orderBy !== undefined && orderBy !== null)
+      url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetWorlds(_response);
+      });
+  }
+
+  protected processGetWorlds(response: Response): Promise<World[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as World[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<World[]>(null as any);
+  }
+
+  createWorld(campaignId: string, world: World): Promise<string> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(world);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCreateWorld(_response);
+      });
+  }
+
+  protected processCreateWorld(response: Response): Promise<string> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 201) {
+      return response.text().then((_responseText) => {
+        let result201: any = null;
+        result201 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string);
+        return result201;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string>(null as any);
+  }
+
+  getCampaignWorld(
+    campaignId: string,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<World> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/world?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetCampaignWorld(_response);
+      });
+  }
+
+  protected processGetCampaignWorld(response: Response): Promise<World> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as World);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<World>(null as any);
+  }
+
+  updateWorldPATCH(
+    campaignId: string,
+    worldId: string,
+    patchDoc: JsonPatchDocumentOfWorld,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<World> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}?';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (worldId === undefined || worldId === null)
+      throw new Error("The parameter 'worldId' must be defined.");
+    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(patchDoc);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateWorldPATCH(_response);
+      });
+  }
+
+  protected processUpdateWorldPATCH(response: Response): Promise<World> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as World);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<World>(null as any);
+  }
+
+  updateWorldPUT(
+    campaignId: string,
+    worldId: string,
+    world: World,
+  ): Promise<FileResponse | null> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (worldId === undefined || worldId === null)
+      throw new Error("The parameter 'worldId' must be defined.");
+    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    const content_ = JSON.stringify(world);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processUpdateWorldPUT(_response);
+      });
+  }
+
+  protected processUpdateWorldPUT(
+    response: Response,
+  ): Promise<FileResponse | null> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200 || status === 206) {
+      const contentDisposition = response.headers
+        ? response.headers.get('content-disposition')
+        : undefined;
+      let fileNameMatch = contentDisposition
+        ? /filename\*=(?:(\\?['"])(.*?)\1|(?:[^\s]+'.*?')?([^;\n]*))/g.exec(
+            contentDisposition,
+          )
+        : undefined;
+      let fileName =
+        fileNameMatch && fileNameMatch.length > 1
+          ? fileNameMatch[3] || fileNameMatch[2]
+          : undefined;
+      if (fileName) {
+        fileName = decodeURIComponent(fileName);
+      } else {
+        fileNameMatch = contentDisposition
+          ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition)
+          : undefined;
+        fileName =
+          fileNameMatch && fileNameMatch.length > 1
+            ? fileNameMatch[1]
+            : undefined;
+      }
+      return response.blob().then((blob) => {
+        return {
+          fileName: fileName,
+          data: blob,
+          status: status,
+          headers: _headers,
+        };
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<FileResponse | null>(null as any);
+  }
+
+  deleteWorld(campaignId: string, worldId: string): Promise<World> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (worldId === undefined || worldId === null)
+      throw new Error("The parameter 'worldId' must be defined.");
+    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processDeleteWorld(_response);
+      });
+  }
+
+  protected processDeleteWorld(response: Response): Promise<World> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as World);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<World>(null as any);
+  }
+
+  getEnum(name: string, campaignId: string): Promise<string[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/GetEnum/{name}';
+    if (name === undefined || name === null)
+      throw new Error("The parameter 'name' must be defined.");
+    url_ = url_.replace('{name}', encodeURIComponent('' + name));
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processGetEnum(_response);
+      });
+  }
+
+  protected processGetEnum(response: Response): Promise<string[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as string[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<string[]>(null as any);
+  }
+}
+
 export interface LoginAttempt {
   username?: string | undefined;
   email?: string | undefined;
@@ -4400,7 +4884,17 @@ export interface Region extends Base {
 
 export interface Continent extends Base {
   name: string;
+  world_id?: string | undefined;
+  world?: World | undefined;
   regions?: Region[] | undefined;
+  map?: string | undefined;
+  campaign_id: string;
+  campaign?: Campaign | undefined;
+}
+
+export interface World extends Base {
+  name: string;
+  continents?: Continent[] | undefined;
   map?: string | undefined;
   campaign_id: string;
   campaign?: Campaign | undefined;
@@ -4611,6 +5105,13 @@ export interface JsonPatchDocumentOfRegion {
 }
 
 export interface OperationOfRegion extends Operation {}
+
+export interface JsonPatchDocumentOfWorld {
+  operations?: OperationOfWorld[] | undefined;
+  contract_resolver?: IContractResolver | undefined;
+}
+
+export interface OperationOfWorld extends Operation {}
 
 export interface FileResponse {
   data: Blob;
