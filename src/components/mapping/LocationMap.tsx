@@ -4,7 +4,7 @@ import { ImageOverlay, MapContainer } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Map, Monster, Npc } from '../../api/model';
+import { MapDto, MonsterDto, NpcDto } from '../../api/model';
 import ArrowIcon from '../../assets/icons/arrow.svg';
 import BuildingIcon from '../../assets/icons/building.svg';
 import PeopleIcon from '../../assets/icons/people.svg';
@@ -49,10 +49,10 @@ export default function LocationMap({
   npcs,
   monsters,
 }: {
-  map: Map;
+  map: MapDto;
   iconName: string;
-  npcs?: Npc[];
-  monsters?: Monster[];
+  npcs?: NpcDto[];
+  monsters?: MonsterDto[];
 }) {
   const [bounds, setBounds] = useState<[number, number][]>();
   const [icon, setIcon] = useState<L.Icon[]>([buildingIcon]);

@@ -1,5 +1,5 @@
+import { BaseDto } from '../api/model';
 import { FieldType, ToggleType } from './Lookups';
-import { Base } from '../api/model';
 
 export interface ITableList<T> {
   headers: string[];
@@ -14,7 +14,7 @@ export interface ITableRows<T> {
 
 //#region WAMS Metadata
 
-export interface Field<T extends Base> {
+export interface Field<T extends BaseDto> {
   name: Extract<keyof T, string>;
   type: FieldType;
   addInfo?: string;

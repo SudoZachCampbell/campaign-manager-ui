@@ -1,15 +1,15 @@
-﻿import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { Field } from '../interfaces/Models';
+﻿import { Box, Button, Grid, Typography } from '@mui/material';
 import _ from 'lodash';
-import { FieldType, ToggleType } from '../interfaces/Lookups';
-import TogglingTextField from '../components/toggling/TogglingTextField';
-import TogglingNumberField from '../components/toggling/TogglingNumberField';
-import TogglingList from '../components/toggling/TogglingList';
-import TogglingEnumField from '../components/toggling/TogglingSelect';
+import { useEffect } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { ApiType, useDnDApi } from '../api/dndDb';
-import { MonstersClient, Monster } from '../api/model';
+import { MonsterDto, MonstersClient } from '../api/model';
+import TogglingList from '../components/toggling/TogglingList';
+import TogglingNumberField from '../components/toggling/TogglingNumberField';
+import TogglingEnumField from '../components/toggling/TogglingSelect';
+import TogglingTextField from '../components/toggling/TogglingTextField';
+import { FieldType, ToggleType } from '../interfaces/Lookups';
+import { Field } from '../interfaces/Models';
 
 interface MonsterSummaryProps {
   monsterId: string;
@@ -28,7 +28,7 @@ export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
     invoke(monsterId);
   }, [monsterId]);
 
-  const fields: Field<Monster>[] = [
+  const fields: Field<MonsterDto>[] = [
     {
       name: 'name',
       type: FieldType.String,

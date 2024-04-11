@@ -1,4 +1,4 @@
-import { Monster } from '../model';
+import { MonsterDto } from '../model';
 
 export interface ListResponse<T> {
   count: number;
@@ -7,6 +7,6 @@ export interface ListResponse<T> {
   results: T[];
 }
 
-export interface OpenMonster extends Monster {
+export interface OpenMonster extends MonsterDto {
   slug: string;
 }

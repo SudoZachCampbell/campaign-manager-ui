@@ -1,10 +1,10 @@
 ﻿import * as React from 'react';
 
 import { Link } from 'react-router-dom';
-import { Base } from '../../api/model';
+import { BaseDto } from '../../api/model';
 import './Table.styles.scss';
 //#region TableData
-export interface CollapsibleTableProps<T> {
+export interface CollapsibleTableProps<T extends BaseDto> {
   Component?: React.FC<{ id: string }>;
   dataSet: T[];
   columns: TableColumn[];
@@ -17,8 +17,8 @@ export interface TableColumn {
   link?: (props: Record<string, any>) => string;
 }
 
-interface TableData extends Base {
-  name: string;
+interface TableData extends BaseDto {
+  name?: string;
 }
 
 export const Table = <T extends TableData>({
@@ -64,7 +64,7 @@ interface RowProps<T> {
   columnMeta: Record<string, TableColumn>;
 }
 
-const Row = <T extends Base>({
+const Row = <T extends BaseDto>({
   instance,
   columnMeta,
 }: RowProps<T>): JSX.Element => {

@@ -1,8 +1,13 @@
-import { Alignment, Monster, MonsterType, Size } from '../../../api/model';
+import {
+  AlignmentDto,
+  MonsterDto,
+  MonsterTypeDto,
+  SizeDto,
+} from '../../../api/model';
 import { FormInput } from '../../../components/form/Form.model';
 import { generateOptionsFromEnum } from '../../../components/form/Form.utils';
 
-export const monsterForm: FormInput<Required<Monster>>[] = [
+export const monsterForm: FormInput<Required<MonsterDto>>[] = [
   {
     name: 'name',
     label: 'Name',
@@ -12,22 +17,22 @@ export const monsterForm: FormInput<Required<Monster>>[] = [
     name: 'type',
     label: 'Monster Type',
     type: 'select',
-    options: generateOptionsFromEnum(MonsterType),
-    defaultValue: MonsterType.None,
+    options: generateOptionsFromEnum(MonsterTypeDto),
+    defaultValue: MonsterTypeDto.None,
   },
   {
     name: 'alignment',
     label: 'Alignment',
     type: 'select',
-    options: generateOptionsFromEnum(Alignment),
-    defaultValue: Alignment.None,
+    options: generateOptionsFromEnum(AlignmentDto),
+    defaultValue: AlignmentDto.None,
   },
   {
     name: 'size',
     label: 'Size',
     type: 'select',
-    options: generateOptionsFromEnum(Size),
-    defaultValue: Size.Tiny,
+    options: generateOptionsFromEnum(SizeDto),
+    defaultValue: SizeDto.Tiny,
   },
   {
     name: 'strength',

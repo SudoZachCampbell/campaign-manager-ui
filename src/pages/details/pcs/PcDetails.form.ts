@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { Alignment, Pc, Size } from '../../../api/model';
+import { AlignmentDto, PcDto, SizeDto } from '../../../api/model';
 import { FormInput } from '../../../components/form/Form.model';
 
-export const pcForm: FormInput<Required<Pc>>[] = [
+export const pcForm: FormInput<Required<PcDto>>[] = [
   {
     name: 'pc_name',
     label: 'Character Name',
@@ -43,21 +43,21 @@ export const pcForm: FormInput<Required<Pc>>[] = [
     name: 'alignment',
     label: 'Alignment',
     type: 'select',
-    options: Object.values(Alignment).map((value) => ({
+    options: Object.values(AlignmentDto).map((value) => ({
       value: value.toString(),
       label: _.startCase(value.toString()),
     })),
-    defaultValue: Alignment.None,
+    defaultValue: AlignmentDto.None,
   },
   {
     name: 'size',
     label: 'Size',
     type: 'select',
-    options: Object.values(Size).map((value) => ({
+    options: Object.values(SizeDto).map((value) => ({
       value: value.toString(),
       label: _.startCase(value.toString()),
     })),
-    defaultValue: Size.Tiny,
+    defaultValue: SizeDto.Tiny,
   },
   {
     name: 'strength',

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../api/dndDb';
-import { Npc, NpcsClient } from '../../../api/model';
+import { NpcDto, NpcsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
@@ -34,9 +34,11 @@ export const NpcDetails = () => {
     }
   }, [npcId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<Npc>>({
-    mode: 'onBlur',
-  });
+  const { control, formState, handleSubmit, reset } = useForm<Required<NpcDto>>(
+    {
+      mode: 'onBlur',
+    },
+  );
 
   useEffect(() => {
     if (npc) {
@@ -44,7 +46,7 @@ export const NpcDetails = () => {
     }
   }, [npc]);
 
-  const updateNpc = async (payload: Npc) => {
+  const updateNpc = async (payload: NpcDto) => {
     if (npcId) {
       await client.updateNpcPUT(campaignId ?? '', npcId, payload);
     } else {

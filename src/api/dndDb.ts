@@ -1,17 +1,17 @@
-import RequestBuilder, { QueryParams, RequestType } from './requestBuilder';
 import _ from 'lodash';
-import { Patch } from '../interfaces/Requests';
 import { useState } from 'react';
+import { Patch } from '../interfaces/Requests';
 import {
+  ApiException,
+  BaseDto,
   BuildingsClient,
   ContinentsClient,
   LocalesClient,
   MonstersClient,
   NpcsClient,
-  Base,
-  ApiException,
   RegionsClient,
 } from './model';
+import RequestBuilder, { RequestType } from './requestBuilder';
 
 export enum PatchType {
   Add = 'add',
@@ -28,7 +28,7 @@ export enum ApiType {
   CONTINENT,
 }
 
-export const useDnDApi = <T extends Base | string>(
+export const useDnDApi = <T extends BaseDto | string>(
   call: (...props: any[]) => Promise<T>,
 ) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export const useDnDApi = <T extends Base | string>(
   return { loading, invoke, response, apiError };
 };
 
-export const useDndCollectionApi = <T extends Base>(
+export const useDndCollectionApi = <T extends BaseDto>(
   call: (...props: any[]) => Promise<T[]>,
 ) => {
   const [loading, setLoading] = useState<boolean>(false);

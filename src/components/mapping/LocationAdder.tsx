@@ -13,14 +13,15 @@ import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Building,
+  BuildingDto,
   BuildingsClient,
-  Continent,
+  ContinentDto,
   ContinentsClient,
-  Locale,
+  LocaleDto,
   LocalesClient,
-  Region,
+  RegionDto,
   RegionsClient,
+  WorldDto,
 } from '../../api/model';
 
 const PREFIX = 'LocationAdder';
@@ -49,18 +50,19 @@ const continentClient = new ContinentsClient();
 interface LocationAdderProps {
   onSave: (id: string) => void;
   expand: string[];
-  building?: Building;
+  building?: BuildingDto;
 }
 
 interface Location {
-  continents: Continent[];
-  regions?: Region[];
-  locales?: Locale[];
-  buildings?: Building[];
-  continent?: Continent;
-  region?: Region;
-  locale?: Locale;
-  building?: Building;
+  continents: ContinentDto[];
+  regions?: RegionDto[];
+  locales?: LocaleDto[];
+  buildings?: BuildingDto[];
+  continent?: ContinentDto;
+  region?: RegionDto;
+  locale?: LocaleDto;
+  building?: BuildingDto;
+  world?: WorldDto;
 }
 
 export default function LocationAdder({

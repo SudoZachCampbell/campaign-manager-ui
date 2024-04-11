@@ -1,11 +1,10 @@
-import React from 'react';
 // @ts-ignore
-import { Marker, TileLayer, Popup, ImageOverlay } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
 // @ts-ignore
-import L from 'leaflet';
 import { Typography } from '@mui/material';
+import L from 'leaflet';
 
-import { Base } from '../../api/model';
+import { BaseDto } from '../../api/model';
 
 export default function LocationMarker({
   position,
@@ -14,7 +13,7 @@ export default function LocationMarker({
 }: {
   key: number;
   position: [number, number];
-  entities: Base[];
+  entities: BaseDto[];
   icon: L.Icon[];
 }) {
   return (

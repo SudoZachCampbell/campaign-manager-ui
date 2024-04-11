@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../api/dndDb';
-import { Pc, PcsClient } from '../../../api/model';
+import { PcDto, PcsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
@@ -32,7 +32,7 @@ export const PcDetails = () => {
     }
   }, [pcId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<Pc>>({
+  const { control, formState, handleSubmit, reset } = useForm<Required<PcDto>>({
     mode: 'onBlur',
   });
 
@@ -42,7 +42,7 @@ export const PcDetails = () => {
     }
   }, [pc]);
 
-  const updatePc = async (payload: Pc) => {
+  const updatePc = async (payload: PcDto) => {
     if (campaignId) {
       payload = { ...payload, campaign_id: campaignId };
       if (pcId) {
