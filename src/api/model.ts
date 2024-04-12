@@ -4690,7 +4690,6 @@ export interface AccountDto {
 export interface BaseDto {
   id: string;
   owner_id: string;
-  owner?: AccountDto | undefined;
 }
 
 export interface CreatureDto extends BaseDto {
@@ -4795,13 +4794,16 @@ export interface NpcDto extends BaseDto {
   flaws?: string | undefined;
   picture?: string | undefined;
   monster_id?: string | undefined;
-  monster?: MonsterDto | undefined;
   locale_id?: string | undefined;
-  locale?: LocaleDto | undefined;
   building_id?: string | undefined;
-  building?: BuildingDto | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
+}
+
+export interface MonsterLocaleDto {
+  monster_id: string;
+  monster?: MonsterDto | undefined;
+  locale_id: string;
+  locale?: LocaleDto | undefined;
 }
 
 export interface LocaleDto extends BaseDto {
@@ -4815,7 +4817,6 @@ export interface LocaleDto extends BaseDto {
   monsters?: MonsterLocaleDto[] | undefined;
   maps?: MapDto[] | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface RegionDto extends BaseDto {
@@ -4825,7 +4826,6 @@ export interface RegionDto extends BaseDto {
   continent?: ContinentDto | undefined;
   map?: string | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface ContinentDto extends BaseDto {
@@ -4835,7 +4835,6 @@ export interface ContinentDto extends BaseDto {
   regions?: RegionDto[] | undefined;
   map?: string | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface WorldDto extends BaseDto {
@@ -4843,26 +4842,6 @@ export interface WorldDto extends BaseDto {
   continents?: ContinentDto[] | undefined;
   map?: string | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
-}
-
-export interface CampaignDto extends BaseDto {
-  name?: string | undefined;
-  type: CampaignTypeDto;
-  players?: AccountCampaignDto[] | undefined;
-}
-
-export enum CampaignTypeDto {
-  FiveE = 'FiveE',
-  PathFinderOne = 'PathFinderOne',
-  PathFinderTwo = 'PathFinderTwo',
-}
-
-export interface AccountCampaignDto {
-  account_id: string;
-  account?: AccountDto | undefined;
-  campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface BuildingDto extends BaseDto {
@@ -4875,7 +4854,6 @@ export interface BuildingDto extends BaseDto {
   pcs?: PcDto[] | undefined;
   maps?: BuildingMapDto[] | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface MonsterBuildingDto {
@@ -4894,13 +4872,9 @@ export interface PcDto extends CreatureDto {
   faction?: string | undefined;
   race?: string | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
   locale_id?: string | undefined;
-  locale?: LocaleDto | undefined;
   building_id?: string | undefined;
-  building?: BuildingDto | undefined;
   player_id?: string | undefined;
-  player?: AccountDto | undefined;
 }
 
 export interface ProficienciesDto {
@@ -4950,10 +4924,8 @@ export interface MapDto extends BaseDto {
   image_url?: string | undefined;
   center?: any[] | undefined;
   locale_id: string;
-  locale?: LocaleDto | undefined;
   buildings?: BuildingMapDto[] | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
 }
 
 export interface DungeonDto extends BaseDto {
@@ -4963,14 +4935,6 @@ export interface DungeonDto extends BaseDto {
   building?: BuildingDto | undefined;
   locale?: LocaleDto | undefined;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
-}
-
-export interface MonsterLocaleDto {
-  monster_id: string;
-  monster?: MonsterDto | undefined;
-  locale_id: string;
-  locale?: LocaleDto | undefined;
 }
 
 export interface JsonPatchDocumentOfBuilding {
@@ -5002,6 +4966,25 @@ export enum OperationType {
 }
 
 export interface IContractResolver {}
+
+export interface CampaignDto extends BaseDto {
+  name?: string | undefined;
+  type: CampaignTypeDto;
+  players?: AccountCampaignDto[] | undefined;
+}
+
+export enum CampaignTypeDto {
+  FiveE = 'FiveE',
+  PathFinderOne = 'PathFinderOne',
+  PathFinderTwo = 'PathFinderTwo',
+}
+
+export interface AccountCampaignDto {
+  account_id: string;
+  account?: AccountDto | undefined;
+  campaign_id: string;
+  campaign?: CampaignDto | undefined;
+}
 
 export interface JsonPatchDocumentOfCampaign {
   operations?: OperationOfCampaign[] | undefined;
