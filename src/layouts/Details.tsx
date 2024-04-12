@@ -1,20 +1,19 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { Field } from '../interfaces/Models';
-import { FieldType } from '../interfaces/Lookups';
 import { Box, Grid } from '@mui/material';
-import { ApiType, PatchType } from '../api/dndDb';
-import SubMenu from '../components/SubMenu';
-import TogglingTextField from '../components/toggling/TogglingTextField';
-import TogglingNumberField from '../components/toggling/TogglingNumberField';
-import TogglingList from '../components/toggling/TogglingList';
-import TogglingEnumField from '../components/toggling/TogglingSelect';
-import { Patch } from '../interfaces/Requests';
 import _ from 'lodash';
+import { useEffect, useState } from 'react';
+import { ApiType } from '../api/dndDb';
+import SubMenu from '../components/SubMenu';
+import TogglingList from '../components/toggling/TogglingList';
+import TogglingNumberField from '../components/toggling/TogglingNumberField';
+import TogglingEnumField from '../components/toggling/TogglingSelect';
+import TogglingTextField from '../components/toggling/TogglingTextField';
+import { FieldType } from '../interfaces/Lookups';
+import { Field } from '../interfaces/Models';
+import { Patch } from '../interfaces/Requests';
 
-import { Base } from '../api/model';
+import { BaseDto } from '../api/model';
 
-interface Props<T extends Base> {
+interface Props<T extends BaseDto> {
   entity: T;
   type: ApiType;
   ignoreFields: string[];
@@ -25,7 +24,7 @@ interface Props<T extends Base> {
   onSave: () => void;
 }
 
-export default <T extends Base>({
+export default <T extends BaseDto>({
   entity,
   type,
   ignoreFields,

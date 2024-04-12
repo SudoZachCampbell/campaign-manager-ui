@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { APIReference, FEClient } from '../../../api/FE/fe.model';
 import { useDnDApi } from '../../../api/dndDb';
-import { Monster, MonstersClient } from '../../../api/model';
+import { MonsterDto, MonstersClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { Select, SelectOption } from '../../../components/inputs/Select';
@@ -39,7 +39,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
   }, [monsterId]);
 
   const { control, formState, handleSubmit, reset } = useForm<
-    Required<Monster>
+    Required<MonsterDto>
   >({
     mode: 'onBlur',
   });
@@ -50,7 +50,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     }
   }, [monster]);
 
-  const updateMonster = async (payload: Monster) => {
+  const updateMonster = async (payload: MonsterDto) => {
     if (monsterId) {
       await client.updateMonsterPUT(monsterId, payload);
     } else {
@@ -63,7 +63,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     <>
       <MonsterModal
         open={selectingMonster}
-        onClose={(monster?: Monster) => {
+        onClose={(monster?: MonsterDto) => {
           if (monster) {
             reset(monster);
           }
@@ -102,12 +102,12 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
 
 interface MonsterModalProps {
   open: boolean;
-  onClose: (monster?: Monster) => void;
+  onClose: (monster?: MonsterDto) => void;
 }
 
 const MonsterModal: FC<MonsterModalProps> = ({ open, onClose }) => {
   const [fEMonsters, setFEMonsters] = useState<APIReference[]>();
-  const [monster, setMonster] = useState<Monster>();
+  const [monster, setMonster] = useState<MonsterDto>();
 
   const collectOpenMonsters = async () => {
     const { results } = await feClient.monsters();
@@ -125,7 +125,7 @@ const MonsterModal: FC<MonsterModalProps> = ({ open, onClose }) => {
           onChange={(event) => {
             feClient
               .monsters2(event.target.value)
-              .then((monster) => setMonster(monster as unknown as Monster));
+              .then((monster) => setMonster(monster as unknown as MonsterDto));
           }}
           options={
             fEMonsters?.map<SelectOption>(({ index, name }) => ({

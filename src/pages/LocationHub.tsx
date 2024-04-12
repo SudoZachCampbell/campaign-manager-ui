@@ -24,13 +24,7 @@ export default function LocationHub() {
     loading,
     invoke,
     response: world,
-  } = useDnDApi(() =>
-    worldClient.getCampaignWorld(
-      campaignId ?? '',
-      null,
-      'Maps.Buildings.Building.Npcs',
-    ),
-  );
+  } = useDnDApi(() => worldClient.getCampaignWorld(campaignId ?? ''));
 
   useEffect(() => {
     invoke(fixedid);

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../api/dndDb';
-import { Campaign, CampaignsClient } from '../../../api/model';
+import { CampaignDto, CampaignsClient } from '../../../api/model';
 import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { useAuth } from '../../../hooks/useAuth';
@@ -32,7 +32,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
   }, [campaignId]);
 
   const { control, formState, handleSubmit, reset } = useForm<
-    Required<Campaign>
+    Required<CampaignDto>
   >({
     mode: 'onBlur',
   });
@@ -43,7 +43,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
     }
   }, [campaign]);
 
-  const updateCampaign = async (payload: Campaign) => {
+  const updateCampaign = async (payload: CampaignDto) => {
     if (campaignId) {
       await client.updateCampaignPUT(campaignId, payload);
     } else {

@@ -1,7 +1,7 @@
-import { Npc } from '../../../api/model';
+import { NpcDto } from '../../../api/model';
 import { FormInput } from '../../../components/form/Form.model';
 
-export const npcForm: FormInput<Required<Npc>>[] = [
+export const npcForm: FormInput<Required<NpcDto>>[] = [
   {
     name: 'name',
     label: 'Name',
