@@ -19,13 +19,16 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     type: 'select',
     options: generateOptionsFromEnum(MonsterTypeDto),
     defaultValue: MonsterTypeDto.None,
+    styling: {
+      newRow: true,
+    },
   },
   {
     name: 'alignment',
     label: 'Alignment',
     type: 'select',
     options: generateOptionsFromEnum(AlignmentDto),
-    defaultValue: AlignmentDto.None,
+    defaultValue: AlignmentDto.Unaligned,
   },
   {
     name: 'size',
@@ -42,6 +45,9 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     max: '30',
     min: '0',
     defaultValue: 10,
+    styling: {
+      newRow: true,
+    },
   },
   {
     name: 'dexterity',
@@ -69,6 +75,9 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     max: '30',
     min: '0',
     defaultValue: 10,
+    styling: {
+      newRow: true,
+    },
   },
   {
     name: 'wisdom',
@@ -90,14 +99,17 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
   },
   {
     name: 'challenge_rating',
-    label: 'Challenge Rating',
+    label: 'CR',
     type: 'number',
     min: '0',
     defaultValue: 10,
+    styling: {
+      newRow: true,
+    },
   },
   {
     name: 'armor_class',
-    label: 'Armor Class',
+    label: 'AC',
     type: 'number',
     step: '1',
     min: '0',
@@ -105,7 +117,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
   },
   {
     name: 'hit_points',
-    label: 'Hit Points',
+    label: 'HP',
     type: 'number',
     step: '1',
     min: '0',
@@ -115,6 +127,9 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     name: 'hit_dice',
     label: 'Hit Dice',
     type: 'text',
+    styling: {
+      width: '10%',
+    },
   },
   {
     name: 'languages',
@@ -126,6 +141,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Senses',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -136,6 +152,10 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
         type: 'text',
         name: 'value',
         label: 'Value',
+        styling: {
+          width: '10%',
+          newRow: true,
+        },
       },
     ],
   },
@@ -144,6 +164,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Speed',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -168,6 +189,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Actions',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -215,6 +237,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
         name: 'damage',
         label: 'Damage',
         type: 'fieldArray',
+        titleField: 'damage_dice',
         fields: [
           {
             name: 'damage_dice',
@@ -227,6 +250,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
         name: 'actions',
         label: 'Sub Actions',
         type: 'fieldArray',
+        titleField: 'action_name',
         fields: [
           {
             name: 'action_name',
@@ -246,6 +270,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     name: 'reactions',
     label: 'Reactions',
     type: 'fieldArray',
+    titleField: 'name',
     tabbed: true,
     fields: [
       {
@@ -265,6 +290,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Special Abilities',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -305,6 +331,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Legendary Actions',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -330,6 +357,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
         type: 'fieldArray',
         label: 'Damage',
         name: 'damage',
+        titleField: 'damage_dice',
         fields: [
           {
             name: 'damage_dice',
@@ -345,6 +373,7 @@ export const monsterForm: FormInput<Required<MonsterDto>>[] = [
     label: 'Proficiencies',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       { name: 'name', type: 'text', label: 'Name' },
       { name: 'value', type: 'number', label: 'Value' },

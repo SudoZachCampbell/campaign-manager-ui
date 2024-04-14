@@ -1,26 +1,35 @@
-.monsterform__main-container {
+.monsterform__main-container--padding {
+  height: 95%;
+  padding: 1%;
+
+  .monsterform__main-container {
     height: 100%;
-    
+
     & h1 {
-        margin: 0
+      margin: 0;
     }
 
     & .monsterform__header {
-        display: flex;
-        justify-content: space-between;
-        height: 5%;
+      display: flex;
+      column-gap: 2rem;
+      height: 5%;
 
-        div input:first-of-type {
-            margin-right: 2em;
-        }
+      div input:first-of-type {
+        margin-right: 2em;
+      }
     }
 
     & .monsterform__content {
-        height: 90%;
+      height: 90%;
     }
-}
 
-.monsterform__modal {
+    > .monsterform__footer {
+      display: flex;
+      justify-content: end;
+    }
+  }
+
+  .monsterform__modal {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -30,4 +39,5 @@
     border: 2px solid #000;
     box-shadow: 24;
     padding: 4;
+  }
 }

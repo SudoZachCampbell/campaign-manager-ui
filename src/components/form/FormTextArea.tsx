@@ -1,6 +1,6 @@
-import { FieldPathValue, Noop, RefCallBack } from 'react-hook-form';
-import './Form.styles.scss';
+import { FieldPathValue, Noop } from 'react-hook-form';
 import { TextArea } from '../inputs/TextArea';
+import './Form.styles.scss';
 
 interface FormTextAreaProps<T> {
   onChange: (...event: any[]) => void;
@@ -10,7 +10,6 @@ interface FormTextAreaProps<T> {
   errorsLookup?: Record<string, any>;
   label?: string;
   className?: string;
-  adaptiveLabel?: boolean;
 }
 
 export const FormTextArea = <T,>({
@@ -21,9 +20,9 @@ export const FormTextArea = <T,>({
   className,
   label,
   errorsLookup,
-  adaptiveLabel = true,
 }: FormTextAreaProps<T>) => (
   <div className="form__input__container">
+    <label className="form__input__label">{label}</label>
     <div
       className={`form__input__group${errorsLookup?.[name] ? ' invalid' : ' '}`}
     >
@@ -32,12 +31,8 @@ export const FormTextArea = <T,>({
         onChange={onChange}
         value={value}
         className={`form__input form__input-multiline ${className ?? ''}`}
-        label={label}
         name={name}
       />
-      {adaptiveLabel && value !== undefined && value !== '' && (
-        <div className={`form__input__label`}>{label}</div>
-      )}
     </div>
     {errorsLookup && (
       <div className="form__error">{errorsLookup[name]?.message}</div>

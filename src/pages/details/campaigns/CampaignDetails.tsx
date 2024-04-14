@@ -31,11 +31,11 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
     }
   }, [campaignId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<
-    Required<CampaignDto>
-  >({
+  const form = useForm<Required<CampaignDto>>({
     mode: 'onBlur',
   });
+
+  const { formState, handleSubmit, reset } = form;
 
   useEffect(() => {
     if (campaign) {
@@ -68,7 +68,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
         <div className="monsterform__content">
           <GeneratedForm
             formBuilder={campaignForm}
-            control={control}
+            form={form}
             errors={formState.errors}
           />
         </div>

@@ -10,6 +10,7 @@ import { Button } from '../../../components/Button/Button';
 import { GeneratedForm } from '../../../components/form/GeneratedForm';
 import { Select, SelectOption } from '../../../components/inputs/Select';
 import { useAuth } from '../../../hooks/useAuth';
+import { feToCampaignManagerMonsterMutator } from '../../../utils/dataAdapter';
 import { monsterForm } from './MonsterDetails.form';
 import './MonsterDetails.styles.scss';
 
@@ -38,11 +39,11 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     }
   }, [monsterId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<
-    Required<MonsterDto>
-  >({
+  const form = useForm<Required<MonsterDto>>({
     mode: 'onBlur',
   });
+
+  const { formState, handleSubmit, reset } = form;
 
   useEffect(() => {
     if (monster) {
@@ -55,12 +56,12 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
       await client.updateMonsterPUT(monsterId, payload);
     } else {
       await client.createMonster(payload);
-      navigate(`/monsters`);
+      navigate(`/compendium/monsters`);
     }
   };
 
   return !loading ? (
-    <>
+    <div className="monsterform__main-container--padding">
       <MonsterModal
         open={selectingMonster}
         onClose={(monster?: MonsterDto) => {
@@ -76,25 +77,28 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
       >
         <div className="monsterform__header">
           <h1>{monster?.name ?? 'Create Monster'}</h1>
-          <div>
-            <Button
-              text="From Monster"
-              type="info"
-              onClick={(_) => setSelectingMonster(true)}
-            />
-            <Button text="Create" submit type="submit" />
-          </div>
+          <Button
+            text="From Monster"
+            type="info"
+            onClick={(_) => setSelectingMonster(true)}
+          />
         </div>
 
         <div className="monsterform__content">
           <GeneratedForm
             formBuilder={monsterForm}
-            control={control}
+            form={form}
             errors={formState.errors}
           />
         </div>
+
+        <div className="monsterform__footer">
+          <div>
+            <Button text="Create" submit type="submit" />
+          </div>
+        </div>
       </form>
-    </>
+    </div>
   ) : (
     <ClipLoader />
   );
@@ -125,7 +129,9 @@ const MonsterModal: FC<MonsterModalProps> = ({ open, onClose }) => {
           onChange={(event) => {
             feClient
               .monsters2(event.target.value)
-              .then((monster) => setMonster(monster as unknown as MonsterDto));
+              .then((monster) =>
+                setMonster(feToCampaignManagerMonsterMutator(monster)),
+              );
           }}
           options={
             fEMonsters?.map<SelectOption>(({ index, name }) => ({

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 interface SelectProps {
   value?: string;
-  label?: string;
   className?: string;
   onChange?: (event: { target: any; type?: any }) => void;
   onBlur?: (event: { target: any; type?: any }) => void;
@@ -26,7 +25,6 @@ export const Select = ({
   value,
   name,
   className,
-  label,
   options,
 }: SelectProps) => {
   const [currentValue, setCurrentValue] = useState<string | undefined>(value);
@@ -44,10 +42,10 @@ export const Select = ({
 
   return (
     <select
-      placeholder={label}
       className={className}
       value={currentValue}
       onChange={_onChange}
+      style={{ textAlign: 'center' }}
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>

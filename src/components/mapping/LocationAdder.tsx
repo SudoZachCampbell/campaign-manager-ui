@@ -84,32 +84,34 @@ export default function LocationAdder({
   };
 
   const prepopulateData = async () => {
-    if (building) {
+    if (building?.id) {
       const selectedBuilding = await buildingClient.getBuildingById(
         building.id,
         'Locale.Region.Continent',
       );
 
-      const buildings =
-        selectedBuilding.locale &&
-        (await localeClient.getLocaleById(
-          campaignId ?? '',
-          selectedBuilding.locale.id,
-          'Buildings',
-        ));
+      const buildings = selectedBuilding.locale?.id
+        ? await localeClient.getLocaleById(
+            campaignId ?? '',
+            selectedBuilding.locale.id,
+            'Buildings',
+          )
+        : undefined;
 
-      const locales =
-        selectedBuilding.locale?.region &&
-        (await regionClient.getRegionById(
-          selectedBuilding.locale.region.id,
-          'Locales',
-        ));
-      const regions =
-        selectedBuilding.locale?.region?.continent &&
-        (await continentClient.getContinentById(
-          selectedBuilding.locale.region.continent.id,
-          'Regions',
-        ));
+      const locales = selectedBuilding.locale?.region?.id
+        ? await regionClient.getRegionById(
+            selectedBuilding.locale.region.id,
+            'Locales',
+          )
+        : undefined;
+
+      const regions = selectedBuilding.locale?.region?.continent?.id
+        ? await continentClient.getContinentById(
+            selectedBuilding.locale.region.continent.id,
+            'Regions',
+          )
+        : undefined;
+
       const continents = await continentClient.getContinents(campaignId ?? '');
 
       let newLocation = {

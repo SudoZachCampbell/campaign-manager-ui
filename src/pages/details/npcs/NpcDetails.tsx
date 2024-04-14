@@ -34,12 +34,11 @@ export const NpcDetails = () => {
     }
   }, [npcId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<NpcDto>>(
-    {
-      mode: 'onBlur',
-    },
-  );
+  const form = useForm<Required<NpcDto>>({
+    mode: 'onBlur',
+  });
 
+  const { formState, handleSubmit, reset } = form;
   useEffect(() => {
     if (npc) {
       reset(npc);
@@ -71,7 +70,7 @@ export const NpcDetails = () => {
         <div className="monsterform__content">
           <GeneratedForm
             formBuilder={npcForm}
-            control={control}
+            form={form}
             errors={formState.errors}
           />
         </div>

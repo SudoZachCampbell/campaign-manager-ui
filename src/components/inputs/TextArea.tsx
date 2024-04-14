@@ -3,7 +3,6 @@ import './Field.styles.scss';
 
 interface TextFieldProps {
   value?: string;
-  label?: string;
   className?: string;
   onChange?: (event: { target: any; type?: any }) => void;
   onBlur?: (event: { target: any; type?: any }) => void;
@@ -15,7 +14,6 @@ interface TextFieldProps {
 export const TextArea = ({
   value = '',
   className,
-  label,
   onChange,
   onBlur,
   name,
@@ -43,7 +41,6 @@ export const TextArea = ({
       required={required}
       disabled={disabled}
       className={className}
-      placeholder={label}
       value={currentValue}
       rows={7}
     />

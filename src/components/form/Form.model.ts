@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
 export interface FormSelectOption {
@@ -9,6 +10,10 @@ interface FormInputBase {
   label: string;
   tabbed?: boolean;
   required?: boolean;
+  styling?: {
+    width?: CSSProperties['width'];
+    newRow?: boolean;
+  };
 }
 
 export type FormInputText<T extends FieldValues> = FormInputBase & {
@@ -61,6 +66,7 @@ export type FormFieldArray<T extends FieldValues> = FormInputBase &
       type: 'fieldArray';
       name: K;
       fields: FormInput<Required<T[K][number]>>[];
+      titleField: Extract<keyof T[K][number], string>;
     };
   }[Extract<keyof T, string>];
 

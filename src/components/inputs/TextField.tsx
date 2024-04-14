@@ -3,7 +3,6 @@ import './Field.styles.scss';
 
 interface TextFieldProps {
   value?: string;
-  label?: string;
   className?: string;
   onChange?: (event: { target: any; type?: any }) => void;
   onBlur?: (event: { target: any; type?: any }) => void;
@@ -20,7 +19,6 @@ interface TextFieldProps {
 export const TextField = ({
   value = '',
   className,
-  label,
   onChange,
   onBlur,
   name,
@@ -58,8 +56,8 @@ export const TextField = ({
       disabled={disabled}
       type={type}
       className={className}
-      placeholder={label}
       value={currentValue}
+      style={{ textAlign: 'center' }}
     />
   );
 };

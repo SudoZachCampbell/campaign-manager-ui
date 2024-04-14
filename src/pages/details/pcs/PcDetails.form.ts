@@ -47,7 +47,7 @@ export const pcForm: FormInput<Required<PcDto>>[] = [
       value: value.toString(),
       label: _.startCase(value.toString()),
     })),
-    defaultValue: AlignmentDto.None,
+    defaultValue: AlignmentDto.Unaligned,
   },
   {
     name: 'size',
@@ -144,6 +144,7 @@ export const pcForm: FormInput<Required<PcDto>>[] = [
     label: 'Speed',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         type: 'text',
@@ -169,6 +170,7 @@ export const pcForm: FormInput<Required<PcDto>>[] = [
     label: 'Reactions',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       {
         name: 'name',
@@ -187,6 +189,7 @@ export const pcForm: FormInput<Required<PcDto>>[] = [
     label: 'Proficiencies',
     type: 'fieldArray',
     tabbed: true,
+    titleField: 'name',
     fields: [
       { name: 'name', type: 'text', label: 'Name' },
       { name: 'value', type: 'number', label: 'Value' },

@@ -44,7 +44,7 @@ const NpcList = () => {
     <>
       <Table dataSet={npcs} columns={columns} />
       <Button
-        onClick={() => navigate('/campaigns/${campaignId}/npcs/create')}
+        onClick={() => navigate(`/campaigns/${campaignId}/npcs/create`)}
         text="Create"
       />
     </>

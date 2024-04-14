@@ -1,4 +1,5 @@
-import { FieldPathValue, Noop, RefCallBack } from 'react-hook-form';
+import { CSSProperties } from 'react';
+import { FieldPathValue, Noop } from 'react-hook-form';
 import { TextField } from '../inputs/TextField';
 import './Form.styles.scss';
 
@@ -15,6 +16,7 @@ interface FormTextFieldProps<T> {
   className?: string;
   type?: 'text' | 'password' | 'email' | 'number';
   adaptiveLabel?: boolean;
+  style?: CSSProperties;
 }
 
 export const FormTextField = <T,>({
@@ -29,9 +31,9 @@ export const FormTextField = <T,>({
   type = 'text',
   label,
   errorsLookup,
-  adaptiveLabel = true,
 }: FormTextFieldProps<T>) => (
   <div className="form__input__container">
+    <label className="form__input__label">{label}</label>
     <div
       className={`form__input__group${errorsLookup?.[name] ? ' invalid' : ' '}`}
     >
@@ -44,12 +46,8 @@ export const FormTextField = <T,>({
         step={step}
         className={`form__input ${className ?? ''}`}
         type={type}
-        label={label}
         name={name}
       />
-      {adaptiveLabel && value !== undefined && value !== '' && (
-        <div className={`form__input__label`}>{label}</div>
-      )}
     </div>
     {errorsLookup && (
       <div className="form__error">{errorsLookup[name]?.message}</div>

@@ -1473,7 +1473,7 @@ export class FEClient {
    * @param index The `index` of the `Monster` to get.
    * @return OK
    */
-  monsters2(index: string): Promise<Monster> {
+  monsters2(index: string): Promise<Required<Monster>> {
     let url_ = this.baseUrl + '/api/monsters/{index}';
     if (index === undefined || index === null)
       throw new Error("The parameter 'index' must be defined.");
@@ -1492,7 +1492,7 @@ export class FEClient {
     });
   }
 
-  protected processMonsters2(response: Response): Promise<Monster> {
+  protected processMonsters2(response: Response): Promise<Required<Monster>> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1517,7 +1517,7 @@ export class FEClient {
         );
       });
     }
-    return Promise.resolve<Monster>(null as any);
+    return Promise.resolve<Required<Monster>>(null as any);
   }
 
   /**

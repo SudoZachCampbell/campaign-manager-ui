@@ -1,6 +1,6 @@
-import React from 'react';
-import { Select, SelectOption } from '../inputs/Select';
+import { CSSProperties } from 'react';
 import { FieldPathValue, Noop } from 'react-hook-form';
+import { Select, SelectOption } from '../inputs/Select';
 import './Form.styles.scss';
 
 interface FormSelectProps {
@@ -12,6 +12,7 @@ interface FormSelectProps {
   label?: string;
   className?: string;
   options: Array<SelectOption>;
+  style?: CSSProperties;
 }
 
 export const FormSelect = ({
@@ -26,6 +27,7 @@ export const FormSelect = ({
 }: FormSelectProps) => {
   return (
     <div className="form__input__container">
+      <label className="form__input__label">{label}</label>
       <div className="form__input__group">
         <Select
           onBlur={onBlur}
@@ -34,7 +36,6 @@ export const FormSelect = ({
           className={`form__input${errorsLookup?.[name] ? ' invalid ' : ' '}${
             className ?? ''
           }`}
-          label={label}
           options={options}
         />
         {errorsLookup && (

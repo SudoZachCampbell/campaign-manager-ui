@@ -1,13 +1,13 @@
 import { Box, Tab, Tabs } from '@mui/material';
-import { JSX, useState } from 'react';
+import { CSSProperties, JSX, useState } from 'react';
 import {
   ArrayPath,
-  Control,
   Controller,
   FieldErrors,
   FieldValues,
   Path,
   PathValue,
+  UseFormReturn,
 } from 'react-hook-form';
 import { FormInput } from './Form.model';
 import './Form.styles.scss';
@@ -19,15 +19,26 @@ import { GeneratedFieldArray } from './GeneratedFieldArray';
 
 interface GeneratedFormProps<T extends FieldValues> {
   formBuilder: FormInput<T>[];
-  control: Control<T>;
+  form: UseFormReturn<T>;
   errors: FieldErrors<T>;
   index?: number;
   path?: string;
 }
 
+export const DEFAULT_STYLES: {
+  width: Partial<Record<FormInput<any>['type'], CSSProperties['width']>>;
+} = {
+  width: {
+    text: '33%',
+    textarea: '100%',
+    number: '3.5rem',
+    select: '15%',
+  },
+};
+
 export const GeneratedForm = <T extends FieldValues>({
   formBuilder,
-  control,
+  form,
   errors,
   index,
   path,
@@ -47,6 +58,7 @@ export const GeneratedForm = <T extends FieldValues>({
 
   const buildField = (input: FormInput<T>, tabPath = '') => {
     let currentPath;
+
     switch (input.type) {
       case 'fieldArray':
         if (tabPath !== '') {
@@ -62,7 +74,8 @@ export const GeneratedForm = <T extends FieldValues>({
           <GeneratedFieldArray
             key={`fieldArray_${currentPath}_${input.name}`}
             label={input.label}
-            control={control}
+            form={form}
+            titleField={input.titleField}
             errors={errors}
             formBuilder={input.fields}
             path={currentPath}
@@ -78,89 +91,100 @@ export const GeneratedForm = <T extends FieldValues>({
           currentPath = `${input.name}` as ArrayPath<T>;
         }
         return (
-          <Controller
-            render={({ field: { onBlur, onChange, name, value } }) => {
-              switch (input.type) {
-                case 'text':
-                  return (
-                    <FormTextField
-                      key={name}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      name={name}
-                      label={input.label}
-                      errorsLookup={errors}
-                    />
-                  );
-                case 'textarea':
-                  return (
-                    <FormTextArea
-                      key={name}
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                      name={name}
-                      label={input.label}
-                      errorsLookup={errors}
-                    />
-                  );
-                case 'number':
-                  return (
-                    <FormTextField
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      label={input.label}
-                      step={input.step}
-                      type="number"
-                      max={input.max}
-                      min={input.min}
-                      errorsLookup={errors}
-                    />
-                  );
-                case 'boolean':
-                  return (
-                    <FormCheckBox
-                      onChange={onChange}
-                      name={name}
-                      value={value}
-                      label={input.label}
-                      errorsLookup={errors}
-                    />
-                  );
-                case 'select':
-                  return (
-                    <FormSelect
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      name={name}
-                      value={value}
-                      options={input.options}
-                      errorsLookup={errors}
-                    />
-                  );
-                case 'subForm':
-                  return (
-                    <div>
-                      <h2>{input.label}</h2>
-                      <GeneratedForm
-                        formBuilder={input.fields as FormInput<T>[]}
-                        control={control}
-                        errors={errors}
-                        path={name}
-                      />
-                    </div>
-                  );
-              }
-            }}
-            rules={{ required: input.required && `This field is required` }}
-            control={control}
-            name={currentPath as Path<T>}
-            key={currentPath}
-            defaultValue={input.defaultValue as PathValue<T, Path<T>>}
-          />
+          <>
+            {input.styling?.newRow && <div className="break" />}
+            <div
+              className="form_details__input-container"
+              style={{
+                width: input.styling?.width ?? DEFAULT_STYLES.width[input.type],
+              }}
+            >
+              <Controller
+                render={({ field: { onBlur, onChange, name, value } }) => {
+                  switch (input.type) {
+                    case 'text':
+                      return (
+                        <FormTextField
+                          key={name}
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                          name={name}
+                          label={input.label}
+                          errorsLookup={errors}
+                        />
+                      );
+                    case 'textarea':
+                      return (
+                        <FormTextArea
+                          key={name}
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                          name={name}
+                          label={input.label}
+                          errorsLookup={errors}
+                        />
+                      );
+                    case 'number':
+                      return (
+                        <FormTextField
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          name={name}
+                          value={value}
+                          label={input.label}
+                          step={input.step}
+                          type="number"
+                          max={input.max}
+                          min={input.min}
+                          errorsLookup={errors}
+                        />
+                      );
+                    case 'boolean':
+                      return (
+                        <FormCheckBox
+                          onChange={onChange}
+                          name={name}
+                          value={value}
+                          label={input.label}
+                          errorsLookup={errors}
+                        />
+                      );
+                    case 'select':
+                      return (
+                        <FormSelect
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          name={name}
+                          value={value}
+                          options={input.options}
+                          errorsLookup={errors}
+                          label={input.label}
+                        />
+                      );
+                    case 'subForm':
+                      return (
+                        <div>
+                          <h2>{input.label}</h2>
+                          <GeneratedForm
+                            formBuilder={input.fields as FormInput<T>[]}
+                            form={form}
+                            errors={errors}
+                            path={name}
+                          />
+                        </div>
+                      );
+                  }
+                }}
+                rules={{ required: input.required && `This field is required` }}
+                control={form.control}
+                name={currentPath as Path<T>}
+                key={currentPath}
+                defaultValue={input.defaultValue as PathValue<T, Path<T>>}
+              />
+            </div>
+          </>
         );
     }
   };
@@ -207,7 +231,7 @@ export const GeneratedForm = <T extends FieldValues>({
               value={currentTab}
               index={index}
             >
-              {tab}
+              <div className="form__details-tab_container">{tab}</div>
             </TabPanel>
           ))}
         </div>
@@ -232,7 +256,7 @@ function TabPanel({ children, value, index }: TabPanelProps) {
       style={{ height: '100%' }}
     >
       {value === index && (
-        <Box height="100%" sx={{ p: 3 }}>
+        <Box height="100%" sx={{ px: 3 }}>
           {children}
         </Box>
       )}

@@ -32,9 +32,11 @@ export const PcDetails = () => {
     }
   }, [pcId]);
 
-  const { control, formState, handleSubmit, reset } = useForm<Required<PcDto>>({
+  const form = useForm<Required<PcDto>>({
     mode: 'onBlur',
   });
+
+  const { formState, handleSubmit, reset } = form;
 
   useEffect(() => {
     if (pc) {
@@ -70,7 +72,7 @@ export const PcDetails = () => {
         <div className="monsterform__content">
           <GeneratedForm
             formBuilder={pcForm}
-            control={control}
+            form={form}
             errors={formState.errors}
           />
         </div>
