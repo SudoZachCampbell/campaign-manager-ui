@@ -1,16 +1,16 @@
 import { Modal } from '@mui/material';
+import { APIReference, FEClient } from 'api/FE/fe.model';
+import { useDnDApi } from 'api/dndDb';
+import { MonsterDto, MonstersClient } from 'api/model';
+import { Button } from 'components/Button/Button';
+import { GeneratedForm } from 'components/form/GeneratedForm';
+import { Select, SelectOption } from 'components/inputs/Select';
+import { useAuth } from 'hooks/useAuth';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { APIReference, FEClient } from '../../../api/FE/fe.model';
-import { useDnDApi } from '../../../api/dndDb';
-import { MonsterDto, MonstersClient } from '../../../api/model';
-import { Button } from '../../../components/Button/Button';
-import { GeneratedForm } from '../../../components/form/GeneratedForm';
-import { Select, SelectOption } from '../../../components/inputs/Select';
-import { useAuth } from '../../../hooks/useAuth';
-import { feToCampaignManagerMonsterMutator } from '../../../utils/dataAdapter';
+import { feToCampaignManagerMonsterMutator } from 'utils/dataAdapter';
 import { monsterForm } from './MonsterDetails.form';
 import './MonsterDetails.styles.scss';
 

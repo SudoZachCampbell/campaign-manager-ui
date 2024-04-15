@@ -1,15 +1,8 @@
-import {
-  ReactElement,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useLocalStorage } from '../utils/auth';
-import jwtDecode from 'jwt-decode';
 import { JwtPayload } from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
+import { ReactElement, createContext, useContext, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'utils/auth';
 
 interface AuthProviderProps {
   children: ReactElement | null;
