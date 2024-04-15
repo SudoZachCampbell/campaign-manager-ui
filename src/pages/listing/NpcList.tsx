@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDndCollectionApi } from '../../api/dndDb';
 import { NpcsClient } from '../../api/model';
-import { Button } from '../../components/Button/Button';
 import { Table, TableColumn } from '../../components/Table/Table';
 import { useAuth } from '../../hooks/useAuth';
+import { Button } from '../../components/Button/Button';
 
 const client = new NpcsClient();
 
@@ -43,10 +43,9 @@ const NpcList = () => {
   ) : npcs ? (
     <>
       <Table dataSet={npcs} columns={columns} />
-      <Button
-        onClick={() => navigate(`/campaigns/${campaignId}/npcs/create`)}
-        text="Create"
-      />
+      <Button onClick={() => navigate(`/campaigns/${campaignId}/npcs/create`)}>
+        Create
+      </Button>
     </>
   ) : (
     <p>Fecked</p>

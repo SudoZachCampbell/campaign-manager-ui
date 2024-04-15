@@ -17,6 +17,7 @@ interface FormTextFieldProps<T> {
   type?: 'text' | 'password' | 'email' | 'number';
   adaptiveLabel?: boolean;
   style?: CSSProperties;
+  center?: boolean;
 }
 
 export const FormTextField = <T,>({
@@ -31,6 +32,7 @@ export const FormTextField = <T,>({
   type = 'text',
   label,
   errorsLookup,
+  center = false,
 }: FormTextFieldProps<T>) => (
   <div className="form__input__container">
     <label className="form__input__label">{label}</label>
@@ -47,6 +49,7 @@ export const FormTextField = <T,>({
         className={`form__input ${className ?? ''}`}
         type={type}
         name={name}
+        center={center}
       />
     </div>
     {errorsLookup && (

@@ -61,7 +61,7 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
         <div className="monsterform__header">
           <h1>{campaign?.name ?? 'Create Campaign'}</h1>
           <div>
-            <Button text="Create" submit type="submit" />
+            <Button type="submit">Create</Button>
           </div>
         </div>
 

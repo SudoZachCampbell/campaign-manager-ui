@@ -65,7 +65,7 @@ export const PcDetails = () => {
         <div className="monsterform__header">
           <h1>{pc?.name ?? 'Create Player Character'}</h1>
           <div>
-            <Button text="Create" submit type="submit" />
+            <Button type="submit">Create</Button>
           </div>
         </div>
 

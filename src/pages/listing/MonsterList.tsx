@@ -40,10 +40,9 @@ export default function MonsterList() {
   ) : monsters ? (
     <>
       <Table dataSet={monsters} columns={columns} />
-      <Button
-        onClick={() => navigate('/compendium/monsters/create')}
-        text="Create"
-      />
+      <Button onClick={() => navigate('/compendium/monsters/create')}>
+        Create
+      </Button>
     </>
   ) : (
     <p>

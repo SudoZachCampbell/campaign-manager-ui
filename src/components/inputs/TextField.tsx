@@ -14,6 +14,7 @@ interface TextFieldProps {
   required?: boolean;
   disabled?: boolean;
   type?: 'text' | 'password' | 'email' | 'number';
+  center?: boolean;
 }
 
 export const TextField = ({
@@ -29,6 +30,7 @@ export const TextField = ({
   required,
   disabled,
   type = 'text',
+  center = false,
 }: TextFieldProps) => {
   const [currentValue, setCurrentValue] = useState<string>(value);
 
@@ -57,7 +59,7 @@ export const TextField = ({
       type={type}
       className={className}
       value={currentValue}
-      style={{ textAlign: 'center' }}
+      style={{ textAlign: center ? 'center' : 'left' }}
     />
   );
 };

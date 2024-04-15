@@ -47,11 +47,35 @@ export const GeneratedFieldArray = <T extends FieldValues>({
           : 'fieldarray__container-empty'
       }
     >
+      <div className="fieldarray__header">
+        <h2>{label}</h2>
+        <Button
+          onClick={() =>
+            append(
+              formBuilder.reduce<Record<string, ''>>((acc, { name }) => {
+                acc[String(name)] = '';
+                return acc;
+              }, {}) as FieldArray<T, ArrayPath<T>>,
+            )
+          }
+          className="fieldarray__append-button"
+          type="add"
+        >
+          +
+        </Button>
+      </div>
       {fields.map(({ id }, index) => {
+        const titleFieldValue = form.getValues(fullPath)?.[index]?.[titleField];
         return (
           <Accordion>
-            <AccordionSummary id={id} expandIcon={<ExpandMore />}>
-              {form.getValues(fullPath)?.[index]?.[titleField]}
+            <AccordionSummary
+              style={{ backgroundColor: '#e6e6e6' }}
+              id={id}
+              expandIcon={<ExpandMore />}
+            >
+              {titleFieldValue && titleFieldValue !== ''
+                ? titleFieldValue
+                : `New ${label} Entry`}
             </AccordionSummary>
             <AccordionDetails>
               <div style={{ width: '100%' }} key={id}>
@@ -68,18 +92,6 @@ export const GeneratedFieldArray = <T extends FieldValues>({
           </Accordion>
         );
       })}
-
-      <Button
-        onClick={() =>
-          append(
-            formBuilder.reduce<Record<string, ''>>((acc, { name }) => {
-              acc[String(name)] = '';
-              return acc;
-            }, {}) as FieldArray<T, ArrayPath<T>>,
-          )
-        }
-        text={`Add ${label}`}
-      />
     </div>
   );
 };

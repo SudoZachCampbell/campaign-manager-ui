@@ -63,7 +63,7 @@ export const NpcDetails = () => {
         <div className="monsterform__header">
           <h1>{npc?.name ?? 'Create Npc'}</h1>
           <div>
-            <Button text="Create" submit type="submit" />
+            <Button type="submit">Create</Button>
           </div>
         </div>
 

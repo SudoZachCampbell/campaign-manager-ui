@@ -42,10 +42,9 @@ const PcList = () => {
   ) : pcs ? (
     <>
       <Table dataSet={pcs} columns={columns} />
-      <Button
-        onClick={() => navigate(`/campaigns/${campaignId}/pcs/create`)}
-        text="Create"
-      />
+      <Button onClick={() => navigate(`/campaigns/${campaignId}/pcs/create`)}>
+        Create
+      </Button>
     </>
   ) : (
     <p>Fecked</p>

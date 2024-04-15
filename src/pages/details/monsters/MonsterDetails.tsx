@@ -22,7 +22,10 @@ const feClient = new FEClient();
 export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
   const [selectingMonster, setSelectingMonster] = useState<boolean>(false);
 
-  const { id: monsterId } = useParams<{ id: string }>();
+  const { id: monsterId } = useParams<{
+    id: string;
+    campaignId?: string;
+  }>();
   const navigate = useNavigate();
 
   client.setAuthToken(useAuth().token);
@@ -77,11 +80,9 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
       >
         <div className="monsterform__header">
           <h1>{monster?.name ?? 'Create Monster'}</h1>
-          <Button
-            text="From Monster"
-            type="info"
-            onClick={(_) => setSelectingMonster(true)}
-          />
+          <Button type="info" onClick={(_) => setSelectingMonster(true)}>
+            From Monster
+          </Button>
         </div>
 
         <div className="monsterform__content">
@@ -94,7 +95,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
 
         <div className="monsterform__footer">
           <div>
-            <Button text="Create" submit type="submit" />
+            <Button type="submit">Create</Button>
           </div>
         </div>
       </form>

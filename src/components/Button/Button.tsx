@@ -1,29 +1,30 @@
-import { FC, MouseEvent } from 'react';
+import { CSSProperties, FC, MouseEvent } from 'react';
 import './Button.styles.scss';
 
-type ButtonTypes = 'submit' | 'info';
+type ButtonTypes = 'submit' | 'info' | 'button' | 'add';
 
 interface ButtonProps {
-  text: string;
   type?: ButtonTypes;
-  submit?: boolean;
   className?: string;
   onClick?: (event: MouseEvent<HTMLInputElement>) => void;
+  children: string | string[];
+  style?: CSSProperties;
 }
 
 export const Button: FC<ButtonProps> = ({
-  text,
   type = 'info',
-  submit,
   className = '',
   onClick,
+  style,
+  children,
 }) => {
   return (
     <input
-      type={submit ? 'submit' : 'button'}
+      type={type === 'submit' ? 'submit' : 'button'}
       className={`${className} button ${type}`}
-      value={text}
+      value={children}
       onClick={onClick}
+      style={style}
     />
   );
 };

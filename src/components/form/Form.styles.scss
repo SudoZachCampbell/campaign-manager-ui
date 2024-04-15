@@ -7,7 +7,7 @@
   height: 100%;
 
   .form__tabs {
-    width: 25%;
+    width: 15%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,6 +55,8 @@
     width: 100%;
     color: $label-color;
     margin-left: 1%;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 
@@ -124,4 +126,8 @@
     background-color: $form-input-color;
     margin-right: 0.5%;
   }
+}
+
+.form_details__subform {
+  width: 100%;
 }

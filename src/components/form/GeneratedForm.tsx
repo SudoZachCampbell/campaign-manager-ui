@@ -33,6 +33,7 @@ export const DEFAULT_STYLES: {
     textarea: '100%',
     number: '3.5rem',
     select: '15%',
+    subForm: '100%',
   },
 };
 
@@ -139,6 +140,7 @@ export const GeneratedForm = <T extends FieldValues>({
                           max={input.max}
                           min={input.min}
                           errorsLookup={errors}
+                          center
                         />
                       );
                     case 'boolean':
@@ -165,7 +167,7 @@ export const GeneratedForm = <T extends FieldValues>({
                       );
                     case 'subForm':
                       return (
-                        <div>
+                        <div className="form_details__subform">
                           <h2>{input.label}</h2>
                           <GeneratedForm
                             formBuilder={input.fields as FormInput<T>[]}

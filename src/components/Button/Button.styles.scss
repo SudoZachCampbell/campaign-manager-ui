@@ -3,14 +3,23 @@
 .button {
   border: 1px solid $base-grey;
   border-radius: 5px;
-  min-width: 7.5em;
+  min-width: 2em;
   min-height: 2.5em;
   width: fit-content;
 
   &.submit {
     background-color: $primary-color;
   }
+
   &.info {
     background-color: $secondary-color;
+  }
+
+  &.add {
+    background-color: darkseagreen;
+  }
+
+  &:hover {
+    opacity: 75%;
   }
 }

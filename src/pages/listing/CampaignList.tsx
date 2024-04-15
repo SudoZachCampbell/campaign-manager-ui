@@ -42,10 +42,9 @@ export const CampaignList = () => {
       }}
     >
       <Table dataSet={campaigns} columns={columns} />
-      <Button
-        onClick={() => navigate('/campaigns/create')}
-        text="New Campaign"
-      />
+      <Button onClick={() => navigate('/campaigns/create')}>
+        New Campaign
+      </Button>
     </div>
   ) : (
     <PuffLoader />

@@ -36,7 +36,7 @@ export default function LocationHub() {
     </p>
   ) : (
     <div className="locationhub__container">
-      <Button onClick={() => navigate('/world/create')} text="Create" />
+      <Button onClick={() => navigate('/world/create')}>Create</Button>
     </div>
   );
 
