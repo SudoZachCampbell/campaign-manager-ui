@@ -1,11 +1,6 @@
-import {
-  AlignmentDto,
-  MonsterDto,
-  MonsterTypeDto,
-  SizeDto,
-} from '../../../api/model';
-import { FormInput } from '../../../components/form/Form.model';
-import { generateOptionsFromEnum } from '../../../components/form/Form.utils';
+import { AlignmentDto, MonsterDto, MonsterTypeDto, SizeDto } from 'api/model';
+import { FormInput } from 'components/form/Form.model';
+import { generateOptionsFromEnum } from 'components/form/Form.utils';
 
 export const monsterForm: FormInput<Required<MonsterDto>>[] = [
   {

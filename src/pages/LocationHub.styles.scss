@@ -1,11 +1,52 @@
 .locationhub__container {
-    display: flex;
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr 9fr;
+
+  .locationhub__columns {
+    grid-row-start: 2;
+    display: grid;
     height: 100%;
+    width: 100%;
+    grid-template-columns: repeat(6, 1fr);
+
+    > .locationhub__column {
+      > .locationhub__column--header {
+        display: flex;
+        justify-content: center;
+        column-gap: 6%;
+        align-items: center;
+      }
+    }
+
+    > .worlds {
+      grid-column-start: 1;
+    }
+
+    > .continents {
+      grid-column-start: 2;
+    }
+
+    > .regions {
+      grid-column-start: 3;
+    }
+
+    > .locales {
+      grid-column-start: 4;
+    }
+
+    > .buildings {
+      grid-column-start: 5;
+    }
+
+    > .dungeons {
+      grid-column-start: 6;
+    }
+  }
 }
 
-
 .locationhub__map {
-    display: flex;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }

@@ -1,8 +1,9 @@
+import { useDndCollectionApi } from 'api/dndDb';
+import { WorldsClient } from 'api/model';
+import { Button } from 'components/Button/Button';
+import { startCase } from 'lodash';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDnDApi } from '../api/dndDb';
-import { WorldsClient } from '../api/model';
-import { Button } from '../components/Button/Button';
 import './LocationHub.styles.scss';
 
 const PREFIX = 'LocationHub';
@@ -23,8 +24,10 @@ export default function LocationHub() {
   const {
     loading,
     invoke,
-    response: world,
-  } = useDnDApi(() => worldClient.getCampaignWorld(campaignId ?? ''));
+    response: worlds,
+  } = useDndCollectionApi(() =>
+    worldClient.getCampaignWorlds(campaignId ?? ''),
+  );
 
   useEffect(() => {
     invoke(fixedid);
@@ -36,7 +39,23 @@ export default function LocationHub() {
     </p>
   ) : (
     <div className="locationhub__container">
-      <Button onClick={() => navigate('/world/create')}>Create</Button>
+      <div className="locationhub__columns">
+        {[
+          'worlds',
+          'continents',
+          'regions',
+          'locales',
+          'buildings',
+          'dungeons',
+        ].map((type) => (
+          <div className={`locationhub__column ${type}`}>
+            <div className="locationhub__column--header">
+              <h2>{startCase(type)}</h2>
+              <Button type="add">+</Button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 

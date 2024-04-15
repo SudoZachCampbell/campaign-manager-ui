@@ -1,5 +1,5 @@
-import { NpcDto } from '../../../api/model';
-import { FormInput } from '../../../components/form/Form.model';
+import { NpcDto } from 'api/model';
+import { FormInput } from 'components/form/Form.model';
 
 export const npcForm: FormInput<Required<NpcDto>>[] = [
   {

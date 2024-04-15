@@ -1,12 +1,12 @@
+import { useDnDApi } from 'api/dndDb';
+import { NpcDto, NpcsClient } from 'api/model';
+import { Button } from 'components/Button/Button';
+import { GeneratedForm } from 'components/form/GeneratedForm';
+import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { useDnDApi } from '../../../api/dndDb';
-import { NpcDto, NpcsClient } from '../../../api/model';
-import { Button } from '../../../components/Button/Button';
-import { GeneratedForm } from '../../../components/form/GeneratedForm';
-import { useAuth } from '../../../hooks/useAuth';
 import { npcForm } from './NpcDetails.form';
 
 const client = new NpcsClient();
@@ -55,16 +55,13 @@ export const NpcDetails = () => {
   };
 
   return !loading ? (
-    <>
+    <div className="monsterform__main-container--padding">
       <form
         onSubmit={handleSubmit(updateNpc)}
         className="monsterform__main-container"
       >
         <div className="monsterform__header">
           <h1>{npc?.name ?? 'Create Npc'}</h1>
-          <div>
-            <Button type="submit">Create</Button>
-          </div>
         </div>
 
         <div className="monsterform__content">
@@ -74,8 +71,14 @@ export const NpcDetails = () => {
             errors={formState.errors}
           />
         </div>
+
+        <div className="monsterform__footer">
+          <div>
+            <Button type="submit">Create</Button>
+          </div>
+        </div>
       </form>
-    </>
+    </div>
   ) : (
     <ClipLoader />
   );

@@ -7,7 +7,7 @@ a {
 }
 
 code {
-  color: #E01A76;
+  color: #e01a76;
 }
 
 .btn-primary {
@@ -20,9 +20,24 @@ body {
   margin: 0;
   background-color: $background-color;
   color: $text-color;
-  font-family: Nunito, Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Inter, Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .app__body {
   height: 100vh;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 300;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 300;
 }

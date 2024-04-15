@@ -1,10 +1,5 @@
-import { Damage, Monster, MonsterAction } from '../api/FE/fe.model';
-import {
-  AlignmentDto,
-  MonsterDto,
-  MonsterTypeDto,
-  SizeDto,
-} from '../api/model';
+import { Damage, Monster, MonsterAction } from 'api/FE/fe.model';
+import { AlignmentDto, MonsterDto, MonsterTypeDto, SizeDto } from 'api/model';
 import { toTitleCase } from './string';
 
 export const feToCampaignManagerMonsterMutator = (

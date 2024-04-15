@@ -4366,8 +4366,8 @@ export class WorldsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getCampaignWorld(campaignId: string): Promise<WorldDto> {
-    let url_ = this.baseUrl + '/{campaignId}/Worlds/world';
+  getCampaignWorlds(campaignId: string): Promise<WorldDto[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/worlds';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
     url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
@@ -4385,11 +4385,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetCampaignWorld(_response);
+        return this.processGetCampaignWorlds(_response);
       });
   }
 
-  protected processGetCampaignWorld(response: Response): Promise<WorldDto> {
+  protected processGetCampaignWorlds(response: Response): Promise<WorldDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4401,7 +4401,7 @@ export class WorldsClient extends Client {
         result200 =
           _responseText === ''
             ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as WorldDto);
+            : (JSON.parse(_responseText, this.jsonParseReviver) as WorldDto[]);
         return result200;
       });
     } else if (status !== 200 && status !== 204) {
@@ -4414,7 +4414,7 @@ export class WorldsClient extends Client {
         );
       });
     }
-    return Promise.resolve<WorldDto>(null as any);
+    return Promise.resolve<WorldDto[]>(null as any);
   }
 
   updateWorldPATCH(campaignId: string, worldId: string): Promise<WorldDto> {

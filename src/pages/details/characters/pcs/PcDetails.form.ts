@@ -1,6 +1,6 @@
+import { AlignmentDto, PcDto, SizeDto } from 'api/model';
+import { FormInput } from 'components/form/Form.model';
 import _ from 'lodash';
-import { AlignmentDto, PcDto, SizeDto } from '../../../api/model';
-import { FormInput } from '../../../components/form/Form.model';
 
 export const pcForm: FormInput<Required<PcDto>>[] = [
   {

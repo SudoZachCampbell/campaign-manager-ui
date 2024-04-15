@@ -1,8 +1,8 @@
+import { useDnDApi } from 'api/dndDb';
+import { CampaignsClient } from 'api/model';
+import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDnDApi } from '../api/dndDb';
-import { CampaignsClient } from '../api/model';
-import { useAuth } from '../hooks/useAuth';
 
 interface CampaignDashboardProps {}
 

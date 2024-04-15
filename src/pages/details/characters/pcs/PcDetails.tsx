@@ -1,12 +1,12 @@
+import { GeneratedForm } from 'components/form/GeneratedForm';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { useDnDApi } from '../../../api/dndDb';
-import { PcDto, PcsClient } from '../../../api/model';
-import { Button } from '../../../components/Button/Button';
-import { GeneratedForm } from '../../../components/form/GeneratedForm';
-import { useAuth } from '../../../hooks/useAuth';
+import { useDnDApi } from '../../../../api/dndDb';
+import { PcDto, PcsClient } from '../../../../api/model';
+import { Button } from '../../../../components/Button/Button';
+import { useAuth } from '../../../../hooks/useAuth';
 import { pcForm } from './PcDetails.form';
 
 const client = new PcsClient();

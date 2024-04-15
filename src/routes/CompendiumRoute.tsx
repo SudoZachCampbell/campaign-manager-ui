@@ -1,7 +1,7 @@
+import { CampaignLayout } from 'layouts/CampaignLayout';
+import { MonsterDetails } from 'pages/details/monsters/MonsterDetails';
+import MonsterList from 'pages/listing/MonsterList';
 import { Route, Routes } from 'react-router';
-import { CampaignLayout } from '../layouts/CampaignLayout';
-import { MonsterDetails } from '../pages/details/monsters/MonsterDetails';
-import MonsterList from '../pages/listing/MonsterList';
 
 export const CompendiumRoute = () => {
   return (

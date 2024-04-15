@@ -1,11 +1,11 @@
+import { useDndCollectionApi } from 'api/dndDb';
+import { CampaignsClient } from 'api/model';
+import { Button } from 'components/Button/Button';
+import { Table, TableColumn } from 'components/Table/Table';
+import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
-import { useDndCollectionApi } from '../../api/dndDb';
-import { CampaignsClient } from '../../api/model';
-import { Button } from '../../components/Button/Button';
-import { Table, TableColumn } from '../../components/Table/Table';
-import { useAuth } from '../../hooks/useAuth';
 
 const client = new CampaignsClient();
 

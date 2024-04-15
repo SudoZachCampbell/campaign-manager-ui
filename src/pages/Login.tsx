@@ -1,15 +1,15 @@
+import { useDnDApi } from 'api/dndDb';
+import { useAuth } from 'hooks/useAuth';
 import { JwtPayload } from 'jsonwebtoken';
 import jwtDecode from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { PuffLoader } from 'react-spinners';
-import { useDnDApi } from '../api/dndDb';
-import { useAuth } from '../hooks/useAuth';
 
+import { AccountsClient } from 'api/model';
+import { Link } from 'components/Link';
+import { FormTextField } from 'components/form/FormTextField';
 import { Controller, useForm } from 'react-hook-form';
-import { AccountsClient } from '../api/model';
-import { Link } from '../components/Link';
-import { FormTextField } from '../components/form/FormTextField';
-import colors from '../style/constants/_colors.scss';
+import colors from 'style/constants/_colors.scss';
 import './Login.styles.scss';
 
 const accountsClient = new AccountsClient();

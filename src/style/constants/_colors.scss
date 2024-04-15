@@ -1,31 +1,31 @@
-:root[data-theme="theme-light"] {
-    --primary-color: #C8E4B2;
-    --primary-variant-color: #C8E4B2;
-    --secondary-color: #ADC4CE;
-    --tertiary-color: #F1F0E8;
-    --text-color: #000000;
-    --form-input-color: #FFFFFF;
-    --label-color: #3d3d3d;
-    --form-input-text-color: #000000;
-    --base-grey: #D8D9DA;
-    --background-color: #FFFFFF;
-    --menu-background-color: #a3a3a3;
-    --border-color: #000;
+:root[data-theme='theme-light'] {
+  --primary-color: #c8e4b2;
+  --primary-variant-color: #c8e4b2;
+  --secondary-color: #adc4ce;
+  --tertiary-color: #f1f0e8;
+  --text-color: #000000;
+  --form-input-color: #ffffff;
+  --label-color: #3d3d3d;
+  --form-input-text-color: #000000;
+  --base-grey: #d8d9da;
+  --background-color: #ffffff;
+  --menu-background-color: #d1d1d1;
+  --border-color: #000;
 }
 
-:root[data-theme="theme-dark"] {
-    --primary-color: #BB86FC;
-    --primary-variant-color: #3700B3;
-    --secondary-color: #03DAC5;
-    --tertiary-color: #F1F0E8;
-    --text-color: #FFFFFF;
-    --form-input-color: #6d6d6d;
-    --label-color: #b1b1b1;
-    --form-input-text-color: #FFF;
-    --base-grey: #5c5c5c;
-    --background-color: #121212;
-    --menu-background-color: #6d6d6d;
-    --border-color: #FFF;
+:root[data-theme='theme-dark'] {
+  --primary-color: #bb86fc;
+  --primary-variant-color: #3700b3;
+  --secondary-color: #03dac5;
+  --tertiary-color: #f1f0e8;
+  --text-color: #ffffff;
+  --form-input-color: #6d6d6d;
+  --label-color: #b1b1b1;
+  --form-input-text-color: #fff;
+  --base-grey: #5c5c5c;
+  --background-color: #121212;
+  --menu-background-color: #6d6d6d;
+  --border-color: #fff;
 }
 
 // Main Colours
@@ -48,11 +48,11 @@ $menu-background-color: var(--menu-background-color);
 $border-color: var(--border-color);
 
 :export {
-    primaryColor: $primary-color;
-    secondaryColor: $secondary-color;
-    tertiaryColor: $tertiary-color;
-    textColor: $text-color;
-    baseGrey: $base-grey;
-    backgroundColor: $background-color;
-    menuBackgroundColor: $menu-background-color;
+  primaryColor: $primary-color;
+  secondaryColor: $secondary-color;
+  tertiaryColor: $tertiary-color;
+  textColor: $text-color;
+  baseGrey: $base-grey;
+  backgroundColor: $background-color;
+  menuBackgroundColor: $menu-background-color;
 }

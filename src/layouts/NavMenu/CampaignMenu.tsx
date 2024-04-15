@@ -1,4 +1,3 @@
-import { GiExitDoor } from 'react-icons/gi';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { Link } from '../../components/Link';
@@ -14,32 +13,40 @@ export const CampaignMenu = () => {
 
   return (
     <div className="navbar__container">
-      <div className="navbar__iconlist">
-        <Link className="navbar__link" to="/">
-          <p>Home</p>
-        </Link>
-        <Link className="navbar__link" to="/campaigns">
-          <p>Campaigns</p>
-        </Link>
-        <Link className="navbar__link" to={`campaigns/${campaignId}/pcs`}>
-          <p>Player Characters</p>
-        </Link>
-        <Link className="navbar__link" to={`campaigns/${campaignId}/npcs`}>
-          <p>Npcs</p>
-        </Link>
-        <Link className="navbar__link" to={`campaigns/${campaignId}/monsters`}>
-          <p>Monsters</p>
-        </Link>
-        <Link
-          className="navbar__link"
-          to={`campaigns/${campaignId}/location-hub`}
-        >
-          <p>Locations</p>
-        </Link>
-        <Link className="navbar__link" onClick={logout}>
-          <GiExitDoor />
-        </Link>
+      <div className="navbar__title">
+        <h1>Campaign Manager</h1>
       </div>
+      <div className="navbar__links">
+        <div className="navbar__links-main">
+          <Link className="navbar__link" to="campaigns">
+            <h3>Campaigns</h3>
+          </Link>
+          <Link className="navbar__link" to="compendium">
+            <h3>Compendium</h3>
+          </Link>
+        </div>
+        <div className="navbar__links-contextual">
+          <Link className="navbar__link" to="/">
+            <h2>Characters</h2>
+          </Link>
+          <Link
+            className="navbar__link"
+            to={`campaigns/${campaignId}/monsters`}
+          >
+            <h2>Monsters</h2>
+          </Link>
+          <Link
+            className="navbar__link"
+            to={`campaigns/${campaignId}/location-hub`}
+          >
+            <h2>Locations</h2>
+          </Link>
+          <Link className="navbar__link" to={`campaigns/${campaignId}/items`}>
+            <h2>Items</h2>
+          </Link>
+        </div>
+      </div>
+
       {/* <Button
         onClick={() => toggleDarkTheme((theme) => !theme)}
         text={dark ? 'Light' : 'Dark'}
