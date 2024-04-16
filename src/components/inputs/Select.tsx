@@ -45,7 +45,7 @@ export const Select = ({
       className={className}
       value={currentValue}
       onChange={_onChange}
-      style={{ textAlign: 'center' }}
+      style={{ textAlign: 'center', marginRight: '0.5rem' }}
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>

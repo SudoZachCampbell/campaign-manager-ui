@@ -1,3 +1,5 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import { ImageOverlay, MapContainer } from 'react-leaflet';
@@ -5,39 +7,34 @@ import { ImageOverlay, MapContainer } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapDto, MonsterDto, NpcDto } from '../../api/model';
-import ArrowIcon from '../../assets/icons/arrow.svg';
-import BuildingIcon from '../../assets/icons/building.svg';
-import PeopleIcon from '../../assets/icons/people.svg';
-import PersonIcon from '../../assets/icons/person.svg';
-import LocationMarker from './LocationMarker';
 
 const personIcon = new L.Icon({
-  iconUrl: PersonIcon,
-  iconRetinaUrl: PersonIcon,
+  iconUrl: '../../asserts/icons/person.svg',
+  iconRetinaUrl: '../../asserts/icons/person.svg',
   iconAnchor: [17.5, 25],
   popupAnchor: [0, -35],
   iconSize: [45, 45],
 });
 
 const peopleIcon = new L.Icon({
-  iconUrl: PeopleIcon,
-  iconRetinaUrl: PeopleIcon,
+  iconUrl: '../../asserts/icons/people.svg',
+  iconRetinaUrl: '../../asserts/icons/people.svg',
   iconAnchor: [17.5, 25],
   popupAnchor: [0, -35],
   iconSize: [45, 45],
 });
 
 const buildingIcon = new L.Icon({
-  iconUrl: BuildingIcon,
-  iconRetinaUrl: BuildingIcon,
+  iconUrl: '../../asserts/icons/building.svg',
+  iconRetinaUrl: '../../asserts/icons/building.svg',
   iconAnchor: [17.5, 25],
   popupAnchor: [0, -35],
   iconSize: [45, 45],
 });
 
 const arrowIcon = new L.Icon({
-  iconUrl: ArrowIcon,
-  iconRetinaUrl: ArrowIcon,
+  iconUrl: '../../asserts/icons/arrow.svg',
+  iconRetinaUrl: '../../asserts/icons/arrow.svg',
   iconAnchor: [17.5, 25],
   popupAnchor: [0, -35],
   iconSize: [45, 45],
@@ -158,7 +155,7 @@ export default function LocationMap({
         ref={mapRef.current}
         zoomSnap={0.01}
       >
-        {map.buildings?.map(({ coords, building }, index) => {
+        {/* {map.buildings?.map(({ coords, building }, index) => {
           switch (iconName) {
             case 'buildings':
               return coords ? (
@@ -188,7 +185,7 @@ export default function LocationMap({
             //     />
             //   ) : null;
           }
-        })}
+        })} */}
 
         <ImageOverlay
           bounds={bounds}

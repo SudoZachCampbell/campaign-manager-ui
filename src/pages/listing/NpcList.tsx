@@ -1,13 +1,13 @@
 ﻿import { Box } from '@mui/material';
 import { useDndCollectionApi } from 'api/dndDb';
-import { NpcsClient } from 'api/model';
+import { Client } from 'api/model';
 import { Button } from 'components/Button/Button';
 import { Table, TableColumn } from 'components/Table/Table';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const client = new NpcsClient();
+const client = new Client();
 
 interface NpcListProps {}
 
@@ -30,7 +30,7 @@ const NpcList = () => {
     loading,
     invoke,
     response: npcs,
-  } = useDndCollectionApi(() => client.getNpcs(campaignId ?? ''));
+  } = useDndCollectionApi(() => client.npcs_GetNpcs(campaignId ?? ''));
 
   useEffect(() => {
     invoke();

@@ -1,13 +1,13 @@
 ﻿import { Box } from '@mui/material';
 import { useDndCollectionApi } from 'api/dndDb';
-import { MonstersClient } from 'api/model';
+import { Client } from 'api/model';
 import { Button } from 'components/Button/Button';
 import { Table, TableColumn } from 'components/Table/Table';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const client = new MonstersClient();
+const client = new Client();
 
 export default function MonsterList() {
   client.setAuthToken(useAuth().token);
@@ -27,7 +27,7 @@ export default function MonsterList() {
     loading,
     invoke,
     response: monsters,
-  } = useDndCollectionApi(() => client.getMonsters());
+  } = useDndCollectionApi(() => client.monsters_GetMonsters());
 
   useEffect(() => {
     invoke();

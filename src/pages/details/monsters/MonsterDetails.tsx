@@ -1,22 +1,22 @@
 import { Modal } from '@mui/material';
 import { APIReference, FEClient } from 'api/FE/fe.model';
 import { useDnDApi } from 'api/dndDb';
-import { MonsterDto, MonstersClient } from 'api/model';
+import { Client, MonsterDto } from 'api/model';
 import { Button } from 'components/Button/Button';
 import { GeneratedForm } from 'components/form/GeneratedForm';
 import { Select, SelectOption } from 'components/inputs/Select';
 import { useAuth } from 'hooks/useAuth';
+import 'pages/details/Details.styles.scss';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { feToCampaignManagerMonsterMutator } from 'utils/dataAdapter';
 import { monsterForm } from './MonsterDetails.form';
-import './MonsterDetails.styles.scss';
 
 interface MonsterDetailsProps {}
 
-const client = new MonstersClient();
+const client = new Client();
 const feClient = new FEClient();
 
 export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
@@ -34,7 +34,9 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi(() => client.getMonsterById(monsterId ?? '', null, ''));
+  } = useDnDApi(() =>
+    client.monsters_GetMonsterById(monsterId ?? '', null, ''),
+  );
 
   useEffect(() => {
     if (monsterId) {
@@ -56,15 +58,15 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
 
   const updateMonster = async (payload: MonsterDto) => {
     if (monsterId) {
-      await client.updateMonsterPUT(monsterId, payload);
+      await client.monsters_UpdateMonsterPUT(monsterId, payload);
     } else {
-      await client.createMonster(payload);
+      await client.monsters_CreateMonster(payload);
       navigate(`/compendium/monsters`);
     }
   };
 
   return !loading ? (
-    <div className="monsterform__main-container--padding">
+    <div className="form__main-container--padding">
       <MonsterModal
         open={selectingMonster}
         onClose={(monster?: MonsterDto) => {
@@ -76,16 +78,16 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
       />
       <form
         onSubmit={handleSubmit(updateMonster)}
-        className="monsterform__main-container"
+        className="form__main-container"
       >
-        <div className="monsterform__header">
+        <div className="form__header">
           <h1>{monster?.name ?? 'Create Monster'}</h1>
           <Button type="info" onClick={(_) => setSelectingMonster(true)}>
             From Monster
           </Button>
         </div>
 
-        <div className="monsterform__content">
+        <div className="form__content">
           <GeneratedForm
             formBuilder={monsterForm}
             form={form}
@@ -93,7 +95,7 @@ export const MonsterDetails: FC<MonsterDetailsProps> = ({}) => {
           />
         </div>
 
-        <div className="monsterform__footer">
+        <div className="form__footer">
           <div>
             <Button type="submit">Create</Button>
           </div>

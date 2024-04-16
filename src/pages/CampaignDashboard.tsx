@@ -1,18 +1,18 @@
 import { useDnDApi } from 'api/dndDb';
-import { CampaignsClient } from 'api/model';
+import { Client } from 'api/model';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 interface CampaignDashboardProps {}
 
-const client = new CampaignsClient();
+const client = new Client();
 
 export const CampaignDashboard = ({}: CampaignDashboardProps) => {
   const { id: campaignId } = useParams<{ id: string }>();
 
   const { invoke, response: campaign } = useDnDApi(() =>
-    client.getCampaignById(campaignId ?? '', 'monsters'),
+    client.campaigns_GetCampaignById(campaignId ?? '', 'monsters'),
   );
 
   useEffect(() => {

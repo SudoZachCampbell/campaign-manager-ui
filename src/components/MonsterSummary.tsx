@@ -1,9 +1,9 @@
 ﻿import { Box, Button, Grid, Typography } from '@mui/material';
+import { ApiType, useDnDApi } from 'api/dndDb';
+import { Client, MonsterDto } from 'api/model';
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { ClipLoader } from 'react-spinners';
-import { ApiType, useDnDApi } from '../api/dndDb';
-import { MonsterDto, MonstersClient } from '../api/model';
 import TogglingList from '../components/toggling/TogglingList';
 import TogglingNumberField from '../components/toggling/TogglingNumberField';
 import TogglingEnumField from '../components/toggling/TogglingSelect';
@@ -15,14 +15,14 @@ interface MonsterSummaryProps {
   monsterId: string;
 }
 
-const client = new MonstersClient();
+const client = new Client();
 
 export default function MonsterSummary({ monsterId }: MonsterSummaryProps) {
   const {
     loading,
     invoke,
     response: monster,
-  } = useDnDApi((id: string) => client.getMonsterById(id));
+  } = useDnDApi((id: string) => client.monsters_GetMonsterById(id));
 
   useEffect(() => {
     invoke(monsterId);

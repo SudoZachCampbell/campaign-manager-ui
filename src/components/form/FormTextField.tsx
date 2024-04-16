@@ -15,7 +15,6 @@ interface FormTextFieldProps<T> {
   label?: string;
   className?: string;
   type?: 'text' | 'password' | 'email' | 'number';
-  adaptiveLabel?: boolean;
   style?: CSSProperties;
   center?: boolean;
 }

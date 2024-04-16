@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { PuffLoader } from 'react-spinners';
 
 import colors from '@/style/constants/_colors.module.scss';
-import { AccountsClient } from 'api/model';
+import { Client } from 'api/model';
 import { Link } from 'components/Link';
 import { FormTextField } from 'components/form/FormTextField';
 import { Controller, useForm } from 'react-hook-form';
 import './Login.styles.scss';
 
-const accountsClient = new AccountsClient();
+const accountsClient = new Client();
 
 interface FormObject {
   username: string;
@@ -42,8 +42,12 @@ export default function Login() {
     apiError,
   } = useDnDApi((login: string, pass: string, email?: string) =>
     creating
-      ? accountsClient.createAccount({ username: login, password: pass, email })
-      : accountsClient.login({ username: login, password: pass }),
+      ? accountsClient.accounts_CreateAccount({
+          username: login,
+          password: pass,
+          email,
+        })
+      : accountsClient.accounts_Login({ username: login, password: pass }),
   );
 
   const attemptLogin = ({ username, password, email }: FormObject) => {
@@ -112,7 +116,7 @@ export default function Login() {
               uniqueness: async (value: string) => {
                 if (creating) {
                   return (
-                    (await accountsClient.validateUsername(value)) ||
+                    (await accountsClient.accounts_ValidateUsername(value)) ||
                     'Username must be unique'
                   );
                 } else {
@@ -129,7 +133,6 @@ export default function Login() {
               value={value}
               errorsLookup={errors}
               label="Username"
-              adaptiveLabel={creating}
             />
           )}
         />
@@ -155,7 +158,6 @@ export default function Login() {
               errorsLookup={errors}
               label="Password"
               type="password"
-              adaptiveLabel={creating}
             />
           )}
         />
@@ -178,7 +180,6 @@ export default function Login() {
                   errorsLookup={errors}
                   label="Confirm Password"
                   type="password"
-                  adaptiveLabel={creating}
                 />
               )}
             />
@@ -197,7 +198,7 @@ export default function Login() {
                       return true;
                     } else {
                       return (
-                        (await accountsClient.validateEmail(value)) ||
+                        (await accountsClient.accounts_ValidateEmail(value)) ||
                         'Email must be unique'
                       );
                     }
@@ -213,7 +214,6 @@ export default function Login() {
                   errorsLookup={errors}
                   label="Email"
                   type="email"
-                  adaptiveLabel={creating}
                 />
               )}
             />

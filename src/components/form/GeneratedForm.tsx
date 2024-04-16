@@ -12,6 +12,7 @@ import {
 import { FormInput } from './Form.model';
 import './Form.styles.scss';
 import { FormCheckBox } from './FormCheckbox';
+import { FormIdLookup } from './FormIdLookup';
 import { FormSelect } from './FormSelect';
 import { FormTextArea } from './FormTextArea';
 import { FormTextField } from './FormTextField';
@@ -149,6 +150,19 @@ export const GeneratedForm = <T extends FieldValues>({
                           onChange={onChange}
                           name={name}
                           value={value}
+                          label={input.label}
+                          errorsLookup={errors}
+                        />
+                      );
+                    case 'idLookup':
+                      return (
+                        <FormIdLookup
+                          key={name}
+                          dataFetch={input.dataFetch}
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                          name={name}
                           label={input.label}
                           errorsLookup={errors}
                         />

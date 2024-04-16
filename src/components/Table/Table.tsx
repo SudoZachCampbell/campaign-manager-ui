@@ -18,7 +18,7 @@ export interface TableColumn {
 }
 
 interface TableData extends BaseDto {
-  name?: string;
+  name: string;
 }
 
 export const Table = <T extends TableData>({

@@ -17,6 +17,13 @@
         column-gap: 6%;
         align-items: center;
       }
+
+      > .locationhub__column--data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 1rem;
+      }
     }
 
     > .worlds {

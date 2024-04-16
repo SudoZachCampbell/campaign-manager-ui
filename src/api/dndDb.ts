@@ -1,16 +1,7 @@
 import _ from 'lodash';
 import { useState } from 'react';
 import { Patch } from '../interfaces/Requests';
-import {
-  ApiException,
-  BaseDto,
-  BuildingsClient,
-  ContinentsClient,
-  LocalesClient,
-  MonstersClient,
-  NpcsClient,
-  RegionsClient,
-} from './model';
+import { ApiException, BaseDto } from './model';
 import RequestBuilder, { RequestType } from './requestBuilder';
 
 export enum PatchType {
@@ -28,9 +19,7 @@ export enum ApiType {
   CONTINENT,
 }
 
-export const useDnDApi = <T extends BaseDto | string>(
-  call: (...props: any[]) => Promise<T>,
-) => {
+export const useDnDApi = <T>(call: (...props: any[]) => Promise<T>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<T>();
   const [apiError, setApiError] = useState<ApiException>();
@@ -96,13 +85,4 @@ export const getEnumValues = async function (
       _.camelCase(name),
     )}`,
   });
-};
-
-export const ApiClients = {
-  [ApiType.MONSTER]: new MonstersClient(),
-  [ApiType.NPC]: new NpcsClient(),
-  [ApiType.BUILDING]: new BuildingsClient(),
-  [ApiType.LOCALE]: new LocalesClient(),
-  [ApiType.REGION]: new RegionsClient(),
-  [ApiType.CONTINENT]: new ContinentsClient(),
 };

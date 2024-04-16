@@ -1,17 +1,17 @@
+import { useDnDApi } from 'api/dndDb';
+import { CampaignDto, Client } from 'api/model';
+import { Button } from 'components/Button/Button';
+import { GeneratedForm } from 'components/form/GeneratedForm';
+import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { useDnDApi } from '../../../api/dndDb';
-import { CampaignDto, CampaignsClient } from '../../../api/model';
-import { Button } from '../../../components/Button/Button';
-import { GeneratedForm } from '../../../components/form/GeneratedForm';
-import { useAuth } from '../../../hooks/useAuth';
 import { campaignForm } from './CampaignDetails.form';
 
 interface CampaignDetailsProps {}
 
-const client = new CampaignsClient();
+const client = new Client();
 
 export const CampaignDetails = ({}: CampaignDetailsProps) => {
   const { id: campaignId } = useParams<{ id: string }>();
@@ -23,7 +23,9 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
     loading,
     invoke,
     response: campaign,
-  } = useDnDApi(() => client.getCampaignById(campaignId ?? '', null, ''));
+  } = useDnDApi(() =>
+    client.campaigns_GetCampaignById(campaignId ?? '', null, ''),
+  );
 
   useEffect(() => {
     if (campaignId) {
@@ -45,9 +47,9 @@ export const CampaignDetails = ({}: CampaignDetailsProps) => {
 
   const updateCampaign = async (payload: CampaignDto) => {
     if (campaignId) {
-      await client.updateCampaignPUT(campaignId, payload);
+      await client.campaigns_UpdateCampaignPUT(campaignId, payload);
     } else {
-      await client.createCampaign(payload);
+      await client.campaigns_CreateCampaign(payload);
       navigate(`/campaigns`);
     }
   };

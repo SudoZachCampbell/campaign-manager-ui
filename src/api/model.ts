@@ -8,12 +8,13 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class Client {
+export class BaseClient {
   authToken = '';
   protected constructor() {}
 
   setAuthToken(token: string) {
     this.authToken = token;
+    return this;
   }
 
   protected transformOptions = (options: RequestInit): Promise<RequestInit> => {
@@ -23,7 +24,7 @@ export class Client {
   };
 }
 
-export class AccountsClient extends Client {
+export class Client extends BaseClient {
   private http: {
     fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
   };
@@ -40,7 +41,7 @@ export class AccountsClient extends Client {
     this.baseUrl = baseUrl ?? 'http://localhost:5000';
   }
 
-  login(attempt: LoginAttempt): Promise<string> {
+  accounts_Login(attempt: LoginAttempt): Promise<string> {
     let url_ = this.baseUrl + '/Accounts/Login';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -60,11 +61,11 @@ export class AccountsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processLogin(_response);
+        return this.processAccounts_Login(_response);
       });
   }
 
-  protected processLogin(response: Response): Promise<string> {
+  protected processAccounts_Login(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -92,7 +93,7 @@ export class AccountsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  createAccount(createAttempt: CreateAttempt): Promise<string> {
+  accounts_CreateAccount(createAttempt: CreateAttempt): Promise<string> {
     let url_ = this.baseUrl + '/Accounts';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -112,11 +113,11 @@ export class AccountsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateAccount(_response);
+        return this.processAccounts_CreateAccount(_response);
       });
   }
 
-  protected processCreateAccount(response: Response): Promise<string> {
+  protected processAccounts_CreateAccount(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -144,7 +145,7 @@ export class AccountsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  validateUsername(username: string): Promise<boolean> {
+  accounts_ValidateUsername(username: string): Promise<boolean> {
     let url_ = this.baseUrl + '/Accounts/validate/username/{username}';
     if (username === undefined || username === null)
       throw new Error("The parameter 'username' must be defined.");
@@ -163,11 +164,13 @@ export class AccountsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processValidateUsername(_response);
+        return this.processAccounts_ValidateUsername(_response);
       });
   }
 
-  protected processValidateUsername(response: Response): Promise<boolean> {
+  protected processAccounts_ValidateUsername(
+    response: Response,
+  ): Promise<boolean> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -195,7 +198,7 @@ export class AccountsClient extends Client {
     return Promise.resolve<boolean>(null as any);
   }
 
-  validateEmail(email: string): Promise<boolean> {
+  accounts_ValidateEmail(email: string): Promise<boolean> {
     let url_ = this.baseUrl + '/Accounts/validate/email/{email}';
     if (email === undefined || email === null)
       throw new Error("The parameter 'email' must be defined.");
@@ -214,11 +217,13 @@ export class AccountsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processValidateEmail(_response);
+        return this.processAccounts_ValidateEmail(_response);
       });
   }
 
-  protected processValidateEmail(response: Response): Promise<boolean> {
+  protected processAccounts_ValidateEmail(
+    response: Response,
+  ): Promise<boolean> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -246,7 +251,7 @@ export class AccountsClient extends Client {
     return Promise.resolve<boolean>(null as any);
   }
 
-  deleteAccount(id: string): Promise<AccountDto> {
+  accounts_DeleteAccount(id: string): Promise<AccountDto> {
     let url_ = this.baseUrl + '/Accounts/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
@@ -265,11 +270,13 @@ export class AccountsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteAccount(_response);
+        return this.processAccounts_DeleteAccount(_response);
       });
   }
 
-  protected processDeleteAccount(response: Response): Promise<AccountDto> {
+  protected processAccounts_DeleteAccount(
+    response: Response,
+  ): Promise<AccountDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -296,26 +303,8 @@ export class AccountsClient extends Client {
     }
     return Promise.resolve<AccountDto>(null as any);
   }
-}
 
-export class BuildingsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getBuildings(
+  buildings_GetBuildings(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -359,11 +348,13 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetBuildings(_response);
+        return this.processBuildings_GetBuildings(_response);
       });
   }
 
-  protected processGetBuildings(response: Response): Promise<BuildingDto[]> {
+  protected processBuildings_GetBuildings(
+    response: Response,
+  ): Promise<BuildingDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -394,7 +385,10 @@ export class BuildingsClient extends Client {
     return Promise.resolve<BuildingDto[]>(null as any);
   }
 
-  createBuilding(campaignId: string, building: BuildingDto): Promise<string> {
+  buildings_CreateBuilding(
+    campaignId: string,
+    building: BuildingDto,
+  ): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Buildings';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -417,11 +411,13 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateBuilding(_response);
+        return this.processBuildings_CreateBuilding(_response);
       });
   }
 
-  protected processCreateBuilding(response: Response): Promise<string> {
+  protected processBuildings_CreateBuilding(
+    response: Response,
+  ): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -449,7 +445,7 @@ export class BuildingsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getBuildingById(
+  buildings_GetBuildingById(
     campaignId: string,
     buildingId: string,
     include?: string | null | undefined,
@@ -485,11 +481,13 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetBuildingById(_response);
+        return this.processBuildings_GetBuildingById(_response);
       });
   }
 
-  protected processGetBuildingById(response: Response): Promise<BuildingDto> {
+  protected processBuildings_GetBuildingById(
+    response: Response,
+  ): Promise<BuildingDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -517,7 +515,7 @@ export class BuildingsClient extends Client {
     return Promise.resolve<BuildingDto>(null as any);
   }
 
-  updateBuildingPATCH(
+  buildings_UpdateBuildingPATCH(
     campaignId: string,
     buildingId: string,
     patchDoc: JsonPatchDocumentOfBuilding,
@@ -558,11 +556,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateBuildingPATCH(_response);
+        return this.processBuildings_UpdateBuildingPATCH(_response);
       });
   }
 
-  protected processUpdateBuildingPATCH(
+  protected processBuildings_UpdateBuildingPATCH(
     response: Response,
   ): Promise<BuildingDto> {
     const status = response.status;
@@ -592,7 +590,7 @@ export class BuildingsClient extends Client {
     return Promise.resolve<BuildingDto>(null as any);
   }
 
-  updateBuildingPUT(
+  buildings_UpdateBuildingPUT(
     campaignId: string,
     buildingId: string,
     building: BuildingDto,
@@ -622,11 +620,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateBuildingPUT(_response);
+        return this.processBuildings_UpdateBuildingPUT(_response);
       });
   }
 
-  protected processUpdateBuildingPUT(
+  protected processBuildings_UpdateBuildingPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -679,7 +677,10 @@ export class BuildingsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteBuilding(campaignId: string, buildingId: string): Promise<BuildingDto> {
+  buildings_DeleteBuilding(
+    campaignId: string,
+    buildingId: string,
+  ): Promise<BuildingDto> {
     let url_ = this.baseUrl + '/{campaignId}/Buildings/{buildingId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -701,11 +702,13 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteBuilding(_response);
+        return this.processBuildings_DeleteBuilding(_response);
       });
   }
 
-  protected processDeleteBuilding(response: Response): Promise<BuildingDto> {
+  protected processBuildings_DeleteBuilding(
+    response: Response,
+  ): Promise<BuildingDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -733,7 +736,7 @@ export class BuildingsClient extends Client {
     return Promise.resolve<BuildingDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  buildings_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Buildings/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -755,11 +758,11 @@ export class BuildingsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processBuildings_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processBuildings_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -786,26 +789,8 @@ export class BuildingsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class CampaignsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getCampaigns(
+  campaigns_GetCampaigns(
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -845,11 +830,13 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetCampaigns(_response);
+        return this.processCampaigns_GetCampaigns(_response);
       });
   }
 
-  protected processGetCampaigns(response: Response): Promise<CampaignDto[]> {
+  protected processCampaigns_GetCampaigns(
+    response: Response,
+  ): Promise<CampaignDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -880,7 +867,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<CampaignDto[]>(null as any);
   }
 
-  createCampaign(campaign: CampaignDto): Promise<string> {
+  campaigns_CreateCampaign(campaign: CampaignDto): Promise<string> {
     let url_ = this.baseUrl + '/Campaigns';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -900,11 +887,13 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateCampaign(_response);
+        return this.processCampaigns_CreateCampaign(_response);
       });
   }
 
-  protected processCreateCampaign(response: Response): Promise<string> {
+  protected processCampaigns_CreateCampaign(
+    response: Response,
+  ): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -932,7 +921,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getCampaignById(
+  campaigns_GetCampaignById(
     id: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
@@ -964,11 +953,13 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetCampaignById(_response);
+        return this.processCampaigns_GetCampaignById(_response);
       });
   }
 
-  protected processGetCampaignById(response: Response): Promise<CampaignDto> {
+  protected processCampaigns_GetCampaignById(
+    response: Response,
+  ): Promise<CampaignDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -996,7 +987,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<CampaignDto>(null as any);
   }
 
-  updateCampaignPATCH(
+  campaigns_UpdateCampaignPATCH(
     id: string,
     patchDoc: JsonPatchDocumentOfCampaign,
     include?: string | null | undefined,
@@ -1033,11 +1024,11 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateCampaignPATCH(_response);
+        return this.processCampaigns_UpdateCampaignPATCH(_response);
       });
   }
 
-  protected processUpdateCampaignPATCH(
+  protected processCampaigns_UpdateCampaignPATCH(
     response: Response,
   ): Promise<CampaignDto> {
     const status = response.status;
@@ -1067,7 +1058,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<CampaignDto>(null as any);
   }
 
-  updateCampaignPUT(
+  campaigns_UpdateCampaignPUT(
     id: string,
     monster: CampaignDto,
   ): Promise<FileResponse | null> {
@@ -1093,11 +1084,11 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateCampaignPUT(_response);
+        return this.processCampaigns_UpdateCampaignPUT(_response);
       });
   }
 
-  protected processUpdateCampaignPUT(
+  protected processCampaigns_UpdateCampaignPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -1150,7 +1141,7 @@ export class CampaignsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteCampaign(id: string): Promise<CampaignDto> {
+  campaigns_DeleteCampaign(id: string): Promise<CampaignDto> {
     let url_ = this.baseUrl + '/Campaigns/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
@@ -1169,11 +1160,13 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteCampaign(_response);
+        return this.processCampaigns_DeleteCampaign(_response);
       });
   }
 
-  protected processDeleteCampaign(response: Response): Promise<CampaignDto> {
+  protected processCampaigns_DeleteCampaign(
+    response: Response,
+  ): Promise<CampaignDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1201,7 +1194,76 @@ export class CampaignsClient extends Client {
     return Promise.resolve<CampaignDto>(null as any);
   }
 
-  enum(name: string): Promise<string[]> {
+  campaigns_GetCampaignWithLocations(
+    id: string,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<CampaignWithLocationsDto> {
+    let url_ = this.baseUrl + '/Campaigns/{id}/locations?';
+    if (id === undefined || id === null)
+      throw new Error("The parameter 'id' must be defined.");
+    url_ = url_.replace('{id}', encodeURIComponent('' + id));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processCampaigns_GetCampaignWithLocations(_response);
+      });
+  }
+
+  protected processCampaigns_GetCampaignWithLocations(
+    response: Response,
+  ): Promise<CampaignWithLocationsDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(
+                _responseText,
+                this.jsonParseReviver,
+              ) as CampaignWithLocationsDto);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<CampaignWithLocationsDto>(null as any);
+  }
+
+  campaigns_Enum(name: string): Promise<string[]> {
     let url_ = this.baseUrl + '/Campaigns/Enum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -1220,11 +1282,11 @@ export class CampaignsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processEnum(_response);
+        return this.processCampaigns_Enum(_response);
       });
   }
 
-  protected processEnum(response: Response): Promise<string[]> {
+  protected processCampaigns_Enum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1251,26 +1313,8 @@ export class CampaignsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class ContinentsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getContinents(
+  continents_GetContinents(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -1314,11 +1358,13 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetContinents(_response);
+        return this.processContinents_GetContinents(_response);
       });
   }
 
-  protected processGetContinents(response: Response): Promise<ContinentDto[]> {
+  protected processContinents_GetContinents(
+    response: Response,
+  ): Promise<ContinentDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1349,7 +1395,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<ContinentDto[]>(null as any);
   }
 
-  createContinent(
+  continents_CreateContinent(
     campaignId: string,
     continent: ContinentDto,
   ): Promise<string> {
@@ -1375,11 +1421,13 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateContinent(_response);
+        return this.processContinents_CreateContinent(_response);
       });
   }
 
-  protected processCreateContinent(response: Response): Promise<string> {
+  protected processContinents_CreateContinent(
+    response: Response,
+  ): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1407,7 +1455,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getContinentById(
+  continents_GetContinentById(
     campaignId: string,
     continentId: string,
     include?: string | null | undefined,
@@ -1443,11 +1491,13 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetContinentById(_response);
+        return this.processContinents_GetContinentById(_response);
       });
   }
 
-  protected processGetContinentById(response: Response): Promise<ContinentDto> {
+  protected processContinents_GetContinentById(
+    response: Response,
+  ): Promise<ContinentDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1478,7 +1528,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<ContinentDto>(null as any);
   }
 
-  updateContinentPATCH(
+  continents_UpdateContinentPATCH(
     campaignId: string,
     continentId: string,
     patchDoc: JsonPatchDocumentOfContinent,
@@ -1519,11 +1569,11 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateContinentPATCH(_response);
+        return this.processContinents_UpdateContinentPATCH(_response);
       });
   }
 
-  protected processUpdateContinentPATCH(
+  protected processContinents_UpdateContinentPATCH(
     response: Response,
   ): Promise<ContinentDto> {
     const status = response.status;
@@ -1556,7 +1606,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<ContinentDto>(null as any);
   }
 
-  updateContinentPUT(
+  continents_UpdateContinentPUT(
     campaignId: string,
     continentId: string,
     continent: ContinentDto,
@@ -1586,11 +1636,11 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateContinentPUT(_response);
+        return this.processContinents_UpdateContinentPUT(_response);
       });
   }
 
-  protected processUpdateContinentPUT(
+  protected processContinents_UpdateContinentPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -1643,7 +1693,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteContinent(
+  continents_DeleteContinent(
     campaignId: string,
     continentId: string,
   ): Promise<ContinentDto> {
@@ -1668,11 +1718,13 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteContinent(_response);
+        return this.processContinents_DeleteContinent(_response);
       });
   }
 
-  protected processDeleteContinent(response: Response): Promise<ContinentDto> {
+  protected processContinents_DeleteContinent(
+    response: Response,
+  ): Promise<ContinentDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1703,7 +1755,7 @@ export class ContinentsClient extends Client {
     return Promise.resolve<ContinentDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  continents_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Continents/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -1725,11 +1777,11 @@ export class ContinentsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processContinents_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processContinents_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1756,26 +1808,8 @@ export class ContinentsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class LocalesClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getLocales(
+  locales_GetLocales(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -1819,11 +1853,13 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetLocales(_response);
+        return this.processLocales_GetLocales(_response);
       });
   }
 
-  protected processGetLocales(response: Response): Promise<LocaleDto[]> {
+  protected processLocales_GetLocales(
+    response: Response,
+  ): Promise<LocaleDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1851,7 +1887,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<LocaleDto[]>(null as any);
   }
 
-  createLocale(campaignId: string, locale: LocaleDto): Promise<string> {
+  locales_CreateLocale(campaignId: string, locale: LocaleDto): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Locales';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -1874,11 +1910,11 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateLocale(_response);
+        return this.processLocales_CreateLocale(_response);
       });
   }
 
-  protected processCreateLocale(response: Response): Promise<string> {
+  protected processLocales_CreateLocale(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1906,7 +1942,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getLocaleById(
+  locales_GetLocaleById(
     campaignId: string,
     localeId: string,
     include?: string | null | undefined,
@@ -1942,11 +1978,13 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetLocaleById(_response);
+        return this.processLocales_GetLocaleById(_response);
       });
   }
 
-  protected processGetLocaleById(response: Response): Promise<LocaleDto> {
+  protected processLocales_GetLocaleById(
+    response: Response,
+  ): Promise<LocaleDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -1974,7 +2012,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<LocaleDto>(null as any);
   }
 
-  updateLocalePATCH(
+  locales_UpdateLocalePATCH(
     campaignId: string,
     localeId: string,
     patchDoc: JsonPatchDocumentOfLocale,
@@ -2015,11 +2053,13 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateLocalePATCH(_response);
+        return this.processLocales_UpdateLocalePATCH(_response);
       });
   }
 
-  protected processUpdateLocalePATCH(response: Response): Promise<LocaleDto> {
+  protected processLocales_UpdateLocalePATCH(
+    response: Response,
+  ): Promise<LocaleDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2047,7 +2087,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<LocaleDto>(null as any);
   }
 
-  updateLocalePUT(
+  locales_UpdateLocalePUT(
     campaignId: string,
     localeId: string,
     locale: LocaleDto,
@@ -2077,11 +2117,11 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateLocalePUT(_response);
+        return this.processLocales_UpdateLocalePUT(_response);
       });
   }
 
-  protected processUpdateLocalePUT(
+  protected processLocales_UpdateLocalePUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -2134,7 +2174,10 @@ export class LocalesClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteLocale(campaignId: string, localeId: string): Promise<LocaleDto> {
+  locales_DeleteLocale(
+    campaignId: string,
+    localeId: string,
+  ): Promise<LocaleDto> {
     let url_ = this.baseUrl + '/{campaignId}/Locales/{localeId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -2156,11 +2199,13 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteLocale(_response);
+        return this.processLocales_DeleteLocale(_response);
       });
   }
 
-  protected processDeleteLocale(response: Response): Promise<LocaleDto> {
+  protected processLocales_DeleteLocale(
+    response: Response,
+  ): Promise<LocaleDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2188,7 +2233,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<LocaleDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  locales_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Locales/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -2210,11 +2255,11 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processLocales_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processLocales_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2242,7 +2287,7 @@ export class LocalesClient extends Client {
     return Promise.resolve<string[]>(null as any);
   }
 
-  getRegionsFromContinent(
+  locales_GetRegionsFromContinent(
     regionId: number,
     campaignId: string,
     page?: number | undefined,
@@ -2290,11 +2335,11 @@ export class LocalesClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetRegionsFromContinent(_response);
+        return this.processLocales_GetRegionsFromContinent(_response);
       });
   }
 
-  protected processGetRegionsFromContinent(
+  protected processLocales_GetRegionsFromContinent(
     response: Response,
   ): Promise<LocaleDto[]> {
     const status = response.status;
@@ -2323,26 +2368,8 @@ export class LocalesClient extends Client {
     }
     return Promise.resolve<LocaleDto[]>(null as any);
   }
-}
 
-export class MonstersClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getMonsters(
+  monsters_GetMonsters(
     page?: number | undefined,
     pageSize?: number | undefined,
     orderBy?: string | null | undefined,
@@ -2382,11 +2409,13 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetMonsters(_response);
+        return this.processMonsters_GetMonsters(_response);
       });
   }
 
-  protected processGetMonsters(response: Response): Promise<MonsterDto[]> {
+  protected processMonsters_GetMonsters(
+    response: Response,
+  ): Promise<MonsterDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2417,7 +2446,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<MonsterDto[]>(null as any);
   }
 
-  createMonster(monster: MonsterDto): Promise<string> {
+  monsters_CreateMonster(monster: MonsterDto): Promise<string> {
     let url_ = this.baseUrl + '/Monsters';
     url_ = url_.replace(/[?&]$/, '');
 
@@ -2437,11 +2466,11 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateMonster(_response);
+        return this.processMonsters_CreateMonster(_response);
       });
   }
 
-  protected processCreateMonster(response: Response): Promise<string> {
+  protected processMonsters_CreateMonster(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2469,7 +2498,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getMonsterById(
+  monsters_GetMonsterById(
     id: string,
     include?: string | null | undefined,
     expand?: string | null | undefined,
@@ -2501,11 +2530,13 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetMonsterById(_response);
+        return this.processMonsters_GetMonsterById(_response);
       });
   }
 
-  protected processGetMonsterById(response: Response): Promise<MonsterDto> {
+  protected processMonsters_GetMonsterById(
+    response: Response,
+  ): Promise<MonsterDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2533,7 +2564,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<MonsterDto>(null as any);
   }
 
-  updateMonsterPATCH(
+  monsters_UpdateMonsterPATCH(
     id: string,
     patchDoc: JsonPatchDocumentOfMonster,
     include?: string | null | undefined,
@@ -2570,11 +2601,13 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateMonsterPATCH(_response);
+        return this.processMonsters_UpdateMonsterPATCH(_response);
       });
   }
 
-  protected processUpdateMonsterPATCH(response: Response): Promise<MonsterDto> {
+  protected processMonsters_UpdateMonsterPATCH(
+    response: Response,
+  ): Promise<MonsterDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2602,7 +2635,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<MonsterDto>(null as any);
   }
 
-  updateMonsterPUT(
+  monsters_UpdateMonsterPUT(
     id: string,
     monster: MonsterDto,
   ): Promise<FileResponse | null> {
@@ -2628,11 +2661,11 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateMonsterPUT(_response);
+        return this.processMonsters_UpdateMonsterPUT(_response);
       });
   }
 
-  protected processUpdateMonsterPUT(
+  protected processMonsters_UpdateMonsterPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -2685,7 +2718,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteMonster(id: string): Promise<MonsterDto> {
+  monsters_DeleteMonster(id: string): Promise<MonsterDto> {
     let url_ = this.baseUrl + '/Monsters/{id}';
     if (id === undefined || id === null)
       throw new Error("The parameter 'id' must be defined.");
@@ -2704,11 +2737,13 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteMonster(_response);
+        return this.processMonsters_DeleteMonster(_response);
       });
   }
 
-  protected processDeleteMonster(response: Response): Promise<MonsterDto> {
+  protected processMonsters_DeleteMonster(
+    response: Response,
+  ): Promise<MonsterDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2736,7 +2771,7 @@ export class MonstersClient extends Client {
     return Promise.resolve<MonsterDto>(null as any);
   }
 
-  getEnum(name: string): Promise<string[]> {
+  monsters_GetEnum(name: string): Promise<string[]> {
     let url_ = this.baseUrl + '/Monsters/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -2755,11 +2790,11 @@ export class MonstersClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processMonsters_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processMonsters_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2786,26 +2821,8 @@ export class MonstersClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class NpcsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getNpcs(
+  npcs_GetNpcs(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -2849,11 +2866,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetNpcs(_response);
+        return this.processNpcs_GetNpcs(_response);
       });
   }
 
-  protected processGetNpcs(response: Response): Promise<NpcDto[]> {
+  protected processNpcs_GetNpcs(response: Response): Promise<NpcDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2881,7 +2898,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<NpcDto[]>(null as any);
   }
 
-  createNpc(campaignId: string, npc: NpcDto): Promise<string> {
+  npcs_CreateNpc(campaignId: string, npc: NpcDto): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Npcs';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -2904,11 +2921,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateNpc(_response);
+        return this.processNpcs_CreateNpc(_response);
       });
   }
 
-  protected processCreateNpc(response: Response): Promise<string> {
+  protected processNpcs_CreateNpc(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -2936,7 +2953,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getNpcById(
+  npcs_GetNpcById(
     campaignId: string,
     npcId: string,
     include?: string | null | undefined,
@@ -2972,11 +2989,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetNpcById(_response);
+        return this.processNpcs_GetNpcById(_response);
       });
   }
 
-  protected processGetNpcById(response: Response): Promise<NpcDto> {
+  protected processNpcs_GetNpcById(response: Response): Promise<NpcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3004,7 +3021,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<NpcDto>(null as any);
   }
 
-  updateNpcPATCH(
+  npcs_UpdateNpcPATCH(
     campaignId: string,
     npcId: string,
     patchDoc: JsonPatchDocumentOfNpc,
@@ -3045,11 +3062,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateNpcPATCH(_response);
+        return this.processNpcs_UpdateNpcPATCH(_response);
       });
   }
 
-  protected processUpdateNpcPATCH(response: Response): Promise<NpcDto> {
+  protected processNpcs_UpdateNpcPATCH(response: Response): Promise<NpcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3077,7 +3094,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<NpcDto>(null as any);
   }
 
-  updateNpcPUT(
+  npcs_UpdateNpcPUT(
     campaignId: string,
     npcId: string,
     npc: NpcDto,
@@ -3107,11 +3124,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateNpcPUT(_response);
+        return this.processNpcs_UpdateNpcPUT(_response);
       });
   }
 
-  protected processUpdateNpcPUT(
+  protected processNpcs_UpdateNpcPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -3164,7 +3181,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteNpc(campaignId: string, npcId: string): Promise<NpcDto> {
+  npcs_DeleteNpc(campaignId: string, npcId: string): Promise<NpcDto> {
     let url_ = this.baseUrl + '/{campaignId}/Npcs/{npcId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -3186,11 +3203,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteNpc(_response);
+        return this.processNpcs_DeleteNpc(_response);
       });
   }
 
-  protected processDeleteNpc(response: Response): Promise<NpcDto> {
+  protected processNpcs_DeleteNpc(response: Response): Promise<NpcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3218,7 +3235,7 @@ export class NpcsClient extends Client {
     return Promise.resolve<NpcDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  npcs_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Npcs/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -3240,11 +3257,11 @@ export class NpcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processNpcs_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processNpcs_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3271,26 +3288,8 @@ export class NpcsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class PcsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getPcs(
+  pcs_GetPcs(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -3334,11 +3333,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetPcs(_response);
+        return this.processPcs_GetPcs(_response);
       });
   }
 
-  protected processGetPcs(response: Response): Promise<PcDto[]> {
+  protected processPcs_GetPcs(response: Response): Promise<PcDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3366,7 +3365,7 @@ export class PcsClient extends Client {
     return Promise.resolve<PcDto[]>(null as any);
   }
 
-  createPc(campaignId: string, pc: PcDto): Promise<string> {
+  pcs_CreatePc(campaignId: string, pc: PcDto): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Pcs';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -3389,11 +3388,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreatePc(_response);
+        return this.processPcs_CreatePc(_response);
       });
   }
 
-  protected processCreatePc(response: Response): Promise<string> {
+  protected processPcs_CreatePc(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3421,7 +3420,7 @@ export class PcsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getPcById(
+  pcs_GetPcById(
     campaignId: string,
     pcId: string,
     include?: string | null | undefined,
@@ -3457,11 +3456,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetPcById(_response);
+        return this.processPcs_GetPcById(_response);
       });
   }
 
-  protected processGetPcById(response: Response): Promise<PcDto> {
+  protected processPcs_GetPcById(response: Response): Promise<PcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3489,7 +3488,7 @@ export class PcsClient extends Client {
     return Promise.resolve<PcDto>(null as any);
   }
 
-  updatePcPATCH(
+  pcs_UpdatePcPATCH(
     campaignId: string,
     pcId: string,
     patchDoc: JsonPatchDocumentOfPc,
@@ -3530,11 +3529,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdatePcPATCH(_response);
+        return this.processPcs_UpdatePcPATCH(_response);
       });
   }
 
-  protected processUpdatePcPATCH(response: Response): Promise<PcDto> {
+  protected processPcs_UpdatePcPATCH(response: Response): Promise<PcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3562,7 +3561,7 @@ export class PcsClient extends Client {
     return Promise.resolve<PcDto>(null as any);
   }
 
-  updatePcPUT(
+  pcs_UpdatePcPUT(
     campaignId: string,
     pcId: string,
     pc: PcDto,
@@ -3592,11 +3591,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdatePcPUT(_response);
+        return this.processPcs_UpdatePcPUT(_response);
       });
   }
 
-  protected processUpdatePcPUT(
+  protected processPcs_UpdatePcPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -3649,7 +3648,7 @@ export class PcsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deletePc(campaignId: string, pcId: string): Promise<PcDto> {
+  pcs_DeletePc(campaignId: string, pcId: string): Promise<PcDto> {
     let url_ = this.baseUrl + '/{campaignId}/Pcs/{pcId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -3671,11 +3670,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeletePc(_response);
+        return this.processPcs_DeletePc(_response);
       });
   }
 
-  protected processDeletePc(response: Response): Promise<PcDto> {
+  protected processPcs_DeletePc(response: Response): Promise<PcDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3703,7 +3702,7 @@ export class PcsClient extends Client {
     return Promise.resolve<PcDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  pcs_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Pcs/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -3725,11 +3724,11 @@ export class PcsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processPcs_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processPcs_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3756,26 +3755,8 @@ export class PcsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class RegionsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getRegions(
+  regions_GetRegions(
     campaignId: string,
     page?: number | undefined,
     pageSize?: number | undefined,
@@ -3819,11 +3800,13 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetRegions(_response);
+        return this.processRegions_GetRegions(_response);
       });
   }
 
-  protected processGetRegions(response: Response): Promise<RegionDto[]> {
+  protected processRegions_GetRegions(
+    response: Response,
+  ): Promise<RegionDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3851,7 +3834,7 @@ export class RegionsClient extends Client {
     return Promise.resolve<RegionDto[]>(null as any);
   }
 
-  createRegion(campaignId: string, region: RegionDto): Promise<string> {
+  regions_CreateRegion(campaignId: string, region: RegionDto): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Regions';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -3874,11 +3857,11 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateRegion(_response);
+        return this.processRegions_CreateRegion(_response);
       });
   }
 
-  protected processCreateRegion(response: Response): Promise<string> {
+  protected processRegions_CreateRegion(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3906,7 +3889,7 @@ export class RegionsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getRegionById(
+  regions_GetRegionById(
     campaignId: string,
     regionId: string,
     include?: string | null | undefined,
@@ -3942,11 +3925,13 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetRegionById(_response);
+        return this.processRegions_GetRegionById(_response);
       });
   }
 
-  protected processGetRegionById(response: Response): Promise<RegionDto> {
+  protected processRegions_GetRegionById(
+    response: Response,
+  ): Promise<RegionDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -3974,7 +3959,7 @@ export class RegionsClient extends Client {
     return Promise.resolve<RegionDto>(null as any);
   }
 
-  updateRegionPATCH(
+  regions_UpdateRegionPATCH(
     campaignId: string,
     regionId: string,
     patchDoc: JsonPatchDocumentOfRegion,
@@ -4015,11 +4000,13 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateRegionPATCH(_response);
+        return this.processRegions_UpdateRegionPATCH(_response);
       });
   }
 
-  protected processUpdateRegionPATCH(response: Response): Promise<RegionDto> {
+  protected processRegions_UpdateRegionPATCH(
+    response: Response,
+  ): Promise<RegionDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4047,7 +4034,7 @@ export class RegionsClient extends Client {
     return Promise.resolve<RegionDto>(null as any);
   }
 
-  updateRegionPUT(
+  regions_UpdateRegionPUT(
     campaignId: string,
     regionId: string,
     region: RegionDto,
@@ -4077,11 +4064,11 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateRegionPUT(_response);
+        return this.processRegions_UpdateRegionPUT(_response);
       });
   }
 
-  protected processUpdateRegionPUT(
+  protected processRegions_UpdateRegionPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -4134,7 +4121,10 @@ export class RegionsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteRegion(campaignId: string, regionId: string): Promise<RegionDto> {
+  regions_DeleteRegion(
+    campaignId: string,
+    regionId: string,
+  ): Promise<RegionDto> {
     let url_ = this.baseUrl + '/{campaignId}/Regions/{regionId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -4156,11 +4146,13 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteRegion(_response);
+        return this.processRegions_DeleteRegion(_response);
       });
   }
 
-  protected processDeleteRegion(response: Response): Promise<RegionDto> {
+  protected processRegions_DeleteRegion(
+    response: Response,
+  ): Promise<RegionDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4188,7 +4180,7 @@ export class RegionsClient extends Client {
     return Promise.resolve<RegionDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  regions_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Regions/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -4210,11 +4202,11 @@ export class RegionsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processRegions_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processRegions_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4241,30 +4233,37 @@ export class RegionsClient extends Client {
     }
     return Promise.resolve<string[]>(null as any);
   }
-}
 
-export class WorldsClient extends Client {
-  private http: {
-    fetch(url: RequestInfo, init?: RequestInit): Promise<Response>;
-  };
-  private baseUrl: string;
-  protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
-    undefined;
-
-  constructor(
-    baseUrl?: string,
-    http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> },
-  ) {
-    super();
-    this.http = http ? http : (window as any);
-    this.baseUrl = baseUrl ?? 'http://localhost:5000';
-  }
-
-  getWorlds(campaignId: string): Promise<WorldDto[]> {
-    let url_ = this.baseUrl + '/{campaignId}/Worlds';
+  worlds_GetWorlds(
+    campaignId: string,
+    page?: number | undefined,
+    pageSize?: number | undefined,
+    orderBy?: string | null | undefined,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<WorldDto[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds?';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
     url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (page === null) throw new Error("The parameter 'page' cannot be null.");
+    else if (page !== undefined)
+      url_ += 'Page=' + encodeURIComponent('' + page) + '&';
+    if (pageSize === null)
+      throw new Error("The parameter 'pageSize' cannot be null.");
+    else if (pageSize !== undefined)
+      url_ += 'PageSize=' + encodeURIComponent('' + pageSize) + '&';
+    if (orderBy !== undefined && orderBy !== null)
+      url_ += 'OrderBy=' + encodeURIComponent('' + orderBy) + '&';
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -4279,11 +4278,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetWorlds(_response);
+        return this.processWorlds_GetWorlds(_response);
       });
   }
 
-  protected processGetWorlds(response: Response): Promise<WorldDto[]> {
+  protected processWorlds_GetWorlds(response: Response): Promise<WorldDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4311,7 +4310,7 @@ export class WorldsClient extends Client {
     return Promise.resolve<WorldDto[]>(null as any);
   }
 
-  createWorld(campaignId: string, world: WorldDto): Promise<string> {
+  worlds_CreateWorld(campaignId: string, world: WorldDto): Promise<string> {
     let url_ = this.baseUrl + '/{campaignId}/Worlds';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -4334,11 +4333,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processCreateWorld(_response);
+        return this.processWorlds_CreateWorld(_response);
       });
   }
 
-  protected processCreateWorld(response: Response): Promise<string> {
+  protected processWorlds_CreateWorld(response: Response): Promise<string> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4366,11 +4365,28 @@ export class WorldsClient extends Client {
     return Promise.resolve<string>(null as any);
   }
 
-  getCampaignWorlds(campaignId: string): Promise<WorldDto[]> {
-    let url_ = this.baseUrl + '/{campaignId}/Worlds/worlds';
+  worlds_GetWorldById(
+    campaignId: string,
+    worldId: string,
+    include?: string | null | undefined,
+    expand?: string | null | undefined,
+    filter?: string | undefined,
+  ): Promise<WorldDto> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}?';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
     url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (worldId === undefined || worldId === null)
+      throw new Error("The parameter 'worldId' must be defined.");
+    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
+    if (include !== undefined && include !== null)
+      url_ += 'Include=' + encodeURIComponent('' + include) + '&';
+    if (expand !== undefined && expand !== null)
+      url_ += 'Expand=' + encodeURIComponent('' + expand) + '&';
+    if (filter === null)
+      throw new Error("The parameter 'filter' cannot be null.");
+    else if (filter !== undefined)
+      url_ += 'Filter=' + encodeURIComponent('' + filter) + '&';
     url_ = url_.replace(/[?&]$/, '');
 
     let options_: RequestInit = {
@@ -4385,65 +4401,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetCampaignWorlds(_response);
+        return this.processWorlds_GetWorldById(_response);
       });
   }
 
-  protected processGetCampaignWorlds(response: Response): Promise<WorldDto[]> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && response.headers.forEach) {
-      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
-    }
-    if (status === 200) {
-      return response.text().then((_responseText) => {
-        let result200: any = null;
-        result200 =
-          _responseText === ''
-            ? null
-            : (JSON.parse(_responseText, this.jsonParseReviver) as WorldDto[]);
-        return result200;
-      });
-    } else if (status !== 200 && status !== 204) {
-      return response.text().then((_responseText) => {
-        return throwException(
-          'An unexpected server error occurred.',
-          status,
-          _responseText,
-          _headers,
-        );
-      });
-    }
-    return Promise.resolve<WorldDto[]>(null as any);
-  }
-
-  updateWorldPATCH(campaignId: string, worldId: string): Promise<WorldDto> {
-    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}';
-    if (campaignId === undefined || campaignId === null)
-      throw new Error("The parameter 'campaignId' must be defined.");
-    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
-    if (worldId === undefined || worldId === null)
-      throw new Error("The parameter 'worldId' must be defined.");
-    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
-    url_ = url_.replace(/[?&]$/, '');
-
-    let options_: RequestInit = {
-      method: 'PATCH',
-      headers: {
-        Accept: 'application/json',
-      },
-    };
-
-    return this.transformOptions(options_)
-      .then((transformedOptions_) => {
-        return this.http.fetch(url_, transformedOptions_);
-      })
-      .then((_response: Response) => {
-        return this.processUpdateWorldPATCH(_response);
-      });
-  }
-
-  protected processUpdateWorldPATCH(response: Response): Promise<WorldDto> {
+  protected processWorlds_GetWorldById(response: Response): Promise<WorldDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4471,7 +4433,66 @@ export class WorldsClient extends Client {
     return Promise.resolve<WorldDto>(null as any);
   }
 
-  updateWorldPUT(
+  worlds_UpdateWorldPATCH(
+    campaignId: string,
+    worldId: string,
+  ): Promise<WorldDto> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    if (worldId === undefined || worldId === null)
+      throw new Error("The parameter 'worldId' must be defined.");
+    url_ = url_.replace('{worldId}', encodeURIComponent('' + worldId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processWorlds_UpdateWorldPATCH(_response);
+      });
+  }
+
+  protected processWorlds_UpdateWorldPATCH(
+    response: Response,
+  ): Promise<WorldDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as WorldDto);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<WorldDto>(null as any);
+  }
+
+  worlds_UpdateWorldPUT(
     campaignId: string,
     worldId: string,
     world: WorldDto,
@@ -4501,11 +4522,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processUpdateWorldPUT(_response);
+        return this.processWorlds_UpdateWorldPUT(_response);
       });
   }
 
-  protected processUpdateWorldPUT(
+  protected processWorlds_UpdateWorldPUT(
     response: Response,
   ): Promise<FileResponse | null> {
     const status = response.status;
@@ -4558,7 +4579,7 @@ export class WorldsClient extends Client {
     return Promise.resolve<FileResponse | null>(null as any);
   }
 
-  deleteWorld(campaignId: string, worldId: string): Promise<WorldDto> {
+  worlds_DeleteWorld(campaignId: string, worldId: string): Promise<WorldDto> {
     let url_ = this.baseUrl + '/{campaignId}/Worlds/{worldId}';
     if (campaignId === undefined || campaignId === null)
       throw new Error("The parameter 'campaignId' must be defined.");
@@ -4580,11 +4601,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processDeleteWorld(_response);
+        return this.processWorlds_DeleteWorld(_response);
       });
   }
 
-  protected processDeleteWorld(response: Response): Promise<WorldDto> {
+  protected processWorlds_DeleteWorld(response: Response): Promise<WorldDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4612,7 +4633,60 @@ export class WorldsClient extends Client {
     return Promise.resolve<WorldDto>(null as any);
   }
 
-  getEnum(name: string, campaignId: string): Promise<string[]> {
+  worlds_GetCampaignWorlds(campaignId: string): Promise<WorldDto[]> {
+    let url_ = this.baseUrl + '/{campaignId}/Worlds/worlds';
+    if (campaignId === undefined || campaignId === null)
+      throw new Error("The parameter 'campaignId' must be defined.");
+    url_ = url_.replace('{campaignId}', encodeURIComponent('' + campaignId));
+    url_ = url_.replace(/[?&]$/, '');
+
+    let options_: RequestInit = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    };
+
+    return this.transformOptions(options_)
+      .then((transformedOptions_) => {
+        return this.http.fetch(url_, transformedOptions_);
+      })
+      .then((_response: Response) => {
+        return this.processWorlds_GetCampaignWorlds(_response);
+      });
+  }
+
+  protected processWorlds_GetCampaignWorlds(
+    response: Response,
+  ): Promise<WorldDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        let result200: any = null;
+        result200 =
+          _responseText === ''
+            ? null
+            : (JSON.parse(_responseText, this.jsonParseReviver) as WorldDto[]);
+        return result200;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException(
+          'An unexpected server error occurred.',
+          status,
+          _responseText,
+          _headers,
+        );
+      });
+    }
+    return Promise.resolve<WorldDto[]>(null as any);
+  }
+
+  worlds_GetEnum(name: string, campaignId: string): Promise<string[]> {
     let url_ = this.baseUrl + '/{campaignId}/Worlds/GetEnum/{name}';
     if (name === undefined || name === null)
       throw new Error("The parameter 'name' must be defined.");
@@ -4634,11 +4708,11 @@ export class WorldsClient extends Client {
         return this.http.fetch(url_, transformedOptions_);
       })
       .then((_response: Response) => {
-        return this.processGetEnum(_response);
+        return this.processWorlds_GetEnum(_response);
       });
   }
 
-  protected processGetEnum(response: Response): Promise<string[]> {
+  protected processWorlds_GetEnum(response: Response): Promise<string[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && response.headers.forEach) {
@@ -4689,11 +4763,11 @@ export interface AccountDto {
 
 export interface BaseDto {
   id?: string | undefined;
+  name: string;
   owner_id?: string | undefined;
 }
 
 export interface CreatureDto extends BaseDto {
-  name?: string | undefined;
   strength: number;
   dexterity: number;
   constitution: number;
@@ -4786,7 +4860,6 @@ export interface SenseDto {
 }
 
 export interface NpcDto extends BaseDto {
-  name?: string | undefined;
   background?: string | undefined;
   noteable_events?: string | undefined;
   beliefs?: string | undefined;
@@ -4807,7 +4880,7 @@ export interface MonsterLocaleDto {
 }
 
 export interface LocaleDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   region_id?: string | undefined;
   region?: RegionDto | undefined;
   buildings?: BuildingDto[] | undefined;
@@ -4820,7 +4893,7 @@ export interface LocaleDto extends BaseDto {
 }
 
 export interface RegionDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   locales?: LocaleDto[] | undefined;
   continent_id?: string | undefined;
   continent?: ContinentDto | undefined;
@@ -4829,7 +4902,7 @@ export interface RegionDto extends BaseDto {
 }
 
 export interface ContinentDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   world_id?: string | undefined;
   world?: WorldDto | undefined;
   regions?: RegionDto[] | undefined;
@@ -4838,14 +4911,14 @@ export interface ContinentDto extends BaseDto {
 }
 
 export interface WorldDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   continents?: ContinentDto[] | undefined;
   map?: string | undefined;
-  campaign_id: string;
+  campaign_id?: string | undefined;
 }
 
 export interface BuildingDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   locale_id?: string | undefined;
   locale?: LocaleDto | undefined;
   map?: string | undefined;
@@ -4918,17 +4991,14 @@ export interface BuildingMapDto {
 }
 
 export interface MapDto extends BaseDto {
-  name?: string | undefined;
   variation?: string | undefined;
   image_url?: string | undefined;
   center?: any[] | undefined;
-  locale_id: string;
-  buildings?: BuildingMapDto[] | undefined;
   campaign_id: string;
 }
 
 export interface DungeonDto extends BaseDto {
-  name?: string | undefined;
+  description?: string | undefined;
   type?: string | undefined;
   map?: string | undefined;
   building?: BuildingDto | undefined;
@@ -4967,7 +5037,6 @@ export enum OperationType {
 export interface IContractResolver {}
 
 export interface CampaignDto extends BaseDto {
-  name?: string | undefined;
   type: CampaignTypeDto;
   players?: AccountCampaignDto[] | undefined;
 }
@@ -4983,6 +5052,15 @@ export interface AccountCampaignDto {
   account?: AccountDto | undefined;
   campaign_id: string;
   campaign?: CampaignDto | undefined;
+}
+
+export interface CampaignWithLocationsDto {
+  worlds?: WorldDto[] | undefined;
+  continents?: ContinentDto[] | undefined;
+  regions?: RegionDto[] | undefined;
+  locales?: LocaleDto[] | undefined;
+  buildings?: BuildingDto[] | undefined;
+  dungeons?: DungeonDto[] | undefined;
 }
 
 export interface JsonPatchDocumentOfCampaign {
@@ -5042,7 +5120,7 @@ export interface FileResponse {
 }
 
 export class ApiException extends Error {
-  message: string;
+  override message: string;
   status: number;
   response: string;
   headers: { [key: string]: any };

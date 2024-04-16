@@ -10,19 +10,16 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   BuildingDto,
-  BuildingsClient,
+  Client,
   ContinentDto,
-  ContinentsClient,
   LocaleDto,
-  LocalesClient,
   RegionDto,
-  RegionsClient,
   WorldDto,
-} from '../../api/model';
+} from 'api/model';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const PREFIX = 'LocationAdder';
 
@@ -42,10 +39,7 @@ const StyledBox = styled(Box)(({ theme }: { theme: Theme }) => ({
   },
 }));
 
-const buildingClient = new BuildingsClient();
-const localeClient = new LocalesClient();
-const regionClient = new RegionsClient();
-const continentClient = new ContinentsClient();
+const client = new Client();
 
 interface LocationAdderProps {
   onSave: (id: string) => void;
@@ -79,19 +73,19 @@ export default function LocationAdder({
   }, []);
 
   const populateContinents = async function () {
-    const data = await continentClient.getContinents(campaignId ?? '');
+    const data = await client.continents_GetContinents(campaignId ?? '');
     setLocation({ ...location, continents: data });
   };
 
   const prepopulateData = async () => {
     if (building?.id) {
-      const selectedBuilding = await buildingClient.getBuildingById(
+      const selectedBuilding = await client.buildings_GetBuildingById(
         building.id,
         'Locale.Region.Continent',
       );
 
       const buildings = selectedBuilding.locale?.id
-        ? await localeClient.getLocaleById(
+        ? await client.locales_GetLocaleById(
             campaignId ?? '',
             selectedBuilding.locale.id,
             'Buildings',
@@ -99,20 +93,22 @@ export default function LocationAdder({
         : undefined;
 
       const locales = selectedBuilding.locale?.region?.id
-        ? await regionClient.getRegionById(
+        ? await client.regions_GetRegionById(
             selectedBuilding.locale.region.id,
             'Locales',
           )
         : undefined;
 
       const regions = selectedBuilding.locale?.region?.continent?.id
-        ? await continentClient.getContinentById(
+        ? await client.continents_GetContinentById(
             selectedBuilding.locale.region.continent.id,
             'Regions',
           )
         : undefined;
 
-      const continents = await continentClient.getContinents(campaignId ?? '');
+      const continents = await client.continents_GetContinents(
+        campaignId ?? '',
+      );
 
       let newLocation = {
         building: selectedBuilding,
@@ -130,7 +126,7 @@ export default function LocationAdder({
   };
 
   const setContinent = async (id: string) => {
-    const selectedContinent = await continentClient.getContinentById(
+    const selectedContinent = await client.continents_GetContinentById(
       campaignId ?? '',
       id,
       'Regions',
@@ -146,7 +142,7 @@ export default function LocationAdder({
   };
 
   const setRegion = async (id: string) => {
-    const selectedRegion = await regionClient.getRegionById(
+    const selectedRegion = await client.regions_GetRegionById(
       campaignId ?? '',
       id,
       'Locales',
@@ -164,7 +160,7 @@ export default function LocationAdder({
   };
 
   const setLocale = async (id: string) => {
-    const selectedLocale = await localeClient.getLocaleById(
+    const selectedLocale = await client.locales_GetLocaleById(
       campaignId ?? '',
       id,
       'Buildings',

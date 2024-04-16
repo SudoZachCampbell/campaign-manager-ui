@@ -1,15 +1,15 @@
+import { Client, PcDto } from 'api/model';
 import { GeneratedForm } from 'components/form/GeneratedForm';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { useDnDApi } from '../../../../api/dndDb';
-import { PcDto, PcsClient } from '../../../../api/model';
 import { Button } from '../../../../components/Button/Button';
 import { useAuth } from '../../../../hooks/useAuth';
 import { pcForm } from './PcDetails.form';
 
-const client = new PcsClient();
+const client = new Client();
 
 export const PcDetails = () => {
   const { campaignId, pcId } = useParams<{
@@ -24,7 +24,9 @@ export const PcDetails = () => {
     loading,
     invoke,
     response: pc,
-  } = useDnDApi(() => client.getPcById(campaignId ?? '', pcId ?? '', null, ''));
+  } = useDnDApi(() =>
+    client.pcs_GetPcById(campaignId ?? '', pcId ?? '', null, ''),
+  );
 
   useEffect(() => {
     if (pcId) {
@@ -48,9 +50,9 @@ export const PcDetails = () => {
     if (campaignId) {
       payload = { ...payload, campaign_id: campaignId };
       if (pcId) {
-        await client.updatePcPUT(campaignId, pcId, payload);
+        await client.pcs_UpdatePcPUT(campaignId, pcId, payload);
       } else {
-        await client.createPc(campaignId, payload);
+        await client.pcs_CreatePc(campaignId, payload);
       }
       navigate('../pcs');
     }

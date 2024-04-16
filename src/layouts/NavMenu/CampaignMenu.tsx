@@ -18,10 +18,10 @@ export const CampaignMenu = () => {
       </div>
       <div className="navbar__links">
         <div className="navbar__links-main">
-          <Link className="navbar__link" to="campaigns">
+          <Link className="navbar__link" to="/campaigns">
             <h3>Campaigns</h3>
           </Link>
-          <Link className="navbar__link" to="compendium">
+          <Link className="navbar__link" to="/compendium">
             <h3>Compendium</h3>
           </Link>
         </div>
@@ -31,17 +31,17 @@ export const CampaignMenu = () => {
           </Link>
           <Link
             className="navbar__link"
-            to={`campaigns/${campaignId}/monsters`}
+            to={`/campaigns/${campaignId}/monsters`}
           >
             <h2>Monsters</h2>
           </Link>
           <Link
             className="navbar__link"
-            to={`campaigns/${campaignId}/location-hub`}
+            to={`/campaigns/${campaignId}/location-hub`}
           >
             <h2>Locations</h2>
           </Link>
-          <Link className="navbar__link" to={`campaigns/${campaignId}/items`}>
+          <Link className="navbar__link" to={`/campaigns/${campaignId}/items`}>
             <h2>Items</h2>
           </Link>
         </div>

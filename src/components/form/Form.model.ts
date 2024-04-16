@@ -1,3 +1,4 @@
+import { BaseDto, Client } from 'api/model';
 import { CSSProperties } from 'react';
 import { FieldValues, Path } from 'react-hook-form';
 
@@ -19,6 +20,13 @@ interface FormInputBase {
 export type FormInputText<T extends FieldValues> = FormInputBase & {
   name: Path<T extends any[] ? T[number] : T>;
   type: 'text';
+  defaultValue?: string;
+};
+
+export type FormIdLookup<T extends FieldValues> = FormInputBase & {
+  name: Path<T extends any[] ? T[number] : T>;
+  type: 'idLookup';
+  dataFetch: (client: Client) => Promise<BaseDto[]>;
   defaultValue?: string;
 };
 
@@ -77,4 +85,5 @@ export type FormInput<T extends FieldValues> =
   | FormInputBoolean<T>
   | FormInputSelect<T>
   | FormSubForm<T>
-  | FormFieldArray<T>;
+  | FormFieldArray<T>
+  | FormIdLookup<T>;

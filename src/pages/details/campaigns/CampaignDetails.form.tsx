@@ -1,6 +1,6 @@
-import { CampaignDto, CampaignTypeDto } from '../../../api/model';
-import { FormInput } from '../../../components/form/Form.model';
-import { generateOptionsFromEnum } from '../../../components/form/Form.utils';
+import { CampaignDto, CampaignTypeDto } from 'api/model';
+import { FormInput } from 'components/form/Form.model';
+import { generateOptionsFromEnum } from 'components/form/Form.utils';
 
 export const campaignForm: FormInput<Required<CampaignDto>>[] = [
   {

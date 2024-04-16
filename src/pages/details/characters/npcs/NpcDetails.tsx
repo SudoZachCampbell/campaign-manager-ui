@@ -1,5 +1,5 @@
 import { useDnDApi } from 'api/dndDb';
-import { NpcDto, NpcsClient } from 'api/model';
+import { Client, NpcDto } from 'api/model';
 import { Button } from 'components/Button/Button';
 import { GeneratedForm } from 'components/form/GeneratedForm';
 import { useAuth } from 'hooks/useAuth';
@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { npcForm } from './NpcDetails.form';
 
-const client = new NpcsClient();
+const client = new Client();
 
 export const NpcDetails = () => {
   const { campaignId, npcId } = useParams<{
@@ -25,7 +25,7 @@ export const NpcDetails = () => {
     invoke,
     response: npc,
   } = useDnDApi(() =>
-    client.getNpcById(campaignId ?? '', npcId ?? '', null, ''),
+    client.npcs_GetNpcById(campaignId ?? '', npcId ?? '', null, ''),
   );
 
   useEffect(() => {
@@ -47,9 +47,9 @@ export const NpcDetails = () => {
 
   const updateNpc = async (payload: NpcDto) => {
     if (npcId) {
-      await client.updateNpcPUT(campaignId ?? '', npcId, payload);
+      await client.npcs_UpdateNpcPUT(campaignId ?? '', npcId, payload);
     } else {
-      await client.createNpc(campaignId ?? '', payload);
+      await client.npcs_CreateNpc(campaignId ?? '', payload);
       navigate('../npcs');
     }
   };
