@@ -1,0 +1,18 @@
+:root {
+  // Font sizes
+  --small-font-size: 0.75rem;
+  --header-1-font-size: 1.5rem;
+  --header-2-font-size: 1.25rem;
+  --header-3-font-size: 1.125rem;
+
+  // Font weights
+  --header-font-weight: 700;
+}
+
+$small-font-size: var(--small-font-size);
+
+$header-1-font-size: var(--header-1-font-size);
+$header-2-font-size: var(--header-2-font-size);
+$header-3-font-size: var(--header-3-font-size);
+
+$header-font-weight: var(--header-font-weight);

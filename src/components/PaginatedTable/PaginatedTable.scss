@@ -1,0 +1,51 @@
+@import '/src/style/constants/_colors.module.scss';
+
+.paginatedtable__container {
+  color: $text-color;
+  height: 90%;
+
+  .paginatedtable__toolbar {
+    color: $inverse-text-color;
+    display: flex;
+    align-items: center;
+    height: 7%;
+    margin-bottom: 1%;
+    justify-content: space-between;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 1%;
+    column-gap: 5%;
+
+    .paginatedtable__show {
+      flex: 2;
+      display: flex;
+      align-items: center;
+      column-gap: 0.7rem;
+    }
+
+    > .search__container {
+      flex: 6;
+      margin-left: 10%;
+    }
+
+    .paginatedtable__filter {
+      flex: 0.5;
+    }
+  }
+
+  .paginatedtable__table {
+    height: 96%;
+  }
+
+  .paginatedtable__footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1%;
+    border-top: solid 1px $border-color;
+
+    .paginatedtable__footer--page-buttons {
+      display: flex;
+      column-gap: 2%;
+      overflow: scroll;
+    }
+  }
+}

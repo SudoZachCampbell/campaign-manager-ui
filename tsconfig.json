@@ -24,6 +24,7 @@
       "components/*": ["./src/components/*"],
       "hooks/*": ["./src/hooks/*"],
       "layouts/*": ["./src/layouts/*"],
+      "models/*": ["./src/models/*"],
       "pages/*": ["./src/pages/*"],
       "routes/*": ["./src/routes/*"],
       "utils/*": ["./src/utils/*"],

@@ -6,7 +6,6 @@ import { ImageOverlay, MapContainer } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapDto, MonsterDto, NpcDto } from '../../api/model';
 
 const personIcon = new L.Icon({
   iconUrl: '../../asserts/icons/person.svg',
@@ -40,15 +39,7 @@ const arrowIcon = new L.Icon({
   iconSize: [45, 45],
 });
 
-export default function LocationMap({
-  map,
-  iconName,
-}: {
-  map: MapDto;
-  iconName: string;
-  npcs?: NpcDto[];
-  monsters?: MonsterDto[];
-}) {
+export default function LocationMap({}: {}) {
   const [bounds, setBounds] = useState<[number, number][]>();
   const [icon, setIcon] = useState<L.Icon[]>([buildingIcon]);
   const [center, setCenter] = useState<[number, number]>([0, 0]);
@@ -68,20 +59,20 @@ export default function LocationMap({
     return true;
   }
 
-  useEffect(() => {
-    let tempIcon: L.Icon[] = [];
-    switch (iconName) {
-      case 'buildings':
-        tempIcon = [buildingIcon];
-        break;
-      case 'npcs':
-        tempIcon = [personIcon, peopleIcon];
-        break;
-      default:
-        tempIcon = [arrowIcon];
-    }
-    setIcon(() => tempIcon);
-  }, [iconName]);
+  // useEffect(() => {
+  //   let tempIcon: L.Icon[] = [];
+  //   switch (iconName) {
+  //     case 'buildings':
+  //       tempIcon = [buildingIcon];
+  //       break;
+  //     case 'npcs':
+  //       tempIcon = [personIcon, peopleIcon];
+  //       break;
+  //     default:
+  //       tempIcon = [arrowIcon];
+  //   }
+  //   setIcon(() => tempIcon);
+  // }, [iconName]);
 
   const showImage = (imgPath: string) => {
     let myImage = new Image();
@@ -92,12 +83,12 @@ export default function LocationMap({
 
   useEffect(() => {
     showImage(
-      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`,
+      `https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/PhanDawn.jpg`,
     );
     if (bounds) {
       setCenter([bounds[1][0] / 2, bounds[0][0] / 2]);
     }
-  }, [map]);
+  }, []);
 
   useEffect(() => {
     // @ts-ignore
@@ -189,7 +180,7 @@ export default function LocationMap({
 
         <ImageOverlay
           bounds={bounds}
-          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/${map.image_url}`}
+          url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/PhanDawn.jpg`}
         />
       </MapContainer>
     </div>

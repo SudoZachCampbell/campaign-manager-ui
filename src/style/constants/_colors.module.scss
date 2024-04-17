@@ -1,58 +1,64 @@
-:root[data-theme='theme-light'] {
-  --primary-color: #c8e4b2;
-  --primary-variant-color: #c8e4b2;
-  --secondary-color: #adc4ce;
-  --tertiary-color: #f1f0e8;
-  --text-color: #000000;
-  --form-input-color: #ffffff;
-  --label-color: #3d3d3d;
-  --form-input-text-color: #000000;
-  --base-grey: #d8d9da;
-  --background-color: #ffffff;
-  --menu-background-color: #d1d1d1;
-  --border-color: #000;
-}
+// Enables future themeing
+:root {
+  --primary-color: #005db4;
+  --primary-light-color: #0891b2;
+  --success-color: #22c55e;
+  --success-light-color: #a5e14a;
+  --info-color: #3730a3;
+  --warning-color: #f59e0b;
+  --danger-color: #dc2626;
 
-:root[data-theme='theme-dark'] {
-  --primary-color: #bb86fc;
-  --primary-variant-color: #3700b3;
-  --secondary-color: #03dac5;
-  --tertiary-color: #f1f0e8;
-  --text-color: #ffffff;
-  --form-input-color: #6d6d6d;
-  --label-color: #b1b1b1;
-  --form-input-text-color: #fff;
-  --base-grey: #5c5c5c;
-  --background-color: #121212;
-  --menu-background-color: #6d6d6d;
-  --border-color: #fff;
+  --title-text-color: #171717;
+  --text-color: #4b5563;
+  --inverse-text-color: #ffffff;
+  --text-highlight-color: #3497f9;
+  --card-text-color: #344054;
+
+  --background-color: #ffffff;
+  --background-secondary-color: #f2f5ff;
+
+  --border-color: #d2dde2;
+  --border-lighter-color: #8f98a94d;
+  --border-card-color: #86a1fd;
 }
 
 // Main Colours
 $primary-color: var(--primary-color);
-$secondary-color: var(--secondary-color);
-$tertiary-color: var(--tertiary-color);
+$primary-light-color: var(--primary-light-color);
+$success-color: var(--success-color);
+$success-light-color: var(--success-light-color);
+$info-color: var(--info-color);
+$warning-color: var(--warning-color);
+$danger-color: var(--danger-color);
 
 // Text Colours
+$title-text-color: var(--title-text-color);
 $text-color: var(--text-color);
-
-// Form Colours
-$form-input-color: var(--form-input-color);
-$label-color: var(--label-color);
-$form-input-text-color: var(--form-input-text-color);
+$inverse-text-color: var(--inverse-text-color);
+$text-highlight-color: var(--text-highlight-color);
+$card-text-color: var(--card-text-color);
 
 // Background Colours
-$base-grey: var(--base-grey);
 $background-color: var(--background-color);
-$menu-background-color: var(--menu-background-color);
-$border-color: var(--border-color);
+$background-secondary-color: var(--background-secondary-color);
+$background-secondary-color: var(--background-secondary-color);
 
+// Border Colours
+$border-color: var(--border-color);
+$border-lighter-color: var(--border-lighter-color);
+$border-card-color: var(--border-card-color);
+
+// Exports for js
 :export {
-  primaryColor: $primary-color;
-  secondaryColor: $secondary-color;
-  tertiaryColor: $tertiary-color;
-  textColor: $text-color;
-  baseGrey: $base-grey;
-  backgroundColor: $background-color;
-  menuBackgroundColor: $menu-background-color;
+  primary: $primary-color;
+  primaryLight: $primary-light-color;
+  success: $success-color;
+  successLight: $success-light-color;
+  info: $info-color;
+  warning: $warning-color;
+  danger: $danger-color;
+  textHighlight: $text-highlight-color;
+  inverseText: $inverse-text-color;
+  text: $text-color;
+  cardText: $card-text-color;
 }

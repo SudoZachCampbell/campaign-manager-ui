@@ -64,7 +64,7 @@ export const BuildingDetails: FC<BuildingDetailsProps> = ({}) => {
     }
   };
 
-  return !loading ? (
+  return !loading && campaignId ? (
     <div className="form__main-container--padding">
       <form
         onSubmit={handleSubmit(updateBuilding)}
@@ -76,7 +76,7 @@ export const BuildingDetails: FC<BuildingDetailsProps> = ({}) => {
 
         <div className="form__content">
           <GeneratedForm
-            formBuilder={buildingForm}
+            formBuilder={buildingForm(campaignId)}
             form={form}
             errors={formState.errors}
           />

@@ -1,4 +1,83 @@
+@import '/src/style/constants/colors.module';
+
 .table__container {
-    td { 
+  height: 100%;
+
+  .table__wrapper {
+    overflow: auto;
+    max-height: 95%;
+
+    .table__table {
+      color: $text-color;
+      border-spacing: 0;
+      font-size: 16px;
+      width: 100%;
+
+      .table__table--header-row {
+        th {
+          text-align: start;
+          padding: 1rem;
+          position: sticky;
+          top: 0;
+          background-color: $background-color;
+
+          &.primary {
+            background-color: $primary-color;
+          }
+
+          &.primary,
+          &.secondary {
+            color: $inverse-text-color;
+          }
+        }
+
+        th:first-child {
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+        }
+
+        th:last-child {
+          border-top-right-radius: 10px;
+          border-bottom-right-radius: 10px;
+        }
+
+        &.primary {
+          background-color: $primary-color;
+        }
+
+        &.secondary {
+        }
+      }
+
+      tbody {
+        tr {
+          background-color: $background-color;
+
+          td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+          }
+
+          td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+          }
+
+          &.shaded {
+          }
+
+          &.border {
+            td {
+              border-top: 1px solid #0000001a;
+            }
+          }
+        }
+
+        td {
+          text-align: start;
+          padding: 1.1rem 1rem;
+        }
+      }
     }
+  }
 }

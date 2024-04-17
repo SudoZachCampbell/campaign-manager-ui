@@ -1,11 +1,12 @@
 ﻿import { Box } from '@mui/material';
 import { useDndCollectionApi } from 'api/dndDb';
-import { Client } from 'api/model';
+import { Client, MonsterDto } from 'api/model';
 import { Button } from 'components/Button/Button';
-import { Table, TableColumn } from 'components/Table/Table';
+import { Table } from 'components/Table/Table';
+import { TableColumn } from 'components/Table/Table.model';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const client = new Client();
 
@@ -13,14 +14,20 @@ export default function MonsterList() {
   client.setAuthToken(useAuth().token);
   const navigate = useNavigate();
 
-  const columns: TableColumn[] = [
+  const columns: TableColumn<MonsterDto>[] = [
     {
-      name: 'name',
+      id: 'name',
       header: 'Name',
-      link: (instance) => `update/${instance.id}`,
+      Render: (instance) => (
+        <Link to={`update/${instance.id}`}>{instance.name}</Link>
+      ),
     },
-    { name: 'passivePerception', header: 'Passive Perception' },
-    { name: 'alignment', header: 'Alignment' },
+    {
+      id: 'passivePerception',
+      accessor: ['challenge_rating'],
+      header: 'Passive Perception',
+    },
+    { id: 'alignment', accessor: ['alignment'], header: 'Alignment' },
   ];
 
   const {
@@ -39,7 +46,7 @@ export default function MonsterList() {
     </p>
   ) : monsters ? (
     <>
-      <Table dataSet={monsters} columns={columns} />
+      <Table data={monsters} columns={columns} />
       <Button onClick={() => navigate('/compendium/monsters/create')}>
         Create
       </Button>

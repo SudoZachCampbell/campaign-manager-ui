@@ -59,7 +59,7 @@ export const GeneratedFieldArray = <T extends FieldValues>({
             )
           }
           className="fieldarray__append-button"
-          type="add"
+          styling="info"
         >
           +
         </Button>

@@ -1,22 +1,27 @@
 import { useDndCollectionApi } from 'api/dndDb';
-import { Client } from 'api/model';
+import { CampaignDto, Client } from 'api/model';
 import { Button } from 'components/Button/Button';
-import { Table, TableColumn } from 'components/Table/Table';
+import { Table } from 'components/Table/Table';
+import { TableColumn } from 'components/Table/Table.model';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
 
 const client = new Client();
 
-const columns: TableColumn[] = [
+const columns: TableColumn<CampaignDto>[] = [
   {
-    name: 'id',
-    header: 'ID',
-    link: ({ id }) => `${id}`,
+    id: 'name',
+    header: 'Name',
+    Render: ({ id, name }) => <Link to={`${id}`}>{name}</Link>,
   },
-  { name: 'name', header: 'Name' },
-  { name: 'type', header: 'Type' },
+  {
+    id: 'players',
+    header: 'Player Count',
+    Render: ({ players }) => players?.length,
+  },
+  { id: 'type', header: 'Type', accessor: ['type'] },
 ];
 
 export const CampaignList = () => {
@@ -41,7 +46,7 @@ export const CampaignList = () => {
         height: '100%',
       }}
     >
-      <Table dataSet={campaigns} columns={columns} />
+      <Table data={campaigns} columns={columns} />
       <Button onClick={() => navigate('/campaigns/create')}>
         New Campaign
       </Button>

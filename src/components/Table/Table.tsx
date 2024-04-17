@@ -1,98 +1,71 @@
-﻿import * as React from 'react';
+﻿import { ReactNode } from 'react';
 
-import { Link } from 'react-router-dom';
-import { BaseDto } from '../../api/model';
+import { deepFind } from '@/utils/objects';
+import { BaseDto } from 'api/model';
+import 'simplebar-react/dist/simplebar.min.css';
+import type { TableColumn } from './Table.model';
 import './Table.styles.scss';
-//#region TableData
-export interface CollapsibleTableProps<T extends BaseDto> {
-  Component?: React.FC<{ id: string }>;
-  dataSet: T[];
-  columns: TableColumn[];
+
+export interface TableProps<T extends BaseDto> {
+  /**
+   * An array of data to be presented in the table
+   */
+  data: T[];
+  /**
+   * The render settings for each column
+   */
+  columns: TableColumn<T>[];
+  /**
+   * The colour style of the header row
+   */
+  headerStyle?: 'primary' | 'secondary' | 'plain';
+  /**
+   * The pattern style for each data row
+   */
+  rowStyle?: 'alternate' | 'border';
 }
 
-export interface TableColumn {
-  name: string;
-  header: string;
-  hidden?: boolean;
-  link?: (props: Record<string, any>) => string;
-}
-
-interface TableData extends BaseDto {
-  name: string;
-}
-
-export const Table = <T extends TableData>({
-  dataSet,
-  Component,
+export const Table = <T extends BaseDto>({
+  data,
   columns,
-}: CollapsibleTableProps<T>): JSX.Element => {
-  const columnLookup = columns.reduce<Record<string, TableColumn>>(
-    (acc, column) => {
-      acc[column.name] = column;
-      return acc;
-    },
-    {},
-  );
-
+  headerStyle = 'plain',
+  rowStyle = 'border',
+}: TableProps<T>): JSX.Element => {
   return (
     <div className="table__container">
-      <table>
-        <thead>
-          <tr>
-            <td key="Empty"></td>
-            {columns.map(({ header }) => (
-              <td key={header}>{header}</td>
+      <div className="table__wrapper">
+        <table className="table__table">
+          <thead>
+            <tr className={['table__table--header-row', headerStyle].join(' ')}>
+              {columns.map(({ header }) => (
+                <th className={headerStyle} key={header}>
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr
+                className={
+                  rowStyle === 'alternate' && index % 2 === 1
+                    ? 'shaded'
+                    : rowStyle
+                }
+                key={row.id}
+              >
+                {columns.map((column) => (
+                  <td key={column.id}>
+                    {'Render' in column
+                      ? column.Render?.(row)
+                      : (deepFind(row, column.accessor) as ReactNode) ?? '-'}
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {dataSet.map((instance: T) => (
-            <Row
-              key={instance.id}
-              instance={instance}
-              columnMeta={columnLookup}
-            />
-          ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  );
-};
-
-interface RowProps<T> {
-  instance: Partial<T>;
-  columnMeta: Record<string, TableColumn>;
-}
-
-const Row = <T extends BaseDto>({
-  instance,
-  columnMeta,
-}: RowProps<T>): JSX.Element => {
-  return (
-    <tr>
-      <td>
-        {/* <IconButton size='small' onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton> */}
-      </td>
-      {Object.entries(instance).reduce<JSX.Element[]>(
-        (acc, [key, instanceData]) => {
-          const columnEntry = columnMeta[key];
-          if (columnEntry) {
-            acc.push(
-              <td key={key}>
-                {columnEntry.link ? (
-                  <Link to={columnEntry.link(instance)}>{instanceData}</Link>
-                ) : (
-                  instanceData
-                )}
-              </td>,
-            );
-          }
-          return acc;
-        },
-        [],
-      )}
-    </tr>
   );
 };

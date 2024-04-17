@@ -60,7 +60,7 @@ export const LocaleDetails: FC<LocaleDetailsProps> = ({}) => {
     }
   };
 
-  return !loading ? (
+  return !loading && campaignId ? (
     <div className="form__main-container--padding">
       <form
         onSubmit={handleSubmit(updateLocale)}
@@ -72,7 +72,7 @@ export const LocaleDetails: FC<LocaleDetailsProps> = ({}) => {
 
         <div className="form__content">
           <GeneratedForm
-            formBuilder={localeForm}
+            formBuilder={localeForm(campaignId)}
             form={form}
             errors={formState.errors}
           />

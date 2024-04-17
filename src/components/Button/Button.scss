@@ -1,0 +1,64 @@
+@import '/src/style/constants/_colors.module.scss';
+@import '/src/style/constants/_typography.module.scss';
+
+.button {
+  font-weight: $header-font-weight;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  color: $text-color;
+
+  // Definitely a better way to do this but priorities
+  &.primary,
+  &.danger,
+  &.success,
+  &.info,
+  &.warning {
+    color: white;
+  }
+
+  &.primary {
+    background-color: $primary-color;
+  }
+
+  &.secondary {
+    color: #333;
+    background-color: $primary-light-color;
+  }
+
+  &.danger {
+    background-color: $danger-color;
+  }
+
+  &.warning {
+    background-color: $warning-color;
+  }
+
+  &.success {
+    background-color: $success-color;
+  }
+
+  &.plain {
+    background-color: $background-color;
+  }
+
+  &.info {
+    background-color: $info-color;
+  }
+
+  &.clear {
+    background-color: transparent;
+  }
+
+  &.medium {
+    font-size: 14px;
+    padding: 0.75rem 1rem;
+  }
+
+  &:disabled {
+    opacity: 40%;
+    cursor: default;
+  }
+}

@@ -1,30 +1,51 @@
-import { CSSProperties, FC, MouseEvent } from 'react';
-import './Button.styles.scss';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
+import './Button.scss';
 
-type ButtonTypes = 'submit' | 'info' | 'button' | 'add';
-
-interface ButtonProps {
-  type?: ButtonTypes;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * Is this the principal call to action on the page?
+   */
+  styling?:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'success'
+    | 'plain'
+    | 'clear'
+    | 'info'
+    | 'warning';
+  /**
+   * How large should the button be?
+   */
+  size?: 'small' | 'medium' | 'large';
   className?: string;
-  onClick?: (event: MouseEvent<HTMLInputElement>) => void;
-  children: string | string[];
-  style?: CSSProperties;
+  /**
+   * Button contents
+   */
+  children: ReactNode;
+  /**
+   * Optional click handler
+   */
+  onClick?: () => void;
 }
 
-export const Button: FC<ButtonProps> = ({
-  type = 'info',
-  className = '',
-  onClick,
-  style,
+/**
+ * Primary UI component for user interaction
+ */
+export const Button = ({
+  styling = 'plain',
+  size = 'medium',
   children,
-}) => {
+  className,
+  ...props
+}: ButtonProps) => {
   return (
-    <input
-      type={type === 'submit' ? 'submit' : 'button'}
-      className={`${className} button ${type}`}
-      value={children}
-      onClick={onClick}
-      style={style}
-    />
+    <button
+      type='button'
+      className={['button', size, styling, className].join(' ')}
+      {...props}
+    >
+      {children}
+    </button>
   );
 };

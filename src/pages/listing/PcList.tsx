@@ -1,28 +1,28 @@
 ﻿import { Box } from '@mui/material';
 import { useDndCollectionApi } from 'api/dndDb';
-import { Client } from 'api/model';
+import { Client, PcDto } from 'api/model';
 import { Button } from 'components/Button/Button';
-import { Table, TableColumn } from 'components/Table/Table';
+import { Table } from 'components/Table/Table';
+import { TableColumn } from 'components/Table/Table.model';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const client = new Client();
-
-interface PcListProps {}
 
 const PcList = () => {
   client.setAuthToken(useAuth().token);
   const navigate = useNavigate();
   const { campaignId } = useParams<{ campaignId: string }>();
 
-  const columns: TableColumn[] = [
+  const columns: TableColumn<PcDto>[] = [
     {
-      name: 'pc_name',
+      id: 'name',
       header: 'Name',
-      link: (instance) => `update/${instance.id}`,
+      Render: ({ id, name }) => <Link to={`update/${id}`}>${name}</Link>,
     },
-    { name: 'location', header: 'Location' },
+    { id: 'level', header: 'Level', accessor: ['level'] },
+    { id: 'player', header: 'Player', accessor: ['player_id'] },
   ];
 
   const {
@@ -41,7 +41,7 @@ const PcList = () => {
     </p>
   ) : pcs ? (
     <>
-      <Table dataSet={pcs} columns={columns} />
+      <Table data={pcs} columns={columns} />
       <Button onClick={() => navigate(`/campaigns/${campaignId}/pcs/create`)}>
         Create
       </Button>

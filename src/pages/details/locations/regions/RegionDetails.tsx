@@ -60,7 +60,7 @@ export const RegionDetails: FC<RegionDetailsProps> = ({}) => {
     }
   };
 
-  return !loading ? (
+  return !loading && campaignId ? (
     <div className="form__main-container--padding">
       <form
         onSubmit={handleSubmit(updateRegion)}
@@ -72,7 +72,7 @@ export const RegionDetails: FC<RegionDetailsProps> = ({}) => {
 
         <div className="form__content">
           <GeneratedForm
-            formBuilder={regionForm}
+            formBuilder={regionForm(campaignId)}
             form={form}
             errors={formState.errors}
           />
