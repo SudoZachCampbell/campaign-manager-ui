@@ -6,7 +6,7 @@ import { Table } from 'components/Table/Table';
 import { TableColumn } from 'components/Table/Table.model';
 import { useAuth } from 'hooks/useAuth';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const client = new Client();
 
@@ -19,9 +19,16 @@ const NpcList = () => {
     {
       id: 'name',
       header: 'Name',
-      Render: (instance) => `update/${instance.id}`,
+      Render: ({ epithet, id, name }) => (
+        <Link to={`update/${id}`}>{[epithet ?? '', name].join(' ')}</Link>
+      ),
     },
-    { id: 'background', header: 'Background', accessor: ['background'] },
+    { id: 'race', header: 'Race', accessor: ['attributes', 'race'] },
+    {
+      id: 'background',
+      header: 'Background',
+      accessor: ['lore', 'background'],
+    },
   ];
 
   const {

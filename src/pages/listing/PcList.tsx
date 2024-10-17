@@ -19,7 +19,7 @@ const PcList = () => {
     {
       id: 'name',
       header: 'Name',
-      Render: ({ id, name }) => <Link to={`update/${id}`}>${name}</Link>,
+      Render: ({ id, name }) => <Link to={`update/${id}`}>{name}</Link>,
     },
     { id: 'level', header: 'Level', accessor: ['level'] },
     { id: 'player', header: 'Player', accessor: ['player_id'] },

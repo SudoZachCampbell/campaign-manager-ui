@@ -6,6 +6,10 @@
   width: 100%;
   height: 100%;
 
+  &.no-tabs {
+    justify-content: center;
+  }
+
   .form__tabs {
     width: 15%;
     display: flex;
@@ -42,6 +46,27 @@
 
 .form__input__container {
   width: 100%;
+
+  .form__checkbox {
+    border-left: solid 1px;
+    border-top: solid 1px;
+    border-right: solid 2px;
+    border-bottom: solid 2px;
+    border-color: $border-color;
+    border-radius: 4px;
+    width: fit-content;
+    padding: 1%;
+    margin: 1%;
+    background-color: $inverse-text-color;
+
+    &.checked {
+      border-left: solid 2px;
+      border-top: solid 2px;
+      border-right: solid 1px;
+      border-bottom: solid 1px;
+      border-color: $primary-color;
+    }
+  }
 
   .form__error {
     color: red;
@@ -99,32 +124,6 @@
     &::placeholder {
       font-size: 1rem;
     }
-  }
-}
-
-.form__checkbox {
-  border-left: solid 1px;
-  border-top: solid 1px;
-  border-right: solid 2px;
-  border-bottom: solid 2px;
-  border-color: $border-color;
-  border-radius: 4px;
-  width: fit-content;
-  padding: 1%;
-  margin: 1%;
-  background-color: $inverse-text-color;
-
-  &.checked {
-    border-left: solid 2px;
-    border-top: solid 2px;
-    border-right: solid 1px;
-    border-bottom: solid 1px;
-    border-color: $primary-color;
-  }
-
-  .form__input__label {
-    background-color: $inverse-text-color;
-    margin-right: 0.5%;
   }
 }
 

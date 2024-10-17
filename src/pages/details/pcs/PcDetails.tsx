@@ -1,12 +1,13 @@
+import { useDnDApi } from 'api/dndDb';
 import { Client, PcDto } from 'api/model';
+import { Button } from 'components/Button/Button';
 import { GeneratedForm } from 'components/form/GeneratedForm';
+import { useAuth } from 'hooks/useAuth';
+import 'pages/details/Details.styles.scss';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { useDnDApi } from '../../../../api/dndDb';
-import { Button } from '../../../../components/Button/Button';
-import { useAuth } from '../../../../hooks/useAuth';
 import { pcForm } from './PcDetails.form';
 
 const client = new Client();
@@ -59,27 +60,29 @@ export const PcDetails = () => {
   };
 
   return !loading ? (
-    <>
-      <form
-        onSubmit={handleSubmit(updatePc)}
-        className="monsterform__main-container"
-      >
-        <div className="monsterform__header">
+    <div className="form__main-container--padding">
+      <form onSubmit={handleSubmit(updatePc)} className="form__main-container">
+        <div className="form__header">
           <h1>{pc?.name ?? 'Create Player Character'}</h1>
-          <div>
-            <Button type="submit">Create</Button>
-          </div>
         </div>
 
-        <div className="monsterform__content">
+        <div className="form__content">
           <GeneratedForm
             formBuilder={pcForm}
             form={form}
             errors={formState.errors}
           />
         </div>
+
+        <div className="form__footer">
+          <div>
+            <Button styling="success" type="submit">
+              {pcId ? 'Edit Pc' : 'Create'}
+            </Button>
+          </div>
+        </div>
       </form>
-    </>
+    </div>
   ) : (
     <ClipLoader />
   );

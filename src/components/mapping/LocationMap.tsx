@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
-import { ImageOverlay, MapContainer } from 'react-leaflet';
 // @ts-ignore
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { MapAdder } from './MapAdder';
 
 const personIcon = new L.Icon({
   iconUrl: '../../asserts/icons/person.svg',
@@ -136,7 +136,8 @@ export default function LocationMap({}: {}) {
         overflow: 'hidden',
       }}
     >
-      <MapContainer
+      <MapAdder />
+      {/* <MapContainer
         crs={L.CRS.Simple}
         center={center}
         minZoom={-2}
@@ -146,7 +147,7 @@ export default function LocationMap({}: {}) {
         ref={mapRef.current}
         zoomSnap={0.01}
       >
-        {/* {map.buildings?.map(({ coords, building }, index) => {
+         {map.buildings?.map(({ coords, building }, index) => {
           switch (iconName) {
             case 'buildings':
               return coords ? (
@@ -176,13 +177,13 @@ export default function LocationMap({}: {}) {
             //     />
             //   ) : null;
           }
-        })} */}
+        })} 
 
         <ImageOverlay
           bounds={bounds}
           url={`https://ddimagecollection.s3-eu-west-1.amazonaws.com/maps/PhanDawn.jpg`}
         />
-      </MapContainer>
+      </MapContainer> */}
     </div>
   ) : null;
 }

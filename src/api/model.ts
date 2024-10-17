@@ -4755,8 +4755,8 @@ export interface CreateAttempt {
 
 export interface AccountDto {
   id: string;
-  username?: string | undefined;
-  email?: string | undefined;
+  username: string;
+  email: string;
   role?: string | undefined;
   monsters?: MonsterDto[] | undefined;
 }
@@ -4777,13 +4777,13 @@ export interface CreatureDto extends BaseDto {
   proficiencies?: ProficienciesDto[] | undefined;
   armor_class: number;
   hit_points: number;
-  hit_dice?: string | undefined;
+  hit_dice: string;
   size: SizeDto;
   speed?: SpeedDto[] | undefined;
-  languages?: string | undefined;
+  languages: string;
   alignment: AlignmentDto;
   reactions?: CreatureActionDto[] | undefined;
-  picture?: string | undefined;
+  picture: string;
 }
 
 export interface MonsterDto extends CreatureDto {
@@ -4818,9 +4818,9 @@ export enum MonsterTypeDto {
 }
 
 export interface CreatureActionDto {
-  name?: string | undefined;
-  multiattack_type?: string | undefined;
-  desc?: string | undefined;
+  name: string;
+  multiattack_type: string;
+  desc: string;
   count?: number | undefined;
   attack_bonus?: number | undefined;
   damage?: DamageDto[] | undefined;
@@ -4830,120 +4830,88 @@ export interface CreatureActionDto {
 }
 
 export interface DamageDto {
-  damage_type?: string | undefined;
-  damage_dice?: string | undefined;
+  damage_type: string;
+  damage_dice: string;
   damage_bonus?: number | undefined;
 }
 
 export interface UsageDto {
-  type?: string | undefined;
+  type: string;
   times?: number | undefined;
   min_value?: number | undefined;
-  dice?: string | undefined;
+  dice: string;
 }
 
 export interface SubActionDto {
-  action_name?: string | undefined;
-  type?: string | undefined;
+  action_name: string;
+  type: string;
   count?: number | undefined;
 }
 
 export interface DCDto {
-  dc_type?: string | undefined;
+  dc_type: string;
   dc_value: number;
-  success_type?: string | undefined;
+  success_type: string;
 }
 
 export interface SenseDto {
-  name?: string | undefined;
-  value?: string | undefined;
+  name: string;
+  value: string;
 }
 
 export interface NpcDto extends BaseDto {
-  background?: string | undefined;
-  noteable_events?: string | undefined;
-  beliefs?: string | undefined;
-  passions?: string | undefined;
-  flaws?: string | undefined;
-  picture?: string | undefined;
+  epithet: string;
+  picture: string;
+  lore?: NpcLoreDto | undefined;
+  attributes?: NpcAttributesDto | undefined;
+  npc_relationships?: NpcNpcRelationshipDto[] | undefined;
+  pc_relationships?: NpcPcRelationshipDto[] | undefined;
   monster_id?: string | undefined;
   locale_id?: string | undefined;
   building_id?: string | undefined;
   campaign_id: string;
 }
 
-export interface MonsterLocaleDto {
-  monster_id: string;
-  monster?: MonsterDto | undefined;
-  locale_id: string;
-  locale?: LocaleDto | undefined;
+export interface NpcLoreDto {
+  secrets: string;
+  useful_knowledge: string;
+  beliefs: string;
+  background: string;
+  affiliations: string;
+  occupation: string;
 }
 
-export interface LocaleDto extends BaseDto {
-  description?: string | undefined;
-  region_id?: string | undefined;
-  region?: RegionDto | undefined;
-  buildings?: BuildingDto[] | undefined;
-  dungeons?: DungeonDto[] | undefined;
-  pcs?: PcDto[] | undefined;
-  npcs?: NpcDto[] | undefined;
-  monsters?: MonsterLocaleDto[] | undefined;
-  maps?: MapDto[] | undefined;
-  campaign_id: string;
+export interface NpcAttributesDto {
+  race: string;
+  age: string;
+  gender: string;
+  appearance: string;
+  alive_status: boolean;
+  flaws: string;
+  passions: string;
 }
 
-export interface RegionDto extends BaseDto {
-  description?: string | undefined;
-  locales?: LocaleDto[] | undefined;
-  continent_id?: string | undefined;
-  continent?: ContinentDto | undefined;
-  map?: string | undefined;
-  campaign_id: string;
+export interface NpcNpcRelationshipDto {
+  from_id: string;
+  from?: NpcDto | undefined;
+  to_id: string;
+  to?: NpcDto | undefined;
 }
 
-export interface ContinentDto extends BaseDto {
-  description?: string | undefined;
-  world_id?: string | undefined;
-  world?: WorldDto | undefined;
-  regions?: RegionDto[] | undefined;
-  map?: string | undefined;
-  campaign_id: string;
-}
-
-export interface WorldDto extends BaseDto {
-  description?: string | undefined;
-  continents?: ContinentDto[] | undefined;
-  map?: string | undefined;
-  campaign_id?: string | undefined;
-}
-
-export interface BuildingDto extends BaseDto {
-  description?: string | undefined;
-  locale_id?: string | undefined;
-  locale?: LocaleDto | undefined;
-  map?: string | undefined;
-  npcs?: NpcDto[] | undefined;
-  monsters?: MonsterBuildingDto[] | undefined;
-  pcs?: PcDto[] | undefined;
-  maps?: BuildingMapDto[] | undefined;
-  campaign_id: string;
-}
-
-export interface MonsterBuildingDto {
-  monster_id: string;
-  monster?: MonsterDto | undefined;
-  building_id: string;
-  building?: BuildingDto | undefined;
+export interface NpcPcRelationshipDto {
+  npc_id: string;
+  npc?: NpcDto | undefined;
+  pc_id: string;
+  pc?: PcDto | undefined;
 }
 
 export interface PcDto extends CreatureDto {
   level: number;
   xp: number;
   inspiration: boolean;
-  pc_name?: string | undefined;
-  background?: string | undefined;
-  faction?: string | undefined;
-  race?: string | undefined;
+  background: string;
+  faction: string;
+  race: string;
   campaign_id: string;
   locale_id?: string | undefined;
   building_id?: string | undefined;
@@ -4951,7 +4919,7 @@ export interface PcDto extends CreatureDto {
 }
 
 export interface ProficienciesDto {
-  name?: string | undefined;
+  name: string;
   value: number;
 }
 
@@ -4964,9 +4932,9 @@ export enum SizeDto {
 }
 
 export interface SpeedDto {
-  name?: string | undefined;
+  name: string;
   value: number;
-  measurement?: string | undefined;
+  measurement: string;
 }
 
 export enum AlignmentDto {
@@ -4982,24 +4950,88 @@ export enum AlignmentDto {
   Unaligned = 'Unaligned',
 }
 
+export interface MonsterLocaleDto {
+  monster_id: string;
+  monster?: MonsterDto | undefined;
+  locale_id: string;
+  locale?: LocaleDto | undefined;
+}
+
+export interface LocaleDto extends BaseDto {
+  description: string;
+  region_id?: string | undefined;
+  region?: RegionDto | undefined;
+  buildings?: BuildingDto[] | undefined;
+  dungeons?: DungeonDto[] | undefined;
+  pcs?: PcDto[] | undefined;
+  npcs?: NpcDto[] | undefined;
+  monsters?: MonsterLocaleDto[] | undefined;
+  maps?: MapDto[] | undefined;
+  campaign_id: string;
+}
+
+export interface RegionDto extends BaseDto {
+  description: string;
+  locales?: LocaleDto[] | undefined;
+  continent_id?: string | undefined;
+  continent?: ContinentDto | undefined;
+  map: string;
+  campaign_id: string;
+}
+
+export interface ContinentDto extends BaseDto {
+  description: string;
+  world_id?: string | undefined;
+  world?: WorldDto | undefined;
+  regions?: RegionDto[] | undefined;
+  map?: string | undefined;
+  campaign_id: string;
+}
+
+export interface WorldDto extends BaseDto {
+  description: string;
+  continents?: ContinentDto[] | undefined;
+  map?: string | undefined;
+  campaign_id?: string | undefined;
+}
+
+export interface BuildingDto extends BaseDto {
+  description: string;
+  locale_id?: string | undefined;
+  locale?: LocaleDto | undefined;
+  map: string;
+  npcs?: NpcDto[] | undefined;
+  monsters?: MonsterBuildingDto[] | undefined;
+  pcs?: PcDto[] | undefined;
+  maps?: BuildingMapDto[] | undefined;
+  campaign_id: string;
+}
+
+export interface MonsterBuildingDto {
+  monster_id: string;
+  monster?: MonsterDto | undefined;
+  building_id: string;
+  building?: BuildingDto | undefined;
+}
+
 export interface BuildingMapDto {
   building_id: string;
   building?: BuildingDto | undefined;
   map_id: string;
-  map?: MapDto | undefined;
-  coords?: number[] | undefined;
+  map: MapDto;
+  coords: number[];
 }
 
 export interface MapDto extends BaseDto {
-  variation?: string | undefined;
-  image_url?: string | undefined;
+  variation: string;
+  image_url: string;
   center?: any[] | undefined;
   campaign_id: string;
 }
 
 export interface DungeonDto extends BaseDto {
-  description?: string | undefined;
-  type?: string | undefined;
+  description: string;
+  type: string;
   map?: string | undefined;
   building?: BuildingDto | undefined;
   locale?: LocaleDto | undefined;
@@ -5049,18 +5081,18 @@ export enum CampaignTypeDto {
 
 export interface AccountCampaignDto {
   account_id: string;
-  account?: AccountDto | undefined;
+  account: AccountDto;
   campaign_id: string;
-  campaign?: CampaignDto | undefined;
+  campaign: CampaignDto;
 }
 
 export interface CampaignWithLocationsDto {
-  worlds?: WorldDto[] | undefined;
-  continents?: ContinentDto[] | undefined;
-  regions?: RegionDto[] | undefined;
-  locales?: LocaleDto[] | undefined;
-  buildings?: BuildingDto[] | undefined;
-  dungeons?: DungeonDto[] | undefined;
+  worlds: WorldDto[];
+  continents: ContinentDto[];
+  regions: RegionDto[];
+  locales: LocaleDto[];
+  buildings: BuildingDto[];
+  dungeons: DungeonDto[];
 }
 
 export interface JsonPatchDocumentOfCampaign {

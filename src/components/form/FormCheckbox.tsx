@@ -1,3 +1,4 @@
+import { Switch } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 
 interface FormCheckBoxProps {
@@ -29,16 +30,11 @@ export const FormCheckBox: FC<FormCheckBoxProps> = ({
   }, [value]);
 
   return (
-    <div>
-      <div
-        onClick={_onChange}
-        className={`form__checkbox${checked ? ' checked' : ''}`}
-      >
-        {' '}
-        <label className="form__input__label" htmlFor={name}>
-          {label}
-        </label>
-      </div>
+    <div className="form__input__container">
+      <label className="form__input__label" htmlFor={name}>
+        {label}
+      </label>
+      <Switch checked={checked} onClick={_onChange} />
       {errorsLookup && (
         <div className="form__error">{errorsLookup[name]?.message}</div>
       )}

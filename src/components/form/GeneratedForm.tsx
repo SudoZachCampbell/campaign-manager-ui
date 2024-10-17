@@ -221,7 +221,11 @@ export const GeneratedForm = <T extends FieldValues>({
 
   return (
     <>
-      <div className="form__container">
+      <div
+        className={`form__container ${
+          tabbedFields.length <= 0 ? 'no-tabs' : ''
+        }`}
+      >
         {tabbedFields.length > 0 && (
           <Tabs
             orientation="vertical"

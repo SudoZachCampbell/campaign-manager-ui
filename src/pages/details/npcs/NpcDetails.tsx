@@ -46,25 +46,25 @@ export const NpcDetails = () => {
   }, [npc]);
 
   const updateNpc = async (payload: NpcDto) => {
-    if (npcId) {
-      await client.npcs_UpdateNpcPUT(campaignId ?? '', npcId, payload);
-    } else {
-      await client.npcs_CreateNpc(campaignId ?? '', payload);
-      navigate('../npcs');
+    if (campaignId) {
+      payload = { ...payload, campaign_id: campaignId };
+      if (npcId) {
+        await client.npcs_UpdateNpcPUT(campaignId, npcId, payload);
+      } else {
+        await client.npcs_CreateNpc(campaignId, payload);
+        navigate('../npcs');
+      }
     }
   };
 
   return !loading ? (
-    <div className="monsterform__main-container--padding">
-      <form
-        onSubmit={handleSubmit(updateNpc)}
-        className="monsterform__main-container"
-      >
-        <div className="monsterform__header">
+    <div className="form__main-container--padding">
+      <form onSubmit={handleSubmit(updateNpc)} className="form__main-container">
+        <div className="form__header">
           <h1>{npc?.name ?? 'Create Npc'}</h1>
         </div>
 
-        <div className="monsterform__content">
+        <div className="form__content">
           <GeneratedForm
             formBuilder={npcForm}
             form={form}
@@ -72,9 +72,11 @@ export const NpcDetails = () => {
           />
         </div>
 
-        <div className="monsterform__footer">
+        <div className="form__footer">
           <div>
-            <Button type="submit">Create</Button>
+            <Button styling="success" type="submit">
+              {npcId ? 'Edit Npc' : 'Create'}
+            </Button>
           </div>
         </div>
       </form>

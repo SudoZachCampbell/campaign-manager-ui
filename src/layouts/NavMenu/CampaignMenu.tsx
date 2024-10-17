@@ -14,7 +14,9 @@ export const CampaignMenu = () => {
   return (
     <div className="navbar__container">
       <div className="navbar__title">
-        <h1>Campaign Manager</h1>
+        <Link className="navbar__link" to="/">
+          <h1>Campaign Manager</h1>
+        </Link>
       </div>
       <div className="navbar__links">
         <div className="navbar__links-main">
@@ -26,8 +28,11 @@ export const CampaignMenu = () => {
           </Link>
         </div>
         <div className="navbar__links-contextual">
-          <Link className="navbar__link" to="/">
-            <h2>Characters</h2>
+          <Link className="navbar__link" to={`/campaigns/${campaignId}/pcs`}>
+            <h2>Players</h2>
+          </Link>
+          <Link className="navbar__link" to={`/campaigns/${campaignId}/npcs`}>
+            <h2>Npcs</h2>
           </Link>
           <Link
             className="navbar__link"

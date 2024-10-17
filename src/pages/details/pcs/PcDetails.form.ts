@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 export const pcForm: FormInput<Required<PcDto>>[] = [
   {
-    name: 'pc_name',
+    name: 'name',
     label: 'Character Name',
     type: 'text',
   },

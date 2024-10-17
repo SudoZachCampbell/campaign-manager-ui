@@ -25,21 +25,6 @@
       height: 50%;
       justify-content: end;
       column-gap: 2rem;
-
-      > .navbar__link {
-        display: flex;
-        text-decoration: none;
-        color: $text-color;
-        margin-right: 4%;
-
-        &:hover {
-          opacity: 50%;
-        }
-
-        div {
-          display: flex;
-        }
-      }
     }
 
     > .navbar__links-contextual {
@@ -61,5 +46,20 @@
         }
       }
     }
+  }
+}
+
+.navbar__link {
+  display: flex;
+  text-decoration: none;
+  color: $text-color;
+  margin-right: 4%;
+
+  &:hover {
+    opacity: 50%;
+  }
+
+  div {
+    display: flex;
   }
 }

@@ -6,6 +6,7 @@ export const feToCampaignManagerMonsterMutator = (
   monster: Required<Monster>,
 ): MonsterDto => ({
   ...monster,
+  picture: '',
   type: toTitleCase(monster.type) as MonsterTypeDto,
   alignment: toTitleCase(monster.alignment) as AlignmentDto,
   size: toTitleCase(monster.size) as SizeDto,
@@ -13,9 +14,9 @@ export const feToCampaignManagerMonsterMutator = (
   actions: actionMutator(monster.actions),
   legendary_actions: actionMutator(monster.legendary_actions),
   reactions: actionMutator(monster.reactions),
-  special_abilities: actionMutator(
-    monster.special_abilities as MonsterAction[],
-  ),
+  // TODO: requires type pairing
+  // @ts-expect-error
+  special_abilities: actionMutator(monster.special_abilities),
   senses: Object.entries(monster.senses)?.map(([key, value]) => ({
     name: key,
     value: value.toString(),
